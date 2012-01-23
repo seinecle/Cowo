@@ -32,8 +32,7 @@ public final class StopWordsRemoverWT {
     StopWordsRemoverWT(String element, int entryCount) throws InterruptedException, ExecutionException {
         this.entryWord = element;
         this.entryCount = entryCount;
-        if (entryWord.equals("game"))
-            System.out.println(entryWord);
+
 
         call();
 
@@ -119,9 +118,7 @@ public final class StopWordsRemoverWT {
         if (write) {
             synchronized (Main.filteredFreqSet) {
                 Main.filteredFreqSet.add(entryWord, entryCount);
-//                        if (entryWord.contains("game"))
-//            System.out.println(entryWord+", "+entryCount);
-//         toReturn = entryWord;
+
             }
 
 //                return toReturn;

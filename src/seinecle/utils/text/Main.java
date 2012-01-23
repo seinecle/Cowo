@@ -53,7 +53,6 @@ public class Main {
     private final static int nbStopWordsShort = 200;
     //static int numberOfThreads = Runtime.getRuntime().availableProcessors();
     static int numberOfThreads = 7;
-    private static boolean suppSingleAndDoubleAndTripleCharacters = true;
     private static Integer counterLines = 0;
     // logic of freqThreshold: the higher the number of stopwords filtered out, the lower the number of significant words which should be expected
     private static int freqThreshold = 800;
@@ -92,7 +91,6 @@ public class Main {
     private static String[] noLemmaArray;
     public static String[] keepWordsArray;
     static InputStream in10000 = Main.class.getResourceAsStream("stopwords_10000_most_frequent.txt");
-    static InputStream in100 = Main.class.getResourceAsStream("stopwords_100_most_frequent.txt");
     static InputStream inscientific = Main.class.getResourceAsStream("scientificstopwords.txt");
     static InputStream inseinecle = Main.class.getResourceAsStream("stopwords_seinecle.txt");
     static InputStream inkeep = Main.class.getResourceAsStream("stopwords_tokeep.txt");
@@ -111,7 +109,6 @@ public class Main {
         fileStopWords = new BufferedReader(new InputStreamReader(in10000));
         //fileStopWords = new BufferedReader(new FileReader(stopwordsFile));
         fileStopWords2 = new BufferedReader(new InputStreamReader(inseinecle));
-        fileStopWords3 = new BufferedReader(new InputStreamReader(in100));
         fileStopWords4 = new BufferedReader(new InputStreamReader(inscientific));
         fileKeepWords = new BufferedReader(new InputStreamReader(inkeep));
         fileNoLemma = new BufferedReader(new InputStreamReader(innolemma));
@@ -130,8 +127,7 @@ public class Main {
         setKeepWords.addAll(Arrays.asList(keepWordsArray));
         setStopWordsShort.addAll(Arrays.asList(stopwordsShort));
         fileStopWords.close();
-        fileStopWords2.close();
-        fileStopWords3.close();
+        fileStopWords2.close();;
         fileStopWords4.close();
         fileNoLemma.close();
         fileKeepWords.close();
@@ -162,7 +158,8 @@ public class Main {
             currLine = currLine.replaceAll("dpfc", "dorsolateral prefrontal cortex");
             currLine = currLine.replaceAll(" acc ", " anterior cingulate cortex ");
             currLine = currLine.replaceAll(" behavioural ", "behavorial");
-            currLine = currLine.replaceAll(" scr ", "skin conductance response ");
+            currLine = currLine.replaceAll(" scr ", " skin conductance response ");
+            currLine = currLine.replaceAll(" pfc ", " prefrontal cortex ");
             currLine = currLine.replaceAll(" vmpfc ", " ventromedial prefrontal cortex ");
             currLine = currLine.replaceAll(" behavioral ", " behavior ");
             currLine = currLine.replaceAll(" functional magnetic resonance imaging ", " fmri ");
@@ -277,40 +274,15 @@ public class Main {
 
     : setNGrams.entrySet () 
         ) {
-            if (entry.getElement().contains("fmri")) {
-        };
-        if ("scr".equals(entry.getElement())) {
-            freqSet.add("skin conductance response", entry.getCount());
-        }
-        if ("ofc".equals(entry.getElement())) {
-            freqSet.add("orbitofrontal cortex", entry.getCount());
-        }
-        if ("pfc".equals(entry.getElement())) {
-            freqSet.add("prefrontal cortex", entry.getCount());
-        }
-        if ("acc".equals(entry.getElement())) {
-            freqSet.add("anterior cingulate cortex", entry.getCount());
-        }
-        if ("mpfc".equals(entry.getElement())) {
-            freqSet.add("medial prefrontal cortex", entry.getCount());
-        }
-        if ("behavioural".equals(entry.getElement())) {
-            freqSet.add("behavioral", entry.getCount());
-        }
+
 
         if (entry.getElement().length() >= minWordLength
-                & !"scr".equals(entry.getElement())
-                & !"ofc".equals(entry.getElement())
-                & !"pfc".equals(entry.getElement())
-                & !"acc".equals(entry.getElement())
-                & !"mpfc".equals(entry.getElement())
-                & !"behavioural".equals(entry.getElement())
                 & entry.getElement().length() < 50
                 & StringUtils.countMatches(entry.getElement(), " ") < maxgram
-                & suppSingleAndDoubleAndTripleCharacters) {
+                ) {
             {
                 freqSet.add(entry.getElement(), entry.getCount());
-                //if ("game".equals(entry.getElement())) System.out.println(entry.getElement());
+
             }
         }
     }
