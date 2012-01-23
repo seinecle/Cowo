@@ -1,0 +1,771 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package seinecle.utils.text;
+
+import com.google.common.collect.ConcurrentHashMultiset;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multiset;
+import com.google.common.collect.Multiset.Entry;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+
+/**
+ *
+ * @author C. Levallois
+ * This class:
+ * - reads a file
+ * - extracts n-grams from the file
+ * - deletes punctuation signs and non ascii characters
+ * - filters out stopwords from the file (but leaves them in 3-grams)
+ * - sorts the remaining n-grams by their frequencies
+ */
+public class Main {
+
+    public static String currLine = "";
+    public static Multiset<String> freqSet = ConcurrentHashMultiset.create();
+    //public static Multiset<Pair<String, String>> wordsPerLine = ConcurrentHashMultiset.create();
+    public static LinkedHashMultimap<Integer, String> wordsPerLine = LinkedHashMultimap.create();
+    public static LinkedHashMultimap<Integer, String> wordsPerLineFiltered = LinkedHashMultimap.create();
+    public static HashSet<String> setOfWords = new HashSet();
+    public static Multiset<String> multisetOfWords = ConcurrentHashMultiset.create();
+    public static Multiset<String> multisetOcc = ConcurrentHashMultiset.create();
+    public static Multiset<String> filteredFreqSet = ConcurrentHashMultiset.create();
+    public static Multiset<String> ngramsInLine = ConcurrentHashMultiset.create();
+    public static HashMap<String, Integer> ngramsCountinCorpus = new HashMap();
+    public static Multiset<String> setCombinations = ConcurrentHashMultiset.create();
+    public static Multiset<String> future = ConcurrentHashMultiset.create();
+    public static List<Entry<String>> freqList;
+    public static List<Entry<String>> freqListFiltered = new ArrayList();
+    public static String[] stopwords;
+    public static int occurrenceThreshold = 4;
+    private static FileReader fr;
+
+    private static int maxgram = 4;
+    private final static int nbStopWords = 5000;
+    private final static int nbStopWordsShort = 200;
+    //static int numberOfThreads = Runtime.getRuntime().availableProcessors();
+    static int numberOfThreads = 7;
+    private static boolean suppSingleAndDoubleAndTripleCharacters = true;
+    private static Integer counterLines = 0;
+    // logic of freqThreshold: the higher the number of stopwords filtered out, the lower the number of significant words which should be expected
+    private static int freqThreshold = 800;
+    //private final static String textFile = "D:\\Docs Pro Clement\\E-humanities\\Datasets\\Zotero biblio Clement\\My Library\\ZoteroText.txt";
+    private final static String wk = "D:\\Docs Pro Clement\\Writing\\Article Nature Reviews Neuroscience\\semantic analysis\\";
+    //private final static String wk = "D:\\Docs Pro Clement\\E-Projects\\Discours Sarko\\";
+    private final static String wkOutput = wk;
+    private final static String textFileName = "abs neuroeco.txt";
+    private static String textFile = wk + textFileName;
+    private final static String stopwordsFile = "C:\\data\\stopwords\\10000stopwords.txt";
+    private final static String stopwordsFileLevallois = "C:\\data\\stopwords\\Levalloisstopwords.txt";
+    private final static String stopwordsFileShort = "C:\\data\\stopwords\\100stopwords.txt";
+    private final static String stopwordsFileScientific = "C:\\data\\stopwords\\scientificstopwords.txt";
+    private final static String noLemmaFile = "C:\\data\\stopwords\\nolemmatization.txt";
+    private final static String keepWordsFile = "C:\\data\\stopwords\\keepwords.txt";
+    static String cleanWord;
+    public static int counter = 0;
+    private static int numberOfDocs;
+    private static BufferedReader fileStopWords;    
+    private static BufferedReader fileKeepWords;    
+    private static BufferedReader fileStopWords2;
+    private static String[] stopwordsLevallois;
+    private static BufferedReader fileStopWords3;
+    private static BufferedReader fileStopWords4;
+    public static String[] stopwordsShort;
+    private static String[] stopwordsScientific;
+    public static Set<String> setStopWords = new HashSet();
+    public static Set<String> setNoLemma = new HashSet();
+    public static int minWordLength = 3;
+    private static HashMap<Integer, String> mapofLines = new HashMap();
+    private static HashSet<String> setFreqWords = new HashSet();
+    private static String fileMapName;
+    private static BufferedWriter fileMapFile;
+    private static String fileNetworkName;
+    private static BufferedWriter fileNetworkFile;
+    private static String fileParametersName;
+    private static BufferedWriter fileParametersFile;
+    private static boolean found = false;
+    public static Set<String> setStopWordsShort = new HashSet();
+    public static Set<String> setKeepWords = new HashSet();
+    private static BufferedReader fileNoLemma;
+    private static String[] noLemmaArray;
+    public static String[] keepWordsArray;
+    
+    public static void main(String[] args) throws FileNotFoundException, IOException, InterruptedException, ClassNotFoundException, InstantiationException, IllegalAccessException, ExecutionException {
+
+
+        System.out.println("---------------------------------");
+        System.out.println();
+
+        // #### LOADING FILE CONTAINING STOPWORDS
+
+        //fileStopWords = new BufferedReader(new FileReader("C:\\data\\stopwords\\common-english-words_long_list.txt"));
+        fileStopWords = new BufferedReader(new FileReader(stopwordsFile));
+        fileStopWords2 = new BufferedReader(new FileReader(stopwordsFileLevallois));
+        fileStopWords3 = new BufferedReader(new FileReader(stopwordsFileShort));
+        fileStopWords4 = new BufferedReader(new FileReader(stopwordsFileScientific));
+        fileKeepWords = new BufferedReader(new FileReader(keepWordsFile));
+        fileNoLemma = new BufferedReader(new FileReader(noLemmaFile));
+        stopwords = fileStopWords.readLine().split(",");
+        noLemmaArray = fileNoLemma.readLine().split(",");
+        keepWordsArray = fileKeepWords.readLine().split(",");
+        stopwordsLevallois = fileStopWords2.readLine().split(",");
+        stopwordsScientific = fileStopWords4.readLine().split(",");
+        stopwords = Arrays.copyOf(stopwords, nbStopWords);
+        stopwordsShort = Arrays.copyOf(stopwords, nbStopWordsShort);
+        stopwords = (String[]) ArrayUtils.addAll(stopwords, stopwordsLevallois);
+        stopwords = (String[]) ArrayUtils.addAll(stopwords, stopwordsScientific);
+
+        setStopWords.addAll(Arrays.asList(stopwords));
+        setNoLemma.addAll(Arrays.asList(noLemmaArray));
+        setKeepWords.addAll(Arrays.asList(keepWordsArray));
+        setStopWordsShort.addAll(Arrays.asList(stopwordsShort));
+        fileStopWords.close();
+        fileStopWords2.close();
+        fileStopWords3.close();
+        fileStopWords4.close();
+        fileNoLemma.close();
+        fileKeepWords.close();
+//-------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+        // ### LOADING FILE IN MEMORY AND CLEANING TO ASCII ...
+        System.out.println("Loading the text file, deleting non-ASCII characters");
+        long startLoading = System.currentTimeMillis();
+        //fr = new FileReader("D:\\Docs Pro Clement\\E-humanities\\Datasets\\Zotero biblio Clement\\My Library\\ZoteroText.txt");
+        fr = new FileReader(textFile);
+        BufferedReader br = new BufferedReader(fr);
+        StringBuilder sb = new StringBuilder();
+        while ((currLine = br.readLine()) != null) {
+            currLine = currLine.toLowerCase().trim().replaceAll("\\p{C}", " ").trim();
+            currLine = currLine.replaceAll("[^A-Za-z']", " ").trim();
+            currLine = currLine.replaceAll("[^A-Za-z'éèàç$êëï]", " ").trim();
+            currLine = currLine.replaceAll("’", "'");
+            currLine = currLine.replaceAll(" +", " ");
+            currLine = currLine.replaceAll("[^A-Za-z]pfc", "prefrontal cortex");
+            currLine = currLine.replaceAll("ofc", "orbitofrontal cortex");
+            currLine = currLine.replaceAll("mpfc", "medial prefrontal cortex");
+            currLine = currLine.replaceAll("dpfc", "dorsolateral prefrontal cortex");
+            currLine = currLine.replaceAll(" acc ", " anterior cingulate cortex ");
+            currLine = currLine.replaceAll(" behavioural ", "behavorial");
+            currLine = currLine.replaceAll(" scr ", "skin conductance response ");
+            currLine = currLine.replaceAll(" vmpfc ", " ventromedial prefrontal cortex ");
+            currLine = currLine.replaceAll(" behavioral ", " behavior ");
+            currLine = currLine.replaceAll(" functional magnetic resonance imaging ", " fmri ");
+            counterLines++;
+            ArrayList<String> wordsOfLine = new ArrayList();
+            wordsOfLine.addAll(Arrays.asList(currLine.split(" ")));
+
+            Iterator<String> itwl = wordsOfLine.iterator();
+            StringBuilder sbWords = new StringBuilder();
+            
+            
+            while (itwl.hasNext()) {
+                String currEntry = itwl.next().trim();
+
+
+  //               ### BASIC LEMMATIZATION: merges n-grams in the singular and plural form (only when plural is with a final "s" though...)
+
+
+
+                if (currEntry.endsWith("ies")){
+                if (!setNoLemma.contains(currEntry)) {
+                    currEntry = currEntry.substring(0, currEntry.length() - 3) + "y";
+                    
+                }} else if (currEntry.endsWith("'s")) {
+                    currEntry = currEntry.substring(0, currEntry.length() - 2);
+                } else if (currEntry.endsWith("'")) {
+                    currEntry = currEntry.substring(0, currEntry.length() - 1);
+
+                } else if (currEntry.endsWith("s")
+                        && !currEntry.endsWith("us")
+                        && !currEntry.endsWith("as")
+                        && !currEntry.endsWith("ss")
+                        && !setNoLemma.contains(currEntry)
+                        && !currEntry.endsWith("is")) {
+                    currEntry = currEntry.substring(0, currEntry.length() - 1);
+
+                }
+//                        if (currEntry.contains("species"))
+//                        System.out.println(currEntry);
+
+             sbWords.append(currEntry.trim()).append(" ");  
+
+            }
+            mapofLines.put(counterLines, sbWords.toString().trim());
+            sb.append(sbWords.toString().trim());
+            sbWords = null;
+
+
+
+        }
+
+
+    numberOfDocs  = counterLines;
+
+    fr.close ();
+
+    br.close ();
+    long endLoading = System.currentTimeMillis();
+
+    System.out.println (
+
+    "loading time: " + (endLoading - startLoading) + " milliseconds");
+        System.out.println (
+            
+
+    "---------------------------------");
+        System.out.println ();
+//-------------------------------------------------------------------------------------------------------------
+
+    // ### EXTRACTING N-GRAMS
+    System.out.println("Extracting n-grams (up to level " + maxgram + ")...");
+        long startNGrams = System.currentTimeMillis();
+    HashMultiset<String> setNGrams = HashMultiset.create();
+
+    setNGrams.addAll (NGramFinder.run(sb.toString(), maxgram));
+        
+    sb  = null;
+    long endNGrams = System.currentTimeMillis();
+
+    System.out.print (
+            
+    "N-grams all identified!");
+
+        long durationNGrams = (endNGrams - startNGrams);
+    
+    if (durationNGrams< 
+
+    
+        1000) {
+            System.out.println("[took " + durationNGrams + " milliseconds]");
+    }
+    
+
+    
+        else {
+            System.out.println("[took " + durationNGrams / 1000 + " seconds]");
+    }
+
+    System.out.println (
+            
+
+    "---------------------------------");
+        System.out.println ();
+
+//-------------------------------------------------------------------------------------------------------------
+    // ### DELETING SMALL WORDS, TOO LONG WORDS AND WORDS WITH TOO MANY SPACES IN THEM
+    System.out.println (
+    "A bit of housekeeping on n-grams...");        
+        long startFilter = System.currentTimeMillis();
+    
+    for (Entry<String> entry
+
+    : setNGrams.entrySet () 
+        ) {
+            if (entry.getElement().contains("fmri")) {
+        };
+        if ("scr".equals(entry.getElement())) {
+            freqSet.add("skin conductance response", entry.getCount());
+        }
+        if ("ofc".equals(entry.getElement())) {
+            freqSet.add("orbitofrontal cortex", entry.getCount());
+        }
+        if ("pfc".equals(entry.getElement())) {
+            freqSet.add("prefrontal cortex", entry.getCount());
+        }
+        if ("acc".equals(entry.getElement())) {
+            freqSet.add("anterior cingulate cortex", entry.getCount());
+        }
+        if ("mpfc".equals(entry.getElement())) {
+            freqSet.add("medial prefrontal cortex", entry.getCount());
+        }
+        if ("behavioural".equals(entry.getElement())) {
+            freqSet.add("behavioral", entry.getCount());
+        }
+
+        if (entry.getElement().length() >= minWordLength
+                & !"scr".equals(entry.getElement())
+                & !"ofc".equals(entry.getElement())
+                & !"pfc".equals(entry.getElement())
+                & !"acc".equals(entry.getElement())
+                & !"mpfc".equals(entry.getElement())
+                & !"behavioural".equals(entry.getElement())
+                & entry.getElement().length() < 50
+                & StringUtils.countMatches(entry.getElement(), " ") < maxgram
+                & suppSingleAndDoubleAndTripleCharacters) {
+            {
+                freqSet.add(entry.getElement(), entry.getCount());
+                //if ("game".equals(entry.getElement())) System.out.println(entry.getElement());
+            }
+        }
+    }
+    long endFilter = System.currentTimeMillis();
+
+    System.out.print (
+            
+    "Deletion / filtering of some N-grams complete!");
+
+        long durationFilter = (endFilter - startFilter);
+    
+    if (durationFilter< 
+
+    
+        1000) {
+            System.out.println("[took " + durationFilter + " milliseconds]");
+    }
+    
+
+    
+        else {
+            System.out.println("[took " + durationFilter / 1000 + " seconds]");
+    }
+
+    System.out.println (
+            
+
+    "---------------------------------");
+        System.out.println ();
+
+
+        
+//-------------------------------------------------------------------------------------------------------------
+    // #### FILTERS OUT LOW FREQUENCY TERMS IN freqSet
+    Iterator<String> itFreqSet = freqSet.iterator();
+    
+
+    while (itFreqSet.hasNext () 
+        ) {
+            String curr = itFreqSet.next();
+
+        if (freqSet.count(curr) < occurrenceThreshold) {
+            //if ("game".equals(curr)) System.out.println(curr+" "+freqSet.count(curr));
+            itFreqSet.remove();
+        }
+    }
+//-------------------------------------------------------------------------------------------------------------        
+    // #### REMOVING STOPWORDS
+    // (lines in comment can be uncommented for concurrency
+    long startStopWords = System.currentTimeMillis();
+    Iterator<Entry<String>> it = freqSet.entrySet().iterator();
+
+    //System.out.println("Starting to remove stopwords, we have " + numberOfThreads + " threads working...");
+    System.out.println (
+            
+    "Removing stopwords...");
+
+
+
+        
+
+    while (it.hasNext () 
+        ) {
+            counter++;
+        Entry<String> entry = it.next();
+        //if (entry.getElement().equals("game")) System.out.println("game");
+        //Future<String> cleanWord = pool.submit(new StopWordsRemoverWT(entry.getElement()));
+            //if (entry.getElement().equals("game")) System.out.println("game");
+            new StopWordsRemoverWT(entry.getElement().trim(), entry.getCount());
+    }
+    counter  = 0;
+    counterLines  = 0;
+    //pool.shutdown();
+    //pool.awaitTermination(1, TimeUnit.SECONDS);
+    long endStopWords = System.currentTimeMillis();
+
+System.out.println ("Number of ngrams after eliminating stopwords: "+filteredFreqSet.elementSet().size());
+
+
+        long durationStopWords = (endStopWords - startStopWords);
+    
+    if (durationStopWords< 
+
+    
+        1000) {
+            System.out.println("[took " + durationStopWords + " milliseconds]");
+    }
+    
+
+    
+        else {
+            System.out.println("[took " + durationStopWords / 1000 + " seconds]");
+    }
+
+    System.out.println (
+            
+
+    "---------------------------------");
+        System.out.println ();
+//-------------------------------------------------------------------------------------------------------------   
+    // #### SORTS N-GRAMS BY FREQUENCY, LEAVING OUT THE LESS FREQUENT ONE
+        //filteredFreqSet.addAll(setKeepWords,StringUtils.countMatches(sb.toString(), sb));
+        //if (filteredFreqSet.elementSet().contains("game")) System.out.println("game in it!");
+        
+        freqList  = MultiSetSorter.sortMultisetPerEntryCount(filteredFreqSet);
+
+    
+    
+        
+    ListIterator<Entry<String>> li = freqList.listIterator(Math.min(freqThreshold, freqList.size()));
+    
+
+    while (li.hasNext () 
+        ) {
+            Entry<String> entry = li.next();
+        li.remove();
+    }
+
+    System.out.println (
+
+    "Number of ngrams after keeping only the most "+Math.min(freqThreshold, freqList.size())+" frequent ones: "+freqList.size());
+//-------------------------------------------------------------------------------------------------------------   
+
+
+
+
+
+
+        // #### DELETES bi-grams trigrams and above, IF they are already contained in n+1 grams
+        System.out.println (
+            
+
+    "Removing n-grams IF already present in a n+1 gram and IF n-gram not twice more frequent");
+        System.err.println (
+            
+    "Example: it will remove \"top of the French\" and leave \"top of the French Alps\"");
+        //System.out.println("But it will remove \"United States of America\" and leave \"United States\", because \"United States\" is a much more frequent form");
+
+        long startRemoveNGrams = System.currentTimeMillis();
+    Iterator<Entry<String>> itFreqList = freqList.iterator();
+    HashSet<String> wordsToBeRemoved = new HashSet();
+    
+
+    while (itFreqList.hasNext () 
+        ) {
+            boolean write = true;
+        Entry<String> entry = itFreqList.next();
+        String currWord = entry.getElement();
+        int currWordCount = entry.getCount();
+                                        if ("game".equals(currWord)){
+                System.out.println(currWord);
+                                }
+        if (currWord.contains(" ")) {
+
+            Iterator<Entry<String>> itFreqList2 = freqList.iterator();
+            while (itFreqList2.hasNext()) {
+                Entry<String> entry2 = itFreqList2.next();
+                String currWord2 = entry2.getElement();
+                int currWordCount2 = entry2.getCount();
+
+                if (!currWord.equals(currWord2)
+                        && currWord.contains(currWord2) && currWordCount * 2 > currWordCount2) {
+
+                    //System.out.println(currWord + ", " + currWord2);
+                    wordsToBeRemoved.add(currWord2);
+//                                                            if ("health care".equals(currWord2)){
+//                System.out.println(currWord);
+//                                }
+
+                }
+            }
+        }
+    }
+    Iterator<Entry<String>> itFreqList3 = freqList.iterator();
+    
+
+    while (itFreqList3.hasNext () 
+        ) {
+            boolean toRemain = true;
+        Entry<String> entry = itFreqList3.next();
+        String currWord3 = entry.getElement();
+        toRemain = wordsToBeRemoved.add(currWord3);
+
+        if (toRemain & !setStopWords.contains(entry.getElement())) {
+            freqListFiltered.add(entry);
+            setFreqWords.add(entry.getElement());
+//            if ("health care".equals(entry.getElement())){
+//                System.out.println("added to freqListFiltered: "+entry.getElement());
+//            }
+
+        }
+
+
+    }
+
+    wordsToBeRemoved.clear ();
+    long endRemoveNGrams = System.currentTimeMillis();
+
+    System.out.print (
+            
+    "Duplicate n-grams removed! Number of remaining n-grams: "+setFreqWords.size());
+
+        long durationRemoveNGrams = (endRemoveNGrams - startRemoveNGrams);
+    
+    if (durationRemoveNGrams< 
+
+    
+        1000) {
+            System.out.println("[took " + durationRemoveNGrams + " milliseconds]");
+    }
+    
+
+    
+        else {
+            System.out.println("[took " + durationRemoveNGrams / 1000 + " seconds]");
+    }
+
+    System.out.println (
+            
+
+    "---------------------------------");
+        System.out.println ();
+//-------------------------------------------------------------------------------------------------------------           
+
+//    // #### PRINTING MOST FREQUENT TERMS         
+        for (int i = 0;
+                i < freqListFiltered.size()
+                && i < freqThreshold; i++) {
+            System.out.println("most frequent words: " + freqListFiltered.get(i));
+        }
+//-------------------------------------------------------------------------------------------------------------  
+
+
+        // #### COUNTING CO-OCCURRENCES PER LINE
+        System.out.println (
+            
+    "Counting co-occurrences per line...");
+
+
+        
+    for (Integer lineNumber
+
+    : mapofLines.keySet () 
+        ) {
+
+
+            String currWords = mapofLines.get(lineNumber);
+        Iterator<String> it3 = setFreqWords.iterator();
+
+
+
+        while (it3.hasNext()) {
+            int termCount = 0;
+            String currFreqTerm = it3.next();
+            if (currWords.contains("health care") & currFreqTerm.equals("health care"))
+                found = !found;
+            if (currWords.contains(currFreqTerm)) {
+//                        if (currValue.equals(itFreqList4.next().getElement())) {
+                //System.out.println("currValue   " + currValue);
+                //docLength = currLine.split(" ").length;
+                //System.out.println("docLength  " + docLength);
+                termCount = StringUtils.countMatches(currWords, currFreqTerm);
+                //System.out.println("FreqWord "+ currFreqTerm+ " found in current line. TermCount  " + termCount);
+                //termCountinCorpus = multisetOfWords.count(currValue);
+                //System.out.println("termCountinCorpus  " + termCountinCorpus);
+                //tdIDF = (termCount / docLength) * Math.log(numberOfDocs / termCountinCorpus);
+                //System.out.println("tdIDF  " + tdIDF);
+                //ngramsInLine.add(currFreqTerm.trim(), termCount);
+                ngramsInLine.add(currFreqTerm.trim());
+                //ngramsCountinCorpus.put(entry.getValue(), (int) termCountinCorpus);
+
+                //System.out.println("n-gram being added to the list of occurrences of line " + counterLines + ": " + entry.getValue());
+
+            }
+//                    }
+
+        }
+        //else break;
+
+
+        //System.out.println(ngramsInLine.size());
+        //System.out.println(ngramsInLine.toString());
+
+        String arrayWords[] = new String[ngramsInLine.size()];
+        if (arrayWords.length > 2) {
+            HashSet<String> setOcc = new HashSet();
+            setOcc.addAll(new PerformCombinations(ngramsInLine.toArray(arrayWords)).call());
+
+            Iterator<String> itOcc = setOcc.iterator();
+            while (itOcc.hasNext()) {
+                boolean add = true;
+                String pairOcc = itOcc.next();
+                if (pairOcc.contains("health care"))
+                        found = !found;
+                //System.out.println(pairOcc);
+                String[] pair = pairOcc.split(",");
+                String[] wordsInPair = pairOcc.split("[, ]");
+                HashSet<String> duplicates = new HashSet();
+
+                for (int i = 0; i < wordsInPair.length; i++) {
+
+                    boolean unique = duplicates.add(wordsInPair[i].trim());
+                    if (!unique) {
+                        add = false;
+                        break;
+                    }
+                }
+
+                if (!pair[0].trim().equals(pair[1].trim()) && !pair[0].contains(pair[1]) && !pair[1].contains(pair[0]) && add) //                                            System.out.println(pairOcc.toString());
+                //                                            System.out.println(pair[0]+" "+freqSet.count(pair[0]));
+                //                                            System.out.println(pair[1]+" "+freqSet.count(pair[1]));
+                //                                            System.out.println(pair[0]+" "+ngramsInLine.count(pair[0]));
+                //                                            System.out.println(pair[1]+" "+ngramsInLine.count(pair[1]));
+                //                                            System.out.println(pairOcc.toString()+" "+(ngramsInLine.count(pair[0]) + ngramsInLine.count(pair[1]))*10000000/(freqSet.count(pair[0])*freqSet.count(pair[1])));
+                {
+                    multisetOcc.add(pairOcc, (ngramsInLine.count(pair[0]) + ngramsInLine.count(pair[1])));
+                    // * 100*numberOfDocs/(freqSet.count(pair[0]) * freqSet.count(pair[1])));
+                }
+                //System.out.println(multisetOcc);
+
+            }
+            setCombinations.addAll(multisetOcc);
+        }
+        //System.out.println(setCombinations.toString());
+
+        //System.out.println("Total number of co-occurring pairs: " + setCombinations.entrySet().size());
+        ngramsInLine.clear();
+        multisetOcc.clear();
+
+    }
+    // #### PRINTING VOS VIEWER OUTPUT        
+
+    System.out.println (
+            
+
+    "Sorting co-occurrences, printing " + freqThreshold + " most frequent ones...");
+        freqList.clear ();
+    freqList  = MultiSetSorter.sortMultisetPerEntryCount(setCombinations);
+    
+    HashMap<String, Integer> id = new HashMap();
+    HashSet<String> idSet = new HashSet();
+    int counterIds = 0;
+    fileMapName  = StringUtils.substring(textFileName, 0, textFileName.length() - 4).concat("_map.txt");
+    fileMapFile  = new BufferedWriter(new FileWriter(wkOutput + fileMapName));
+    StringBuilder mapSb = new StringBuilder();
+
+    mapSb.append (
+    "label,id\n");
+        
+        // #### Creates the map of ids
+        
+    for (int i = 0;
+
+    i< freqList.size ()
+    //&& i < freqThreshold
+            ;
+    i
+
+    
+        ++) {
+            String[] edge = freqList.get(i).getElement().split(",");
+        if (idSet.add(edge[0])) {
+            id.put(edge[0], counterIds++);
+                mapSb.append(edge[0]).append(", ").append(counterIds).append("\n");
+        }
+        if (idSet.add(edge[1])) {
+            id.put(edge[1], counterIds++);
+                mapSb.append(edge[1]).append(", ").append(counterIds).append("\n");
+        }
+
+
+    }
+
+    fileMapFile.write (mapSb.toString
+
+    ());
+        fileMapFile.flush ();
+
+    fileMapFile.close ();
+    mapSb  = null;
+    fileNetworkName  = StringUtils.substring(textFileName, 0, textFileName.length() - 4).concat("_network.txt");
+    fileNetworkFile  = new BufferedWriter(new FileWriter(wkOutput + fileNetworkName));
+    StringBuilder networkSb = new StringBuilder();
+    
+    for (int i = 0;
+
+    i< freqList.size () //&& i < freqThreshold
+    ;
+    i
+
+    
+        ++) {
+            String[] edge = freqList.get(i).getElement().split(",");
+        try {
+                networkSb.append(id.get(edge[0]) + 1).append(",").append(id.get(edge[1]) + 1).append(",").append(freqList.get(i).getCount()).append("\n");
+        } catch (NullPointerException e) {
+        }
+    }
+
+    fileNetworkFile.write (networkSb.toString
+
+    ());
+        fileNetworkFile.flush ();
+
+    fileNetworkFile.close ();
+    networkSb  = null;
+// #### PRINTING REPORT ON PARAMETERS EMPLOYED:
+    fileParametersName  = StringUtils.substring(textFileName, 0, textFileName.length() - 4).concat("_parameters.txt");
+    fileParametersFile  = new BufferedWriter(new FileWriter(wkOutput + fileParametersName));
+    StringBuilder parametersSb = new StringBuilder();
+
+    parametersSb.append (
+
+    "Report of the parameters used to extract co-occurrences in file \"").append(textFileName).append("\".\n");       
+        parametersSb.append (
+
+    "Number of documents in the corpus: ").append(numberOfDocs).append(".\n");       
+        parametersSb.append (
+
+    "Inclusion of n-grams up to (and including) ").append(maxgram).append("-grams.\n");       
+        parametersSb.append (
+
+    "Size of the list of most frequent stopwords removed: ").append(nbStopWords).append(".\n");       
+        parametersSb.append (
+
+    "Only for bigrams and above: size of the list of most frequent stopwords used to filter out: ").append(nbStopWordsShort).append(".\n");       
+        parametersSb.append (
+
+    "max number of words allowed: ").append(freqThreshold).append(".\n");       
+        parametersSb.append (
+
+    "min nb of occurrences for a word to be processed: ").append(occurrenceThreshold).append(".\n");       
+
+        parametersSb.append (
+
+    "min nb of characters for a word to be processed: ").append(minWordLength).append(".\n");       
+        parametersSb.append (
+
+    "number of words found including n-grams: ").append(setFreqWords.size()).append(".\n");       
+        parametersSb.append (
+
+    "number of nodes: ").append(counterIds).append(".\n");      
+        parametersSb.append (
+
+    "number of edges: ").append(freqList.size()).append(".\n");      
+        
+        fileParametersFile.write (parametersSb.toString
+
+    ());
+        fileParametersFile.flush ();
+
+    fileParametersFile.close ();
+    parametersSb  = null;
+
+    
+    
+    System.exit (
+            
+
+0);
+    }
+}
