@@ -56,7 +56,7 @@ public class Main {
     // logic of freqThreshold: the higher the number of stopwords filtered out, the lower the number of significant words which should be expected
     private static int freqThreshold = 800;
     //private final static String textFile = "D:\\Docs Pro Clement\\E-humanities\\Datasets\\Zotero biblio Clement\\My Library\\ZoteroText.txt";
-    private final static String wk = "D:\\Docs Pro Clement\\Writing\\Article Nature Reviews Neuroscience\\semantic analysis\\";
+    private final static String wk = "D:\\Docs Pro Clement\\Writing\\Article NRN\\semantic analysis\\";
     //private final static String wk = "D:\\Docs Pro Clement\\E-Projects\\Discours Sarko\\";
     private final static String wkOutput = wk;
     private final static String textFileName = "abs neuroeco.txt";
