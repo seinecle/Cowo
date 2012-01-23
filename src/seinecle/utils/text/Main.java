@@ -15,6 +15,8 @@ import java.util.concurrent.ExecutionException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+        
+
 /**
  *
  * @author C. Levallois
@@ -61,12 +63,6 @@ public class Main {
     private final static String wkOutput = wk;
     private final static String textFileName = "abs neuroeco.txt";
     private static String textFile = wk + textFileName;
-    private final static String stopwordsFile = "C:\\data\\stopwords\\10000stopwords.txt";
-    private final static String stopwordsFileLevallois = "C:\\data\\stopwords\\Levalloisstopwords.txt";
-    private final static String stopwordsFileShort = "C:\\data\\stopwords\\100stopwords.txt";
-    private final static String stopwordsFileScientific = "C:\\data\\stopwords\\scientificstopwords.txt";
-    private final static String noLemmaFile = "C:\\data\\stopwords\\nolemmatization.txt";
-    private final static String keepWordsFile = "C:\\data\\stopwords\\keepwords.txt";
     static String cleanWord;
     public static int counter = 0;
     private static int numberOfDocs;
@@ -95,6 +91,12 @@ public class Main {
     private static BufferedReader fileNoLemma;
     private static String[] noLemmaArray;
     public static String[] keepWordsArray;
+    static InputStream in10000 = Main.class.getResourceAsStream("stopwords_10000_most_frequent.txt");
+    static InputStream in100 = Main.class.getResourceAsStream("stopwords_100_most_frequent.txt");
+    static InputStream inscientific = Main.class.getResourceAsStream("scientificstopwords.txt");
+    static InputStream inseinecle = Main.class.getResourceAsStream("stopwords_seinecle.txt");
+    static InputStream inkeep = Main.class.getResourceAsStream("stopwords_tokeep.txt");
+    static InputStream innolemma = Main.class.getResourceAsStream("nolemmatization.txt");
     
     public static void main(String[] args) throws FileNotFoundException, IOException, InterruptedException, ClassNotFoundException, InstantiationException, IllegalAccessException, ExecutionException {
 
@@ -105,12 +107,14 @@ public class Main {
         // #### LOADING FILE CONTAINING STOPWORDS
 
         //fileStopWords = new BufferedReader(new FileReader("C:\\data\\stopwords\\common-english-words_long_list.txt"));
-        fileStopWords = new BufferedReader(new FileReader(stopwordsFile));
-        fileStopWords2 = new BufferedReader(new FileReader(stopwordsFileLevallois));
-        fileStopWords3 = new BufferedReader(new FileReader(stopwordsFileShort));
-        fileStopWords4 = new BufferedReader(new FileReader(stopwordsFileScientific));
-        fileKeepWords = new BufferedReader(new FileReader(keepWordsFile));
-        fileNoLemma = new BufferedReader(new FileReader(noLemmaFile));
+        
+        fileStopWords = new BufferedReader(new InputStreamReader(in10000));
+        //fileStopWords = new BufferedReader(new FileReader(stopwordsFile));
+        fileStopWords2 = new BufferedReader(new InputStreamReader(inseinecle));
+        fileStopWords3 = new BufferedReader(new InputStreamReader(in100));
+        fileStopWords4 = new BufferedReader(new InputStreamReader(inscientific));
+        fileKeepWords = new BufferedReader(new InputStreamReader(inkeep));
+        fileNoLemma = new BufferedReader(new InputStreamReader(innolemma));
         stopwords = fileStopWords.readLine().split(",");
         noLemmaArray = fileNoLemma.readLine().split(",");
         keepWordsArray = fileKeepWords.readLine().split(",");
