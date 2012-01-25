@@ -8,6 +8,7 @@ package seinecle.utils.text;
 //CombinationGenerator.java
 //--------------------------------------
 // Systematically generate combinations.
+// Found on the Internet
 //--------------------------------------
 import java.math.BigInteger;
 public class CombinationGenerator {
