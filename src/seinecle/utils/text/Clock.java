@@ -13,7 +13,12 @@ import org.apache.commons.lang3.StringUtils;
 public class Clock {
 
     private long start;
-    private final String action;
+    private String action;
+    private String logText;
+    private final String newLine = "\n";
+    private final String interval = "-------------------------------\n\n";
+            
+    
     public Clock (String action){
     
     this.action = action;    
@@ -25,7 +30,11 @@ public class Clock {
     void startClock(){
         
         start = System.currentTimeMillis();
-        System.out.println(action + "...");
+        logText = action + "..."+newLine;
+        GUI_Screen_1.logArea.setText(GUI_Screen_1.logArea.getText().concat(logText));
+        //GUI_Screen_1.logArea.repaint();
+        
+        System.out.print(logText);
     }
 
     
@@ -38,6 +47,7 @@ public class Clock {
         if (elapsedTime
                 < 1000) {
             System.out.println("still " + StringUtils.lowerCase(action) + ", " + elapsedTime + " milliseconds]");
+            
         } else {
             System.out.println("still " + StringUtils.lowerCase(action) + ", " + elapsedTime / 1000 + " seconds]");
         }
@@ -51,16 +61,16 @@ public class Clock {
        
         if (totalTime
                 < 1000) {
-            System.out.println("finished " + StringUtils.lowerCase(action) + " [took: " + totalTime + " milliseconds]");
+            logText = "finished " + StringUtils.lowerCase(action) + " [took: " + totalTime + " milliseconds]"+newLine+interval;
+            System.out.print(logText);
         } else {
-            System.out.println("finished " + StringUtils.lowerCase(action) + " [took: " + totalTime / 1000 + " seconds]");
+            logText = "finished " + StringUtils.lowerCase(action) + " [took: " + totalTime / 1000 + " seconds]"+newLine+interval;
+            System.out.print(logText);
         
-        
+               
         }
-       
-        System.out.println(
-                "---------------------------------");
-        System.out.println();
+        GUI_Screen_1.logArea.setText(GUI_Screen_1.logArea.getText().concat(logText));
+
 
     
     }

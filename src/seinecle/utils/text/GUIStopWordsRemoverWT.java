@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
  *
  * @author C. Levallois
  */
-public final class StopWordsRemoverWT {
+public final class GUIStopWordsRemoverWT {
 
     //private final Entry<String> entry;
     private String entryWord;
@@ -29,7 +29,7 @@ public final class StopWordsRemoverWT {
 //        this.entryCount = entry.getCount();
 //        //run();
 //    }
-    StopWordsRemoverWT(String element, int entryCount) throws InterruptedException, ExecutionException {
+    GUIStopWordsRemoverWT(String element, int entryCount) throws InterruptedException, ExecutionException {
         this.entryWord = element;
         this.entryCount = entryCount;
 
@@ -43,7 +43,7 @@ public final class StopWordsRemoverWT {
 
         boolean write = true;
 
-        //System.out.println(Main.counter);
+        //System.out.println(GUIMain.counter);
 
         try {
 
@@ -60,7 +60,7 @@ public final class StopWordsRemoverWT {
                 for (int n = 0; n < wordsNGrams.length; n++) {
                     //System.out.println(wordsNGrams[n]);
 
-                    if (wordsNGrams[n].length() < Main.minWordLength) {
+                    if (wordsNGrams[n].length() < GUIMain.minWordLength) {
                         write = false;
                         break;
                     }
@@ -70,8 +70,8 @@ public final class StopWordsRemoverWT {
                 if (wordsNGrams.length == 2
                         && (
                         
-                            (Main.setStopWordsScientificOrShort.contains(wordsNGrams[0].toLowerCase().trim())
-                                || Main.setStopWordsScientificOrShort.contains(wordsNGrams[1].toLowerCase().trim()))
+                            (GUIMain.setStopWordsScientificOrShort.contains(wordsNGrams[0].toLowerCase().trim())
+                                || GUIMain.setStopWordsScientificOrShort.contains(wordsNGrams[1].toLowerCase().trim()))
                             )
                    )
                     
@@ -83,10 +83,10 @@ public final class StopWordsRemoverWT {
                 if (wordsNGrams.length > 2) {
 
 
-                    if (Main.setStopWordsShort.contains(wordsNGrams[0].toLowerCase().trim())
-                            || (Main.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) & Main.setStopWordsShort.contains(wordsNGrams[2].toLowerCase().trim()))
-                            || (Main.setStopWords.contains(wordsNGrams[0].toLowerCase().trim())& Main.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) && Main.setStopWords.contains(wordsNGrams[2].toLowerCase().trim()))
-                            || (Main.setStopWordsShort.contains(wordsNGrams[wordsNGrams.length - 1].toLowerCase().trim()))) {
+                    if (GUIMain.setStopWordsShort.contains(wordsNGrams[0].toLowerCase().trim())
+                            || (GUIMain.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) & GUIMain.setStopWordsShort.contains(wordsNGrams[2].toLowerCase().trim()))
+                            || (GUIMain.setStopWords.contains(wordsNGrams[0].toLowerCase().trim())& GUIMain.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) && GUIMain.setStopWords.contains(wordsNGrams[2].toLowerCase().trim()))
+                            || (GUIMain.setStopWordsShort.contains(wordsNGrams[wordsNGrams.length - 1].toLowerCase().trim()))) {
                         write = false;
                     }
 
@@ -104,7 +104,7 @@ public final class StopWordsRemoverWT {
 //                    entryWord = result.get();
                 //entryWord = new StanfordLemmatization(entryWord).call();
 
-                if (Main.setStopWords.contains(entryWord) & !Main.setKeepWords.contains(entryWord)) {
+                if (GUIMain.setStopWords.contains(entryWord) & !GUIMain.setKeepWords.contains(entryWord)) {
 
                     write = false;
 
@@ -122,8 +122,8 @@ public final class StopWordsRemoverWT {
 
 
         if (write) {
-            synchronized (Main.filteredFreqSet) {
-                Main.filteredFreqSet.add(entryWord, entryCount);
+            synchronized (GUIMain.filteredFreqSet) {
+                GUIMain.filteredFreqSet.add(entryWord, entryCount);
 
             }
 

@@ -62,12 +62,12 @@ public class Main {
     static int numberOfThreads = 7;
     private static Integer counterLines = 0;
     // logic of freqThreshold: the higher the number of stopwords filtered out, the lower the number of significant words which should be expected
-    private static int freqThreshold = 800;
-    //private final static String textFile = "D:\\Docs Pro Clement\\E-humanities\\Datasets\\Zotero biblio Clement\\My Library\\ZoteroText.txt";
-    private final static String wk = "D:\\Docs Pro Clement\\E-humanities\\TextMining\\Exported Items\\";
+    private static int freqThreshold = 400;
+    //private final static String wk = "D:\\Docs Pro Clement\\E-humanities\\TextMining\\Exported Items\\";
     //private final static String wk = "D:\\Docs Pro Clement\\E-Projects\\Discours Sarko\\";
+    private final static String wk = "D:\\Docs Pro Clement\\NESSHI\\Project bibliometrics\\plain text files\\";
     private final static String wkOutput = wk;
-    private final static String textFileName = "ZoteroText.txt";
+    private final static String textFileName = "abs and ti of marketing papers (2005 to 2010) citing neuro journals.csv";
     private static String textFile = wk + textFileName;
     static String cleanWord;
     public static int counter = 0;
@@ -75,12 +75,14 @@ public class Main {
     private static BufferedReader fileStopWords;
     private static BufferedReader fileKeepWords;
     private static BufferedReader fileStopWords2;
-    private static String[] stopwordsLevallois;
+    private static String[] stopwordsSeinecle;
     private static BufferedReader fileStopWords3;
     private static BufferedReader fileStopWords4;
     public static String[] stopwordsShort;
     private static String[] stopwordsScientific;
     public static Set<String> setStopWords = new HashSet();
+    public static Set<String> setStopWordsScientific = new HashSet();
+    public static Set<String> setStopWordsScientificOrShort = new HashSet();
     public static Set<String> setNoLemma = new HashSet();
     public static int minWordLength = 3;
     private static HashMap<Integer, String> mapofLines = new HashMap();
@@ -93,11 +95,12 @@ public class Main {
     private static BufferedWriter fileParametersFile;
     private static boolean found = false;
     public static Set<String> setStopWordsShort = new HashSet();
+    public static Set<String> setStopWordsSeinecle = new HashSet();
     public static Set<String> setKeepWords = new HashSet();
     private static BufferedReader fileNoLemma;
     private static String[] noLemmaArray;
     public static String[] keepWordsArray;
-    static InputStream in10000 = Main.class.getResourceAsStream("stopwords_10000_most_frequent.txt");
+    static InputStream in10000 = Main.class.getResourceAsStream("stopwords_10000_most_frequent_filtered.txt");
     static InputStream inscientific = Main.class.getResourceAsStream("scientificstopwords.txt");
     static InputStream inseinecle = Main.class.getResourceAsStream("stopwords_seinecle.txt");
     static InputStream inkeep = Main.class.getResourceAsStream("stopwords_tokeep.txt");
@@ -125,17 +128,23 @@ public class Main {
         stopwords = fileStopWords.readLine().split(",");
         noLemmaArray = fileNoLemma.readLine().split(",");
         keepWordsArray = fileKeepWords.readLine().split(",");
-        stopwordsLevallois = fileStopWords2.readLine().split(",");
+        stopwordsSeinecle = fileStopWords2.readLine().split(",");
         stopwordsScientific = fileStopWords4.readLine().split(",");
         stopwords = Arrays.copyOf(stopwords, nbStopWords);
         stopwordsShort = Arrays.copyOf(stopwords, nbStopWordsShort);
-        stopwords = (String[]) ArrayUtils.addAll(stopwords, stopwordsLevallois);
-        stopwords = (String[]) ArrayUtils.addAll(stopwords, stopwordsScientific);
+        stopwords =ArrayUtils.addAll(stopwords, stopwordsSeinecle);
+        stopwords = ArrayUtils.addAll(stopwords, stopwordsScientific);
 
         setStopWords.addAll(Arrays.asList(stopwords));
+        setStopWordsScientific.addAll(Arrays.asList(stopwordsScientific));
+        setStopWordsSeinecle.addAll(Arrays.asList(stopwordsSeinecle));
         setNoLemma.addAll(Arrays.asList(noLemmaArray));
         setKeepWords.addAll(Arrays.asList(keepWordsArray));
         setStopWordsShort.addAll(Arrays.asList(stopwordsShort));
+        setStopWordsScientificOrShort.addAll(setStopWordsScientific);
+        setStopWordsScientificOrShort.addAll(setStopWordsShort);
+        setStopWordsScientificOrShort.addAll(setStopWordsSeinecle);
+
         fileStopWords.close();
         fileStopWords2.close();
         fileStopWords4.close();
@@ -160,9 +169,9 @@ public class Main {
         StringBuilder sb = new StringBuilder();
         while ((currLine = br.readLine()) != null) {
             currLine = currLine.toLowerCase().trim().replaceAll("\\p{C}", " ").trim();
+            currLine = currLine.replaceAll("’", "'");
             currLine = currLine.replaceAll("[^A-Za-z']", " ").trim();
             currLine = currLine.replaceAll("[^A-Za-z'éèàç$êëï]", " ").trim();
-            currLine = currLine.replaceAll("’", "'");
             currLine = currLine.replaceAll(" +", " ");
             //currLine = currLine.replaceAll("[^A-Za-z]pfc", "prefrontal cortex");
             currLine = currLine.replaceAll("ofc", "orbitofrontal cortex");
@@ -193,7 +202,8 @@ public class Main {
             while (itwl.hasNext()) {
                 String currEntry = itwl.next().trim();
 
-                
+//                if ("consumers".equals(currEntry))
+//                    System.out.println("consumers");
 
 
                 if (currEntry.endsWith("ies")) {
@@ -485,9 +495,9 @@ public class Main {
                 while (itOcc.hasNext()) {
                     boolean add = true;
                     String pairOcc = itOcc.next();
-                    if (pairOcc.contains("health care")) {
-                        found = !found;
-                    }
+//                    if (pairOcc.contains("health care")) {
+//                        found = !found;
+//                    }
                     //System.out.println(pairOcc);
                     String[] pair = pairOcc.split(",");
                     String[] wordsInPair = pairOcc.split("[, ]");
@@ -539,7 +549,7 @@ public class Main {
         HashMap<String, Integer> id = new HashMap();
         HashSet<String> idSet = new HashSet();
         int counterIds = 0;
-        fileMapName = StringUtils.substring(textFileName, 0, textFileName.length() - 4).concat("_map.txt");
+        fileMapName = StringUtils.substring(textFileName, 0, textFileName.length() - 4).concat("_VosViewer__map.txt");
         fileMapFile = new BufferedWriter(new FileWriter(wkOutput + fileMapName));
         StringBuilder mapSb = new StringBuilder();
 
@@ -574,7 +584,7 @@ public class Main {
 
         // #### Creates the Vosviewer network (edges) of ids
 
-        fileNetworkName = StringUtils.substring(textFileName, 0, textFileName.length() - 4).concat("_network.txt");
+        fileNetworkName = StringUtils.substring(textFileName, 0, textFileName.length() - 4).concat("_VosViewer__network.txt");
         fileNetworkFile = new BufferedWriter(new FileWriter(wkOutput + fileNetworkName));
         StringBuilder networkSb = new StringBuilder();
 
@@ -600,8 +610,6 @@ public class Main {
 //-------------------------------------------------------------------------------------------------------------     
         // #### 10. PRINTING GML output        
 
-        System.out.println(
-                "Printing GML output...");
 
         HashMap<String, Integer> idGML = new HashMap();
         HashSet<String> idSetGML = new HashSet();
@@ -667,7 +675,7 @@ public class Main {
         parametersSb.append(
                 "Size of the list of most frequent stopwords removed: ").append(nbStopWords).append(".\n");
         parametersSb.append(
-                "Only for bigrams and above: size of the list of most frequent stopwords used to filter out: ").append(nbStopWordsShort).append(".\n");
+                "Only for bigrams and above: size of the list of most frequent stopwords used to filter out: ").append(setStopWordsScientificOrShort.size()).append(".\n");
         parametersSb.append(
                 "max number of words allowed: ").append(freqThreshold).append(".\n");
         parametersSb.append(
