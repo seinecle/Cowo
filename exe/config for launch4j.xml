@@ -1,0 +1,37 @@
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Users\C. Levallois\Documents\NetBeansProjects\MapText\dist\MapText.jar</jar>
+  <outfile>C:\Users\C. Levallois\Documents\NetBeansProjects\MapText\exe\maptext.exe</outfile>
+  <errTitle>You need to update your version of Java for this program to run</errTitle>
+  <cmdLine></cmdLine>
+  <chdir></chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <customProcName>false</customProcName>
+  <stayAlive>false</stayAlive>
+  <manifest></manifest>
+  <icon>D:\Docs Pro Clement\E-projects\Firm\logo\eyd.ico</icon>
+  <classPath>
+    <mainClass>seinecle.utils.text.GUI_Screen_1</mainClass>
+    <cp>lib/joda-time.jar</cp>
+    <cp>lib/xom.jar</cp>
+    <cp>lib/commons-lang3-3.0.1.jar</cp>
+    <cp>lib/guava-10.0.1.jar</cp>
+    <cp>lib/gephi-toolkit.jar</cp>
+  </classPath>
+  <jre>
+    <path></path>
+    <minVersion>1.6.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <maxHeapSize>500</maxHeapSize>
+  </jre>
+  <splash>
+    <file>C:\Users\C. Levallois\Documents\NetBeansProjects\MapText\exe\splashscreen.bmp</file>
+    <waitForWindow>true</waitForWindow>
+    <timeout>60</timeout>
+    <timeoutErr>true</timeoutErr>
+  </splash>
+</launch4jConfig>

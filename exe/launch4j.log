@@ -1,0 +1,84 @@
+
+
+CmdLine:	C:\Users\C. Levallois\Documents\NetBeansProjects\MapText\exe\maptext.exe --l4j-debug
+WOW64:		yes
+Check launcher:	 (n/a)
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+Ignore:		SOFTWARE\JavaSoft\Java Runtime Environment\1.6
+Match:		SOFTWARE\JavaSoft\Java Runtime Environment\1.6.0_26
+Match:		SOFTWARE\JavaSoft\Java Runtime Environment\1.7
+Match:		SOFTWARE\JavaSoft\Java Runtime Environment\1.7.0_01
+Using 64-bit runtime.
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+Ignore:		SOFTWARE\JavaSoft\Java Development Kit\1.6
+Ignore:		SOFTWARE\JavaSoft\Java Development Kit\1.6.0_26
+Ignore:		SOFTWARE\JavaSoft\Java Development Kit\1.7
+Ignore:		SOFTWARE\JavaSoft\Java Development Kit\1.7.0_01
+Using 64-bit runtime.
+Check launcher:	C:\Program Files\Java\jre7\bin\javaw.exe (OK)
+Heap -Xmx:	500 MB / 0%, Free: 4095 MB, Heap size: 500 MB
+Add classpath:	lib\joda-time.jar
+Add classpath:	lib\xom.jar
+Add classpath:	lib\commons-lang3-3.0.1.jar
+Add classpath:	lib\guava-10.0.1.jar
+Add classpath:	lib\gephi-toolkit.jar
+Launcher:	C:\Program Files\Java\jre7\bin\javaw.exe
+Launcher args:	-Xmx500m -classpath "C:\Users\C. Levallois\Documents\NetBeansProjects\MapText\exe\maptext.exe;lib\joda-time.jar;lib\xom.jar;lib\commons-lang3-3.0.1.jar;lib\guava-10.0.1.jar;lib\gephi-toolkit.jar" seinecle.utils.text.GUI_Screen_1
+Args length:	228/32768 chars
+Exit code:	259
+
+
+CmdLine:	C:\Users\C. Levallois\Documents\NetBeansProjects\MapText\exe\maptext.exe --l4j-debug
+WOW64:		yes
+Check launcher:	 (n/a)
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+Ignore:		SOFTWARE\JavaSoft\Java Runtime Environment\1.6
+Match:		SOFTWARE\JavaSoft\Java Runtime Environment\1.6.0_26
+Match:		SOFTWARE\JavaSoft\Java Runtime Environment\1.7
+Match:		SOFTWARE\JavaSoft\Java Runtime Environment\1.7.0_01
+Using 64-bit runtime.
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+Ignore:		SOFTWARE\JavaSoft\Java Development Kit\1.6
+Ignore:		SOFTWARE\JavaSoft\Java Development Kit\1.6.0_26
+Ignore:		SOFTWARE\JavaSoft\Java Development Kit\1.7
+Ignore:		SOFTWARE\JavaSoft\Java Development Kit\1.7.0_01
+Using 64-bit runtime.
+Check launcher:	C:\Program Files\Java\jre7\bin\javaw.exe (OK)
+Heap -Xmx:	500 MB / 0%, Free: 4095 MB, Heap size: 500 MB
+Add classpath:	lib\joda-time.jar
+Add classpath:	lib\xom.jar
+Add classpath:	lib\commons-lang3-3.0.1.jar
+Add classpath:	lib\guava-10.0.1.jar
+Add classpath:	lib\gephi-toolkit.jar
+Launcher:	C:\Program Files\Java\jre7\bin\javaw.exe
+Launcher args:	-Xmx500m -classpath "C:\Users\C. Levallois\Documents\NetBeansProjects\MapText\exe\maptext.exe;lib\joda-time.jar;lib\xom.jar;lib\commons-lang3-3.0.1.jar;lib\guava-10.0.1.jar;lib\gephi-toolkit.jar" seinecle.utils.text.GUI_Screen_1
+Args length:	228/32768 chars
+Exit code:	259
+
+
+CmdLine:	C:\Users\C. Levallois\Documents\NetBeansProjects\MapText\exe\maptext.exe --l4j-debug
+WOW64:		yes
+Check launcher:	 (n/a)
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+Ignore:		SOFTWARE\JavaSoft\Java Runtime Environment\1.6
+Match:		SOFTWARE\JavaSoft\Java Runtime Environment\1.6.0_26
+Match:		SOFTWARE\JavaSoft\Java Runtime Environment\1.7
+Match:		SOFTWARE\JavaSoft\Java Runtime Environment\1.7.0_01
+Using 64-bit runtime.
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+Ignore:		SOFTWARE\JavaSoft\Java Development Kit\1.6
+Ignore:		SOFTWARE\JavaSoft\Java Development Kit\1.6.0_26
+Ignore:		SOFTWARE\JavaSoft\Java Development Kit\1.7
+Ignore:		SOFTWARE\JavaSoft\Java Development Kit\1.7.0_01
+Using 64-bit runtime.
+Check launcher:	C:\Program Files\Java\jre7\bin\javaw.exe (OK)
+Heap -Xmx:	500 MB / 0%, Free: 4095 MB, Heap size: 500 MB
+Add classpath:	lib\joda-time.jar
+Add classpath:	lib\xom.jar
+Add classpath:	lib\commons-lang3-3.0.1.jar
+Add classpath:	lib\guava-10.0.1.jar
+Add classpath:	lib\gephi-toolkit.jar
+Launcher:	C:\Program Files\Java\jre7\bin\javaw.exe
+Launcher args:	-Xmx500m -classpath "C:\Users\C. Levallois\Documents\NetBeansProjects\MapText\exe\maptext.exe;lib\joda-time.jar;lib\xom.jar;lib\commons-lang3-3.0.1.jar;lib\guava-10.0.1.jar;lib\gephi-toolkit.jar" seinecle.utils.text.GUI_Screen_1
+Args length:	228/32768 chars
+Exit code:	259

@@ -61,10 +61,10 @@ public class Clock {
        
         if (totalTime
                 < 1000) {
-            logText = "finished " + StringUtils.lowerCase(action) + " [took: " + totalTime + " milliseconds]"+newLine+interval;
+            logText = "finished [took: " + totalTime + " milliseconds]"+newLine+interval;
             System.out.print(logText);
         } else {
-            logText = "finished " + StringUtils.lowerCase(action) + " [took: " + totalTime / 1000 + " seconds]"+newLine+interval;
+            logText = "finished [took: " + totalTime / 1000 + " seconds]"+newLine+interval;
             System.out.print(logText);
         
                

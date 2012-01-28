@@ -172,7 +172,7 @@ public class GUIMain implements Runnable {
 
             // ### 2. LOADING FILE IN MEMORY AND CLEANING  ...
             
-            Clock loadingAndLemmatizingTime = new Clock("Loading text file: " + textFile +", cleaning a bit and lemmatizing");
+            Clock loadingAndLemmatizingTime = new Clock("Loading text file: " + textFile +"\nCleaning a bit and lemmatizing");
 
             fr = new FileReader(textFile);
             BufferedReader br = new BufferedReader(fr);
@@ -711,9 +711,16 @@ public class GUIMain implements Runnable {
     //-------------------------------------------------------------------------------------------------------------     
             printingOutputTime.closeAndPrintClock();
             
-            Clock GephiVizTime = new Clock ("Creating pdf of Gephi Viz");
+            Clock GephiVizTime = new Clock ("Creating pdf of Gephi viz");
+            GUI_Screen_1.logArea.setText(GUI_Screen_1.logArea.getText().concat("This step takes longer - count 15 seconds on a powerful desktop\n"));
             GephiTooKit.main(wkOutput,fileGMLName);
             GephiVizTime.closeAndPrintClock();
+            GUI_Screen_1.logArea.setText(GUI_Screen_1.logArea.getText().concat("The resulting network is a file called \"GEPHI_output.png\" located in the same directory as your text file.\n"
+                    + "Results are ugly but it's going to improve! Check again regularly.\n"
+                    + "The source for this program is freely available at:\n"
+                    + "https://github.com/seinecle/MapText/blob/master/src/seinecle/utils/text/GUIMain.java\n"
+                    + "Thank you!\n"
+                    + "www.clementlevallois.net // twitter: @seinecle"));
 
             //System.exit(0);
         } catch (InterruptedException ex) {

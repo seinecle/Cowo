@@ -113,7 +113,7 @@ Ranking degreeRanking = rankingController.getModel().getRanking(Ranking.NODE_ELE
 AbstractColorTransformer colorTransformer = (AbstractColorTransformer) rankingController.getModel().getTransformer(Ranking.NODE_ELEMENT, Transformer.RENDERABLE_COLOR);
 colorTransformer.setColors(new Color[]{new Color(0xFEF0D9), new Color(0xB30000)});
 rankingController.transform(degreeRanking,colorTransformer);
-rankingController.setInterpolator(Interpolator.newBezierInterpolator(new Float(0.1), new Float(0.1), new Float(0.1), new Float(0.1)));
+
  
 //Rank LABEL size by degree 
 AttributeColumn centralityColumn = attributeModel.getNodeTable().getColumn(GraphDistance.BETWEENNESS);
@@ -121,7 +121,7 @@ AttributeColumn centralityColumn = attributeModel.getNodeTable().getColumn(Graph
 AbstractSizeTransformer sizeTransformer = (AbstractSizeTransformer) rankingController.getModel().getTransformer(Ranking.NODE_ELEMENT, Transformer.LABEL_SIZE);
 sizeTransformer.setMinSize(3);
 sizeTransformer.setMaxSize(10);
-rankingController.setInterpolator(Interpolator.newBezierInterpolator(new Float(0.1), new Float(0.1), new Float(0.1), new Float(0.1)));
+rankingController.setInterpolator(new Interpolator.BezierInterpolator(new Float(0.1), new Float(0.1), new Float(0.1), new Float(0.1)));
 rankingController.transform(degreeRanking,sizeTransformer);
  
 //Preview
