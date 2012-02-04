@@ -584,7 +584,7 @@ public class Main {
 
         // #### Creates the Vosviewer network (edges) of ids
 
-        fileNetworkName = StringUtils.substring(textFileName, 0, textFileName.length() - 4).concat("_VosViewer__network.txt");
+        fileNetworkName = StringUtils.substring(textFileName, 0, textFileName.length() - 4).concat("_VosViewer_network.txt");
         fileNetworkFile = new BufferedWriter(new FileWriter(wkOutput + fileNetworkName));
         StringBuilder networkSb = new StringBuilder();
 

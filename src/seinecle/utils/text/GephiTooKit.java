@@ -13,6 +13,7 @@ import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.Query;
 import org.gephi.filters.api.Range;
+import org.gephi.filters.plugin.edge.EdgeWeightBuilder.EdgeWeightFilter;
 import org.gephi.filters.plugin.graph.DegreeRangeBuilder.DegreeRangeFilter;
 import org.gephi.graph.api.*;
 import org.gephi.io.exporter.api.ExportController;
@@ -81,8 +82,12 @@ System.out.println("Edges: " + graph.getEdgeCount());
  
 //Filter      
 DegreeRangeFilter degreeFilter = new DegreeRangeFilter();
-degreeFilter.init(graph);
-degreeFilter.setRange(new Range(500, Integer.MAX_VALUE));     //Remove nodes with degree < 500
+EdgeWeightFilter edgeWeightFilter = new EdgeWeightFilter();
+
+//degreeFilter.init(graph);
+edgeWeightFilter.init(graph);
+//degreeFilter.setRange(new Range(500, Integer.MAX_VALUE));     //Remove nodes with degree < 500
+//edgeWeightFilter.setRange(new Range(10, Integer.MAX_VALUE));     //Remove nodes with degree < 500
 Query query = filterController.createQuery(degreeFilter);
 GraphView view = filterController.filter(query);
 graphModel.setVisibleView(view);    //Set the filter result as the visible view
@@ -116,20 +121,21 @@ rankingController.transform(degreeRanking,colorTransformer);
 
  
 //Rank LABEL size by degree 
-AttributeColumn centralityColumn = attributeModel.getNodeTable().getColumn(GraphDistance.BETWEENNESS);
+//AttributeColumn centralityColumn = attributeModel.getNodeTable().getColumn(GraphDistance.BETWEENNESS);
 //Ranking centralityRanking = rankingController.getModel().getRanking(Ranking.NODE_ELEMENT, centralityColumn.getId());
 AbstractSizeTransformer sizeTransformer = (AbstractSizeTransformer) rankingController.getModel().getTransformer(Ranking.NODE_ELEMENT, Transformer.LABEL_SIZE);
 sizeTransformer.setMinSize(3);
 sizeTransformer.setMaxSize(10);
-rankingController.setInterpolator(new Interpolator.BezierInterpolator(new Float(0.1), new Float(0.1), new Float(0.1), new Float(0.1)));
+rankingController.setInterpolator(new Interpolator.BezierInterpolator(new Float(0), new Float(1), new Float(0), new Float(1)));
 rankingController.transform(degreeRanking,sizeTransformer);
  
 //Preview
 model.getProperties().putValue(PreviewProperty.SHOW_NODE_LABELS, Boolean.TRUE);
 model.getProperties().putValue(PreviewProperty.EDGE_COLOR, new EdgeColor(Color.GRAY));
+model.getProperties().putValue(PreviewProperty.SHOW_EDGES,false);
 model.getProperties().putValue(PreviewProperty.EDGE_THICKNESS, new Float(0.1f));
 model.getProperties().putValue(PreviewProperty.NODE_OPACITY, new Float(0.00));
-model.getProperties().putValue(PreviewProperty.NODE_LABEL_FONT, model.getProperties().getFontValue(PreviewProperty.NODE_LABEL_FONT).deriveFont(8));
+//model.getProperties().putValue(PreviewProperty.NODE_LABEL_FONT, model.getProperties().getFontValue(PreviewProperty.NODE_LABEL_FONT).deriveFont(8));
  
 //Export
 ExportController ec = Lookup.getDefault().lookup(ExportController.class);

@@ -59,6 +59,7 @@ public class GUIMain implements Runnable {
     private static int maxgram = 4;
     private final static int nbStopWords = 5000;
     private final static int nbStopWordsShort = 200;
+    public final static int maxAcceptedGarbage = 3;
     //static int numberOfThreads = Runtime.getRuntime().availableProcessors();
     static int numberOfThreads = 7;
     private static Integer counterLines = 0;
@@ -465,17 +466,20 @@ public class GUIMain implements Runnable {
 
 
                 while (it3.hasNext()) {
-                    int termCount = 0;
+                    //int termCount = 0;
                     String currFreqTerm = it3.next();
     //                if (currWords.contains("health care") & currFreqTerm.equals("health care")) {
     //                    found = !found;
     //                }
                     if (currWords.contains(currFreqTerm)) {
+                        
+                        if (currFreqTerm == "consumers")
+                            System.out.println("consumers");
     //                        if (currValue.equals(itFreqList4.next().getElement())) {
                         //System.out.println("currValue   " + currValue);
                         //docLength = currLine.split(" ").length;
                         //System.out.println("docLength  " + docLength);
-                        termCount = StringUtils.countMatches(currWords, currFreqTerm);
+                        //termCount = StringUtils.countMatches(currWords, currFreqTerm);
                         //System.out.println("FreqWord "+ currFreqTerm+ " found in current line. TermCount  " + termCount);
                         //termCountinCorpus = multisetOfWords.count(currValue);
                         //System.out.println("termCountinCorpus  " + termCountinCorpus);
@@ -506,22 +510,10 @@ public class GUIMain implements Runnable {
                     while (itOcc.hasNext()) {
                         boolean add = true;
                         String pairOcc = itOcc.next();
-    //                    if (pairOcc.contains("health care")) {
-    //                        found = !found;
-    //                    }
-                        //System.out.println(pairOcc);
+
                         String[] pair = pairOcc.split(",");
-                        String[] wordsInPair = pairOcc.split("[, ]");
-                        HashSet<String> duplicates = new HashSet();
 
-                        for (int i = 0; i < wordsInPair.length; i++) {
 
-                            boolean unique = duplicates.add(wordsInPair[i].trim());
-                            if (!unique) {
-                                add = false;
-                                break;
-                            }
-                        }
 
                         if (!pair[0].trim().equals(pair[1].trim()) && !pair[0].contains(pair[1]) && !pair[1].contains(pair[0]) && add) //                                            System.out.println(pairOcc.toString());
                         //                                            System.out.println(pair[0]+" "+freqSet.count(pair[0]));
@@ -595,7 +587,7 @@ public class GUIMain implements Runnable {
 
             // #### Creates the Vosviewer network (edges) of ids
 
-            fileNetworkName = StringUtils.substring(textFileName, 0, textFileName.length() - 4).concat("_VosViewer__network.txt");
+            fileNetworkName = StringUtils.substring(textFileName, 0, textFileName.length() - 4).concat("_VosViewer_network.txt");
             fileNetworkFile = new BufferedWriter(new FileWriter(wkOutput + fileNetworkName));
             System.out.println(wkOutput+fileNetworkName);
             StringBuilder networkSb = new StringBuilder();
@@ -713,6 +705,7 @@ public class GUIMain implements Runnable {
             
             Clock GephiVizTime = new Clock ("Creating pdf of Gephi viz");
             GUI_Screen_1.logArea.setText(GUI_Screen_1.logArea.getText().concat("This step takes longer - count 15 seconds on a powerful desktop\n"));
+            GUI_Screen_1.logArea.setCaretPosition(GUI_Screen_1.logArea.getText().length());
             GephiTooKit.main(wkOutput,fileGMLName);
             GephiVizTime.closeAndPrintClock();
             GUI_Screen_1.logArea.setText(GUI_Screen_1.logArea.getText().concat("The resulting network is a file called \"GEPHI_output.png\" located in the same directory as your text file.\n"
@@ -721,6 +714,8 @@ public class GUIMain implements Runnable {
                     + "https://github.com/seinecle/MapText/blob/master/src/seinecle/utils/text/GUIMain.java\n"
                     + "Thank you!\n"
                     + "www.clementlevallois.net // twitter: @seinecle"));
+            GUI_Screen_1.logArea.setCaretPosition(GUI_Screen_1.logArea.getText().length());
+
 
             //System.exit(0);
         } catch (InterruptedException ex) {

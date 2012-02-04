@@ -12,6 +12,7 @@ import javax.swing.SwingUtilities;
  * @author C. Levallois
  */
 public class GUI_Screen_1 extends javax.swing.JFrame {
+
     private String workingDirectory;
     private boolean fileSelected;
     private String fileSelectedPathANdName;
@@ -35,7 +36,7 @@ public class GUI_Screen_1 extends javax.swing.JFrame {
 
         selectTextFileButton = new javax.swing.JButton();
         createMapButton = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         logArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -54,9 +55,16 @@ public class GUI_Screen_1 extends javax.swing.JFrame {
             }
         });
 
+        logArea.setBackground(new java.awt.Color(240, 240, 240));
         logArea.setColumns(20);
+        logArea.setFont(new java.awt.Font("Arial Unicode MS", 0, 10)); // NOI18N
+        logArea.setLineWrap(true);
         logArea.setRows(5);
-        jScrollPane1.setViewportView(logArea);
+        logArea.setWrapStyleWord(true);
+        logArea.setBorder(null);
+        logArea.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        logArea.setHighlighter(null);
+        jScrollPane2.setViewportView(logArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,28 +73,24 @@ public class GUI_Screen_1 extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(261, 261, 261)
-                                .addComponent(selectTextFileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(285, 285, 285)
-                                .addComponent(createMapButton)))
-                        .addGap(0, 309, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1)))
-                .addContainerGap())
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(selectTextFileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(createMapButton))))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addContainerGap(36, Short.MAX_VALUE)
                 .addComponent(selectTextFileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(createMapButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -94,52 +98,52 @@ public class GUI_Screen_1 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void selectTextFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectTextFileButtonActionPerformed
-                if (evt.getSource() == selectTextFileButton) {
-        System.out.println("selectTextFile clicked");
+        if (evt.getSource() == selectTextFileButton) {
+            System.out.println("selectTextFile clicked");
 
-                            
-    }
-    JFileChooser chooser = new JFileChooser();
-    //chooser.setCurrentDirectory(new java.io.File("D:\\Docs Pro Clement\\E-humanities\\TextMining\\Exported Items\\"));
-    chooser.setDialogTitle("Select a text file");
-    //chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-    chooser.setAcceptAllFileFilterUsed(false);
-    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-        System.out.println("Current directory: " + chooser.getCurrentDirectory().getAbsolutePath());
 
-        workingDirectory = chooser.getCurrentDirectory().getAbsolutePath().toString();
-        fileSelected = true;
-        fileSelectedPathANdName = chooser.getSelectedFile().toString();
-        fileSelectedName = chooser.getSelectedFile().getName();
-        System.out.println("Selected File: " + fileSelectedPathANdName);
-    } else {
-        System.out.println("No Selection");
-    }
+        }
+        JFileChooser chooser = new JFileChooser();
+        //chooser.setCurrentDirectory(new java.io.File("D:\\Docs Pro Clement\\E-humanities\\TextMining\\Exported Items\\"));
+        chooser.setDialogTitle("Select a text file");
+        //chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            System.out.println("Current directory: " + chooser.getCurrentDirectory().getAbsolutePath());
+
+            workingDirectory = chooser.getCurrentDirectory().getAbsolutePath().toString();
+            fileSelected = true;
+            fileSelectedPathANdName = chooser.getSelectedFile().toString();
+            fileSelectedName = chooser.getSelectedFile().getName();
+            System.out.println("Selected File: " + fileSelectedPathANdName);
+        } else {
+            System.out.println("No Selection");
+        }
     }//GEN-LAST:event_selectTextFileButtonActionPerformed
 
     private void createMapButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createMapButtonActionPerformed
-               if (evt.getSource() == createMapButton) {
+        if (evt.getSource() == createMapButton) {
 
 
             if (fileSelected) {
-               
-                    //System.out.println(String.valueOf(countHTML));
-                    String[] args;
-                    args = new String[3];
-                    args[0] = workingDirectory;
-                    args[1] = fileSelectedPathANdName;
-                    args[2] = fileSelectedName;
-                    //logArea.append(workingDirectory);
- //                    args[1] = String.valueOf(countPDF);
 
-               
-                    Runnable r = new GUIMain(args[0],args[1],args[2]);
-                    new Thread(r).start();
-                    
+                //System.out.println(String.valueOf(countHTML));
+                String[] args;
+                args = new String[3];
+                args[0] = workingDirectory;
+                args[1] = fileSelectedPathANdName;
+                args[2] = fileSelectedName;
+                //logArea.append(workingDirectory);
+                //                    args[1] = String.valueOf(countPDF);
 
-                            }
-            
-       }
+
+                Runnable r = new GUIMain(args[0], args[1], args[2]);
+                new Thread(r).start();
+
+
+            }
+
+        }
     }//GEN-LAST:event_createMapButtonActionPerformed
 
     /**
@@ -185,7 +189,7 @@ public class GUI_Screen_1 extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createMapButton;
-    private javax.swing.JScrollPane jScrollPane1;
+    public static javax.swing.JScrollPane jScrollPane2;
     public static javax.swing.JTextArea logArea;
     private javax.swing.JButton selectTextFileButton;
     // End of variables declaration//GEN-END:variables

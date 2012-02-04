@@ -81,16 +81,42 @@ public final class GUIStopWordsRemoverWT {
                 }
 
                 if (wordsNGrams.length > 2) {
+                    int scoreGarbage = 0;
+
+                    for (int i = 0; i < wordsNGrams.length; i++) {
+
+                        if ((i == 0 | i == (wordsNGrams.length - 1)) & GUIMain.setStopWordsScientificOrShort.contains(wordsNGrams[i].toLowerCase().trim()) ) {
+                            scoreGarbage = GUIMain.maxAcceptedGarbage + 1;
+                            continue;
+                        }
+
+                                                
+                        if (GUIMain.setStopWordsShort.contains(wordsNGrams[i].toLowerCase().trim())) {
+                            scoreGarbage = scoreGarbage + 3;
+                            continue;
+                        }
+
+                        if (GUIMain.setStopWordsScientific.contains(wordsNGrams[i].toLowerCase().trim())) {
+                            scoreGarbage = scoreGarbage + 2;
+                            continue;
+                        }
+
+                        
+                        
+//                        if (Main.setStopWords.contains(wordsNGrams[i].toLowerCase().trim())) {
+//                            scoreGarbage++;
+//                        }
 
 
-                    if (GUIMain.setStopWordsShort.contains(wordsNGrams[0].toLowerCase().trim())
-                            || (GUIMain.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) & GUIMain.setStopWordsShort.contains(wordsNGrams[2].toLowerCase().trim()))
-                            || (GUIMain.setStopWords.contains(wordsNGrams[0].toLowerCase().trim())& GUIMain.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) && GUIMain.setStopWords.contains(wordsNGrams[2].toLowerCase().trim()))
-                            || (GUIMain.setStopWordsShort.contains(wordsNGrams[wordsNGrams.length - 1].toLowerCase().trim()))) {
+                    }
+//                    if (Main.setStopWordsShort.contains(wordsNGrams[0].toLowerCase().trim())
+//                            || (Main.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) & Main.setStopWordsShort.contains(wordsNGrams[2].toLowerCase().trim()))
+//                            || (Main.setStopWords.contains(wordsNGrams[0].toLowerCase().trim())& Main.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) && Main.setStopWords.contains(wordsNGrams[2].toLowerCase().trim()))
+//                            || (Main.setStopWordsShort.contains(wordsNGrams[wordsNGrams.length - 1].toLowerCase().trim()))) {
+                    if (scoreGarbage > GUIMain.maxAcceptedGarbage) {
+                        
                         write = false;
                     }
-
-
                 }
 
 

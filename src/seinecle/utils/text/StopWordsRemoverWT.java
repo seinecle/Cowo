@@ -68,34 +68,41 @@ public final class StopWordsRemoverWT {
                 }
 
                 if (wordsNGrams.length == 2
-                        && (
-                        
-                            (Main.setStopWordsScientificOrShort.contains(wordsNGrams[0].toLowerCase().trim())
-                                || Main.setStopWordsScientificOrShort.contains(wordsNGrams[1].toLowerCase().trim()))
-                            )
-                   )
-                    
-                         {
+                        && ((Main.setStopWordsScientificOrShort.contains(wordsNGrams[0].toLowerCase().trim())
+                        || Main.setStopWordsScientificOrShort.contains(wordsNGrams[1].toLowerCase().trim())))) {
                     write = false;
 
                 }
 
                 if (wordsNGrams.length > 2) {
+                    int scoreGarbage = 0;
+                    for (int i = 0; i < wordsNGrams.length; i++) {
+
+                        if (Main.setStopWordsShort.contains(wordsNGrams[i].toLowerCase().trim())) {
+                            scoreGarbage = scoreGarbage + 3;
+                            continue;
+                        }
+
+                        if (Main.setStopWordsScientific.contains(wordsNGrams[i].toLowerCase().trim())) {
+                            scoreGarbage = scoreGarbage + 2;
+                            continue;
+                        }
+
+                        
+//                        if (Main.setStopWords.contains(wordsNGrams[i].toLowerCase().trim())) {
+//                            scoreGarbage++;
+//                        }
 
 
-                    if (Main.setStopWordsShort.contains(wordsNGrams[0].toLowerCase().trim())
-                            || (Main.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) & Main.setStopWordsShort.contains(wordsNGrams[2].toLowerCase().trim()))
-                            || (Main.setStopWords.contains(wordsNGrams[0].toLowerCase().trim())& Main.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) && Main.setStopWords.contains(wordsNGrams[2].toLowerCase().trim()))
-                            || (Main.setStopWordsShort.contains(wordsNGrams[wordsNGrams.length - 1].toLowerCase().trim()))) {
+                    }
+//                    if (Main.setStopWordsShort.contains(wordsNGrams[0].toLowerCase().trim())
+//                            || (Main.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) & Main.setStopWordsShort.contains(wordsNGrams[2].toLowerCase().trim()))
+//                            || (Main.setStopWords.contains(wordsNGrams[0].toLowerCase().trim())& Main.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) && Main.setStopWords.contains(wordsNGrams[2].toLowerCase().trim()))
+//                            || (Main.setStopWordsShort.contains(wordsNGrams[wordsNGrams.length - 1].toLowerCase().trim()))) {
+                    if (scoreGarbage > 3) {
                         write = false;
                     }
-
-
                 }
-
-
-
-
 
 
             } else {
