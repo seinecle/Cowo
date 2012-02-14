@@ -103,13 +103,15 @@ public final class GUIStopWordsRemoverWT {
 
                         
                         
-//                        if (Main.setStopWords.contains(wordsNGrams[i].toLowerCase().trim())) {
-//                            scoreGarbage++;
-//                        }
 
 
                     }
-//                    if (Main.setStopWordsShort.contains(wordsNGrams[0].toLowerCase().trim())
+
+                    if (Main.setStopWords.contains(entryWord)) {
+                        scoreGarbage = GUIMain.maxAcceptedGarbage + 1;
+                    }
+
+                    //                    if (Main.setStopWordsShort.contains(wordsNGrams[0].toLowerCase().trim())
 //                            || (Main.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) & Main.setStopWordsShort.contains(wordsNGrams[2].toLowerCase().trim()))
 //                            || (Main.setStopWords.contains(wordsNGrams[0].toLowerCase().trim())& Main.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) && Main.setStopWords.contains(wordsNGrams[2].toLowerCase().trim()))
 //                            || (Main.setStopWordsShort.contains(wordsNGrams[wordsNGrams.length - 1].toLowerCase().trim()))) {

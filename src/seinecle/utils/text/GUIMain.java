@@ -4,6 +4,7 @@
  */
 package seinecle.utils.text;
 
+import GUI.GUI_Screen_1;
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.LinkedHashMultimap;
@@ -106,7 +107,7 @@ public class GUIMain implements Runnable {
     public static String fileGMLName;
     private static BufferedWriter fileGMLFile;
 
-    GUIMain(String wkGUI,String textFileGUI,String textFileNameGUI){
+    public GUIMain(String wkGUI,String textFileGUI,String textFileNameGUI){
         
         textFile = textFileGUI;
         wk = wkGUI;
@@ -180,6 +181,8 @@ public class GUIMain implements Runnable {
             StringBuilder sb = new StringBuilder();
             while ((currLine = br.readLine()) != null) {
                 currLine = currLine.toLowerCase().trim().replaceAll("http[^ ]* ", " ").trim();
+                currLine = currLine.toLowerCase().trim().replaceAll("&amp;", "and").trim();
+                
                 currLine = currLine.toLowerCase().trim().replaceAll("\\p{C}", " ").trim();
                 currLine = currLine.replaceAll("’", "'");
                 currLine = currLine.replaceAll("[^A-Za-z']", " ").trim();
@@ -212,10 +215,10 @@ public class GUIMain implements Runnable {
 
 
                 while (itwl.hasNext()) {
-                    String currEntry = itwl.next().trim();
+                    String currEntry = itwl.next().trim().toLowerCase();
 
-    //                if ("consumers".equals(currEntry))
-    //                    System.out.println("consumers");
+//                    if ("consumers".equals(currEntry))
+//                        System.out.println("consumers");
 
 
                     if (currEntry.endsWith("ies")) {
@@ -225,20 +228,26 @@ public class GUIMain implements Runnable {
                         }
                     } else if (currEntry.endsWith("'s")) {
                         currEntry = currEntry.substring(0, currEntry.length() - 2);
-                    } else if (currEntry.endsWith("'")) {
-                        currEntry = currEntry.substring(0, currEntry.length() - 1);
 
-                    } else if (currEntry.endsWith("s")
+
+                    } else if ((currEntry.endsWith("s")|currEntry.endsWith("s'"))
                             && !currEntry.endsWith("us")
                             && !currEntry.endsWith("as")
                             && !currEntry.endsWith("ss")
                             && !setNoLemma.contains(currEntry)
                             && !currEntry.endsWith("is")) {
-                        currEntry = currEntry.substring(0, currEntry.length() - 1);
+                        if (currEntry.endsWith("s"))
+                            currEntry = currEntry.substring(0, currEntry.length() - 1);
+                        if (currEntry.endsWith("s'"))
+                            currEntry = currEntry.substring(0, currEntry.length() - 2);
 
                     }
-
+                     else if (currEntry.endsWith("'")) {
+                        currEntry = currEntry.substring(0, currEntry.length() - 1);}
+                    
                     sbWords.append(currEntry.trim()).append(" ");
+//                    if ("consumers".equals(currEntry))
+//                        System.out.println("consumers even after lemmatization!");
 
                 } // end looping through all words of the line which is currently read
                 mapofLines.put(counterLines, sbWords.toString().trim());
@@ -329,7 +338,7 @@ public class GUIMain implements Runnable {
             while (it.hasNext()) {
                 counter++;
                 Entry<String> entry = it.next();
-                //if (entry.getElement().equals("game")) System.out.println("game");
+//                if (entry.getElement().equals("consumers")) System.out.println("consumers");
                 //Future<String> cleanWord = pool.submit(new StopWordsRemoverWT(entry.getElement()));
                 //if (entry.getElement().equals("game")) System.out.println("game");
                 new GUIStopWordsRemoverWT(entry.getElement().trim(), entry.getCount());
@@ -388,9 +397,9 @@ public class GUIMain implements Runnable {
                 Entry<String> entry = itFreqList.next();
                 String currWord = entry.getElement();
                 int currWordCount = entry.getCount();
-    //            if ("game".equals(currWord)) {
-    //                System.out.println(currWord);
-    //            }
+//                if ("consumers".equals(currWord)) {
+//                    System.out.println("consumers");
+//                }
                 if (currWord.contains(" ")) {
 
                     Iterator<Entry<String>> itFreqList2 = freqList.iterator();
@@ -425,9 +434,9 @@ public class GUIMain implements Runnable {
                 if (toRemain & !setStopWords.contains(entry.getElement())) {
                     freqListFiltered.add(entry);
                     setFreqWords.add(entry.getElement());
-    //            if ("health care".equals(entry.getElement())){
-    //                System.out.println("added to freqListFiltered: "+entry.getElement());
-    //            }
+//                if ("consumers".equals(entry.getElement())){
+//                    System.out.println("added to freqListFiltered: "+entry.getElement());
+//                }
 
                 }
 
@@ -473,8 +482,8 @@ public class GUIMain implements Runnable {
     //                }
                     if (currWords.contains(currFreqTerm)) {
                         
-                        if (currFreqTerm == "consumers")
-                            System.out.println("consumers");
+//                        if ("consumers".equals(currFreqTerm))
+//                            System.out.println("consumers");
     //                        if (currValue.equals(itFreqList4.next().getElement())) {
                         //System.out.println("currValue   " + currValue);
                         //docLength = currLine.split(" ").length;

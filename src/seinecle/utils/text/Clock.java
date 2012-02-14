@@ -4,6 +4,7 @@
  */
 package seinecle.utils.text;
 
+import GUI.GUI_Screen_1;
 import org.apache.commons.lang3.StringUtils;
 
 /**
