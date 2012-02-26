@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package seinecle.utils.text;
+package cowo;
 
-import GUI.GUI_Screen_1;
+import GUI.Screen1;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -32,8 +32,8 @@ public class Clock {
         
         start = System.currentTimeMillis();
         logText = action + "..."+newLine;
-        GUI_Screen_1.logArea.setText(GUI_Screen_1.logArea.getText().concat(logText));
-        GUI_Screen_1.logArea.setCaretPosition(GUI_Screen_1.logArea.getText().length());
+        Screen1.logArea.setText(Screen1.logArea.getText().concat(logText));
+        Screen1.logArea.setCaretPosition(Screen1.logArea.getText().length());
 
         //GUI_Screen_1.logArea.repaint();
         
@@ -72,8 +72,8 @@ public class Clock {
         
                
         }
-        GUI_Screen_1.logArea.setText(GUI_Screen_1.logArea.getText().concat(logText));
-        GUI_Screen_1.logArea.setCaretPosition(GUI_Screen_1.logArea.getText().length());
+        Screen1.logArea.setText(Screen1.logArea.getText().concat(logText));
+        Screen1.logArea.setCaretPosition(Screen1.logArea.getText().length());
 
 
     

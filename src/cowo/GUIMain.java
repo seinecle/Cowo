@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package seinecle.utils.text;
+package cowo;
 
-import GUI.GUI_Screen_1;
+import GUI.Screen1;
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.LinkedHashMultimap;
@@ -20,22 +20,18 @@ import org.openide.util.Exceptions;
 /**
  *
  * @author C. Levallois
- * 
- * FUNCTION OF THIS PROGRAM:
- * Take a text as input, returns semantic networks as an output.
- * 
- * DETAIL OF OPERATIONS:
- * 1. loads several stopwords files in memory
- * 2. reads the text file and does some housekeeping on it
- * 3. lemmatization of the text
- * 4. extracts n-grams
- * 5. housekeeping on n-grams, removal of least frequent terms
- * 6. removal of stopwords, removal of least frequent terms
- * 7. removal of redudant n-grams (as in: removal of "united states of" if "united stated of America" exists frequently enough
- * 8. determines all word co-occurrences for each line of the text
- * 9. prints vosViewer output
- * 10. prints GML file
- * 11. print a short report of all these operations
+ *
+ * FUNCTION OF THIS PROGRAM: Take a text as input, returns semantic networks as
+ * an output.
+ *
+ * DETAIL OF OPERATIONS: 1. loads several stopwords files in memory 2. reads the
+ * text file and does some housekeeping on it 3. lemmatization of the text 4.
+ * extracts n-grams 5. housekeeping on n-grams, removal of least frequent terms
+ * 6. removal of stopwords, removal of least frequent terms 7. removal of
+ * redudant n-grams (as in: removal of "united states of" if "united stated of
+ * America" exists frequently enough 8. determines all word co-occurrences for
+ * each line of the text 9. prints vosViewer output 10. prints GML file 11.
+ * print a short report of all these operations
  */
 public class GUIMain implements Runnable {
 
@@ -45,6 +41,9 @@ public class GUIMain implements Runnable {
     public static LinkedHashMultimap<Integer, String> wordsPerLine = LinkedHashMultimap.create();
     public static LinkedHashMultimap<Integer, String> wordsPerLineFiltered = LinkedHashMultimap.create();
     public static HashSet<String> setOfWords = new HashSet();
+    public static HashMultiset<String> setNGrams = HashMultiset.create();
+    public static HashSet<String> setUniqueNGramsPerLine;
+    public static HashMultiset<String> setAllNGramsPerLine;
     public static Multiset<String> multisetOfWords = ConcurrentHashMultiset.create();
     public static Multiset<String> multisetOcc = ConcurrentHashMultiset.create();
     public static Multiset<String> filteredFreqSet = ConcurrentHashMultiset.create();
@@ -104,25 +103,33 @@ public class GUIMain implements Runnable {
     static InputStream inseinecle = Main.class.getResourceAsStream("stopwords_seinecle.txt");
     static InputStream inkeep = Main.class.getResourceAsStream("stopwords_tokeep.txt");
     static InputStream innolemma = Main.class.getResourceAsStream("nolemmatization.txt");
+    public static String ownStopWords;
     public static String fileGMLName;
     private static BufferedWriter fileGMLFile;
+    private boolean binary = true;
+    static private boolean filterDifficultChars;
 
-    public GUIMain(String wkGUI,String textFileGUI,String textFileNameGUI){
-        
+    public GUIMain(String wkGUI, String textFileGUI, String textFileNameGUI, String binary, String freqThreshold, String minWordLength,String maxgram, String occurrenceThreshold,String ownStopWords,String filterDifficultChars) {
+
         textFile = textFileGUI;
         wk = wkGUI;
         textFileName = textFileNameGUI;
-        
-        
+        this.binary = Boolean.getBoolean(binary);
+        GUIMain.freqThreshold = Integer.valueOf(freqThreshold);
+        GUIMain.minWordLength = Integer.valueOf(minWordLength);
+        GUIMain.maxgram = Integer.valueOf(maxgram);
+        GUIMain.occurrenceThreshold = Integer.valueOf(occurrenceThreshold);
+        GUIMain.ownStopWords = ownStopWords;
+        GUIMain.filterDifficultChars = Boolean.getBoolean(filterDifficultChars);
+
     }
-    
 
     @Override
-    public void run ()  {
+    public void run() {
         try {
             wkOutput = wk.concat("\\");
 
-            
+
             System.out.println("---------------------------------");
             System.out.println();
 
@@ -144,7 +151,7 @@ public class GUIMain implements Runnable {
             stopwordsScientific = fileStopWords4.readLine().split(",");
             stopwords = Arrays.copyOf(stopwords, nbStopWords);
             stopwordsShort = Arrays.copyOf(stopwords, nbStopWordsShort);
-            stopwords =ArrayUtils.addAll(stopwords, stopwordsSeinecle);
+            stopwords = ArrayUtils.addAll(stopwords, stopwordsSeinecle);
             stopwords = ArrayUtils.addAll(stopwords, stopwordsScientific);
 
             setStopWords.addAll(Arrays.asList(stopwords));
@@ -163,8 +170,16 @@ public class GUIMain implements Runnable {
             fileNoLemma.close();
             fileKeepWords.close();
             
+            if (!ownStopWords.equals("nothing")){
+                
+            fileStopWords = new BufferedReader(new FileReader(ownStopWords));
+            stopwords = fileStopWords.readLine().split(",");
+            setStopWords.addAll(Arrays.asList(stopwords));
+                
+            }
+
             loadingStopWordsTime.closeAndPrintClock();
-    //-------------------------------------------------------------------------------------------------------------
+            //-------------------------------------------------------------------------------------------------------------
 
 
 
@@ -173,8 +188,8 @@ public class GUIMain implements Runnable {
 
 
             // ### 2. LOADING FILE IN MEMORY AND CLEANING  ...
-            
-            Clock loadingAndLemmatizingTime = new Clock("Loading text file: " + textFile +"\nCleaning a bit and lemmatizing");
+
+            Clock loadingAndLemmatizingTime = new Clock("Loading text file: " + textFile + "\nCleaning a bit and lemmatizing");
 
             fr = new FileReader(textFile);
             BufferedReader br = new BufferedReader(fr);
@@ -182,34 +197,54 @@ public class GUIMain implements Runnable {
             while ((currLine = br.readLine()) != null) {
                 currLine = currLine.toLowerCase().trim().replaceAll("http[^ ]* ", " ").trim();
                 currLine = currLine.toLowerCase().trim().replaceAll("&amp;", "and").trim();
-                
+
+                currLine = currLine.replaceAll("\\(i\\)", " ");
+                currLine = currLine.replaceAll("\\(ii\\)", " ");
+                currLine = currLine.replaceAll("\\(iii\\)", " ");
+                if(filterDifficultChars){
                 currLine = currLine.toLowerCase().trim().replaceAll("\\p{C}", " ").trim();
                 currLine = currLine.replaceAll("’", "'");
-                currLine = currLine.replaceAll("[^A-Za-z']", " ").trim();
-                currLine = currLine.replaceAll("[^A-Za-z'éèàç$êëï]", " ").trim();
+                currLine = currLine.replaceAll("[^A-Za-z']", " ").trim();}
+                //currLine = currLine.replaceAll("[^A-Za-z'éèàç$êëï]", " ").trim();
                 currLine = currLine.replaceAll(" +", " ");
-                //currLine = currLine.replaceAll("[^A-Za-z]pfc", "prefrontal cortex");
+
+                currLine = currLine.replaceAll("orbitofrontal cortex (ofc)", "orbitofrontal cortex");
                 currLine = currLine.replaceAll("ofc", "orbitofrontal cortex");
-                currLine = currLine.replaceAll("mpfc", "medial prefrontal cortex");
+                currLine = currLine.replaceAll("medial prefrontal cortex (mpfc)", "medial prefrontal cortex");
+                currLine = currLine.replaceAll("medial prefrontal cortex (mpfc)", "medial prefrontal cortex");
+                currLine = currLine.replaceAll("dorsolateral prefrontal cortex (dpfc)", "dorsolateral prefrontal cortex");
                 currLine = currLine.replaceAll("dpfc", "dorsolateral prefrontal cortex");
+                currLine = currLine.replaceAll("dorsolateral prefrontal cortex (dlpfc)", "dorsolateral prefrontal cortex");
+                currLine = currLine.replaceAll("dlpfc", "dorsolateral prefrontal cortex");
+                currLine = currLine.replaceAll(" anterior cingulate cortex (acc) ", " anterior cingulate cortex ");
                 currLine = currLine.replaceAll(" acc ", " anterior cingulate cortex ");
                 currLine = currLine.replaceAll(" behavioural ", "behavorial");
+                currLine = currLine.replaceAll(" skin conductance response (scr) ", " skin conductance response ");
                 currLine = currLine.replaceAll(" scr ", " skin conductance response ");
+                currLine = currLine.replaceAll(" prefrontal cortex (pfc) ", " prefrontal cortex ");
                 currLine = currLine.replaceAll(" pfc ", " prefrontal cortex ");
+                currLine = currLine.replaceAll(" ventromedial prefrontal cortex (vmpfc) ", " ventromedial prefrontal cortex ");
                 currLine = currLine.replaceAll(" vmpfc ", " ventromedial prefrontal cortex ");
                 currLine = currLine.replaceAll(" behavioral ", " behavior ");
+                currLine = currLine.replaceAll(" functional magnetic resonance imaging (fmri)", " fmri ");
                 currLine = currLine.replaceAll(" functional magnetic resonance imaging ", " fmri ");
+                currLine = currLine.replaceAll(" attention deficit hyperactivity disorder (adhd)", " adhd ");
+                currLine = currLine.replaceAll(" attention deficit hyperactivity disorder ", " adhd ");
+                currLine = currLine.replaceAll(" obsessive compulsive disorder (ocd)", " obsessive compulsice disorder ");
+                currLine = currLine.replaceAll(" odc ", " obsessive compulsive disorder ");
+                currLine = currLine.replaceAll(" risky ", " risk ");
                 counterLines++;
+                System.out.println(currLine);
                 ArrayList<String> wordsOfLine = new ArrayList();
                 wordsOfLine.addAll(Arrays.asList(currLine.split(" ")));
 
-                
 
-    //          ### 3. BASIC LEMMATIZATION: turns some common plural forms to their singular form)
-    //                  -> Makes use of nolemmatization.txt file, which contains terms ending with an s which should not be trasnformed.
-                
 
-           
+                //          ### 3. BASIC LEMMATIZATION: turns some common plural forms to their singular form)
+                //                  -> Makes use of nolemmatization.txt file, which contains terms ending with an s which should not be trasnformed.
+
+
+
                 Iterator<String> itwl = wordsOfLine.iterator();
                 StringBuilder sbWords = new StringBuilder();
 
@@ -230,21 +265,23 @@ public class GUIMain implements Runnable {
                         currEntry = currEntry.substring(0, currEntry.length() - 2);
 
 
-                    } else if ((currEntry.endsWith("s")|currEntry.endsWith("s'"))
+                    } else if ((currEntry.endsWith("s") | currEntry.endsWith("s'"))
                             && !currEntry.endsWith("us")
                             && !currEntry.endsWith("as")
                             && !currEntry.endsWith("ss")
                             && !setNoLemma.contains(currEntry)
                             && !currEntry.endsWith("is")) {
-                        if (currEntry.endsWith("s"))
+                        if (currEntry.endsWith("s")) {
                             currEntry = currEntry.substring(0, currEntry.length() - 1);
-                        if (currEntry.endsWith("s'"))
+                        }
+                        if (currEntry.endsWith("s'")) {
                             currEntry = currEntry.substring(0, currEntry.length() - 2);
+                        }
 
+                    } else if (currEntry.endsWith("'")) {
+                        currEntry = currEntry.substring(0, currEntry.length() - 1);
                     }
-                     else if (currEntry.endsWith("'")) {
-                        currEntry = currEntry.substring(0, currEntry.length() - 1);}
-                    
+
                     sbWords.append(currEntry.trim()).append(" ");
 //                    if ("consumers".equals(currEntry))
 //                        System.out.println("consumers even after lemmatization!");
@@ -265,35 +302,59 @@ public class GUIMain implements Runnable {
 
             br.close();
 
-            loadingAndLemmatizingTime.closeAndPrintClock();        
-            
-            
+            loadingAndLemmatizingTime.closeAndPrintClock();
+
+
             //-------------------------------------------------------------------------------------------------------------
 
             // ### 4. EXTRACTING N-GRAMS
-            
 
-            Clock extractingNGrams = new Clock ("Extracting n-grams");
-            
-            HashMultiset<String> setNGrams = HashMultiset.create();
 
-            setNGrams.addAll(NGramFinder.run(sb.toString(), maxgram));
+//            Clock extractingNGrams = new Clock("Extracting n-grams");
+//
+//            HashMultiset<String> setNGrams = HashMultiset.create();
+//
+//            setNGrams.addAll(NGramFinder.run(sb.toString(), maxgram));
+//
+//            sb = null;
+//
+//            extractingNGrams.closeAndPrintClock();
 
-            sb = null;
 
-            extractingNGrams.closeAndPrintClock();
-            
-            
-            
-            
-            
-    //-------------------------------------------------------------------------------------------------------------
+            //-------------------------------------------------------------------------------------------------------------
+
+            // ### 4 bis. EXTRACTING set of NGrams, optionally unique N-GRAMS per Line.
+
+
+            Clock extractingNGramsPerLine = new Clock("Extracting n-grams");
+            HashMap<Integer, HashSet<String>> mapOfLinesNGrammed = new HashMap();
+
+            for (Integer lineNumber : mapofLines.keySet()) {
+
+
+                setUniqueNGramsPerLine = new HashSet();
+                setAllNGramsPerLine = HashMultiset.create();
+
+                setAllNGramsPerLine.addAll(NGramFinder.run(mapofLines.get(lineNumber), maxgram));
+                setUniqueNGramsPerLine.addAll(setAllNGramsPerLine);
+
+                if (binary) {
+                    setNGrams.addAll(setUniqueNGramsPerLine);
+                } else {
+                    setNGrams.addAll(setAllNGramsPerLine);
+                }
+
+
+
+            }
+            extractingNGramsPerLine.closeAndPrintClock();
+            //-------------------------------------------------------------------------------------------------------------
             // ### 5. DELETING SMALL WORDS, TOO LONG WORDS AND WORDS WITH TOO MANY SPACES IN THEM
 
-            
-            Clock nGramHousekeeping = new Clock ("Housekeeping on n-grams and removal of least frequent terms");
-            
-            
+
+            Clock nGramHousekeeping = new Clock("Housekeeping on n-grams and removal of least frequent terms");
+
+
             for (Entry<String> entry : setNGrams.entrySet()) {
 
 
@@ -316,6 +377,12 @@ public class GUIMain implements Runnable {
 
             while (itFreqSet.hasNext()) {
                 String curr = itFreqSet.next();
+//                if ("risk".equals(curr)){
+//                    
+//                    System.out.println("risk");
+//                    System.out.println(freqSet.count("risk"));
+//                    
+//                }
 
                 if (freqSet.count(curr) < occurrenceThreshold) {
                     itFreqSet.remove();
@@ -323,15 +390,15 @@ public class GUIMain implements Runnable {
             }
 
             nGramHousekeeping.closeAndPrintClock();
-            
-            
-    //-------------------------------------------------------------------------------------------------------------        
+
+
+            //-------------------------------------------------------------------------------------------------------------        
 
             // #### 6. REMOVING STOPWORDS
             // lines in comment can be uncommented for concurrency
-            
-            Clock stopwordsRemovalTime = new Clock ("Removing stopwords");
-            
+
+            Clock stopwordsRemovalTime = new Clock("Removing stopwords");
+
             Iterator<Entry<String>> it = freqSet.entrySet().iterator();
 
 
@@ -341,19 +408,20 @@ public class GUIMain implements Runnable {
 //                if (entry.getElement().equals("consumers")) System.out.println("consumers");
                 //Future<String> cleanWord = pool.submit(new StopWordsRemoverWT(entry.getElement()));
                 //if (entry.getElement().equals("game")) System.out.println("game");
+
                 new GUIStopWordsRemoverWT(entry.getElement().trim(), entry.getCount());
             }
             counter = 0;
             counterLines = 0;
             //pool.shutdown();
             //pool.awaitTermination(1, TimeUnit.SECONDS);
-            
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
+
             // #### SORTS TERMS BY FREQUENCY, LEAVING OUT THE LESS FREQUENT ONE
 
             freqList = MultiSetSorter.sortMultisetPerEntryCount(filteredFreqSet);
@@ -370,9 +438,9 @@ public class GUIMain implements Runnable {
             }
 
 
-           stopwordsRemovalTime.closeAndPrintClock();
-             
-       //-------------------------------------------------------------------------------------------------------------   
+            stopwordsRemovalTime.closeAndPrintClock();
+
+            //-------------------------------------------------------------------------------------------------------------   
 
 
 
@@ -380,20 +448,19 @@ public class GUIMain implements Runnable {
 
 
             // #### 7. DELETES bi-grams trigrams and above, IF they are already contained in n+1 grams
-            
-            
-            Clock deletingDuplicatesTime = new Clock ("Deleting n-grams when they are already included in longer n-grams");
-            
+
+
+            Clock deletingDuplicatesTime = new Clock("Deleting n-grams when they are already included in longer n-grams");
+
             System.out.println(
                     "Example: it will remove \"United States of \" because \"United States of America\" exists and is quite frequent too");
 
-            
+
             Iterator<Entry<String>> itFreqList = freqList.iterator();
             HashSet<String> wordsToBeRemoved = new HashSet();
 
 
             while (itFreqList.hasNext()) {
-                boolean write = true;
                 Entry<String> entry = itFreqList.next();
                 String currWord = entry.getElement();
                 int currWordCount = entry.getCount();
@@ -409,14 +476,14 @@ public class GUIMain implements Runnable {
                         int currWordCount2 = entry2.getCount();
 
                         if (!currWord.equals(currWord2)
-                        // there is a parameter here which determines how frequent should "United States of America" be for "United States of" to be removed        
-                                && currWord.contains(currWord2) && currWordCount * 2 > currWordCount2) {
+                                // there is a parameter here which determines how frequent should "United States of America" be for "United States of" to be removed        
+                                & currWord.contains(currWord2) & currWordCount * 2 > currWordCount2) {
 
                             //System.out.println(currWord + ", " + currWord2);
                             wordsToBeRemoved.add(currWord2);
-    //                                                            if ("health care".equals(currWord2)){
-    //                System.out.println(currWord);
-    //                                }
+                            //                                                            if ("health care".equals(currWord2)){
+                            //                System.out.println(currWord);
+                            //                                }
 
                         }
                     }
@@ -426,12 +493,13 @@ public class GUIMain implements Runnable {
 
 
             while (itFreqList3.hasNext()) {
-                boolean toRemain = true;
+                boolean toRemain;
                 Entry<String> entry = itFreqList3.next();
                 String currWord3 = entry.getElement();
                 toRemain = wordsToBeRemoved.add(currWord3);
 
-                if (toRemain & !setStopWords.contains(entry.getElement())) {
+                //This line includes the condition for an important word to remain in the list of words, even if listed with stopwords.
+                if ((toRemain & !setStopWords.contains(currWord3)) | setKeepWords.contains(currWord3)) {
                     freqListFiltered.add(entry);
                     setFreqWords.add(entry.getElement());
 //                if ("consumers".equals(entry.getElement())){
@@ -445,26 +513,31 @@ public class GUIMain implements Runnable {
 
             wordsToBeRemoved.clear();
 
-            
-            deletingDuplicatesTime.closeAndPrintClock();        
-            
-            
-    //-------------------------------------------------------------------------------------------------------------           
 
-    //    // #### PRINTING MOST FREQUENT TERMS         
-    //        for (int i = 0;
-    //                i < freqListFiltered.size()
-    //                && i < freqThreshold; i++) {
-    //            System.out.println("most frequent words: " + freqListFiltered.get(i));
-    //        }
-    //-------------------------------------------------------------------------------------------------------------  
+            deletingDuplicatesTime.closeAndPrintClock();
+
+
+            //-------------------------------------------------------------------------------------------------------------           
+
+            // #### PRINTING MOST FREQUENT TERMS         
+            StringBuilder mostFrequentTerms = new StringBuilder();
+            String currFrequentTerm;
+            for (int i = 0;
+                    i < freqListFiltered.size()
+                    && i < freqThreshold; i++) {
+                currFrequentTerm = freqListFiltered.get(i).toString();
+                System.out.println("most frequent words: " + currFrequentTerm);
+                mostFrequentTerms.append("most frequent words: ").append(currFrequentTerm).append("\n");
+                
+            }
+//    -------------------------------------------------------------------------------------------------------------  
 
 
             // #### 8. COUNTING CO-OCCURRENCES PER LINE
-            
-            
-            Clock calculatingCooccurrencesTime = new Clock ("Determining all word co-occurrences for each line of the text");
-            
+
+
+            Clock calculatingCooccurrencesTime = new Clock("Determining all word co-occurrences for each line of the text");
+
 
             for (Integer lineNumber : mapofLines.keySet()) {
 
@@ -477,14 +550,14 @@ public class GUIMain implements Runnable {
                 while (it3.hasNext()) {
                     //int termCount = 0;
                     String currFreqTerm = it3.next();
-    //                if (currWords.contains("health care") & currFreqTerm.equals("health care")) {
-    //                    found = !found;
-    //                }
+                    //                if (currWords.contains("health care") & currFreqTerm.equals("health care")) {
+                    //                    found = !found;
+                    //                }
                     if (currWords.contains(currFreqTerm)) {
-                        
+
 //                        if ("consumers".equals(currFreqTerm))
 //                            System.out.println("consumers");
-    //                        if (currValue.equals(itFreqList4.next().getElement())) {
+                        //                        if (currValue.equals(itFreqList4.next().getElement())) {
                         //System.out.println("currValue   " + currValue);
                         //docLength = currLine.split(" ").length;
                         //System.out.println("docLength  " + docLength);
@@ -501,7 +574,7 @@ public class GUIMain implements Runnable {
                         //System.out.println("n-gram being added to the list of occurrences of line " + counterLines + ": " + entry.getValue());
 
                     }
-    //                    }
+                    //                    }
 
                 }
                 //                    }
@@ -548,13 +621,13 @@ public class GUIMain implements Runnable {
             }
             calculatingCooccurrencesTime.closeAndPrintClock();
 
-    //-------------------------------------------------------------------------------------------------------------                 
-            Clock printingOutputTime = new Clock ("Printing Vosviewer files, GML file, report file");        
-    //-------------------------------------------------------------------------------------------------------------          
+            //-------------------------------------------------------------------------------------------------------------                 
+            Clock printingOutputTime = new Clock("Printing Vosviewer files, GML file, report file");
+            //-------------------------------------------------------------------------------------------------------------          
             // #### 9. PRINTING VOS VIEWER OUTPUT        
 
 
-            
+
             freqList.clear();
             freqList = MultiSetSorter.sortMultisetPerEntryCount(setCombinations);
 
@@ -598,7 +671,7 @@ public class GUIMain implements Runnable {
 
             fileNetworkName = StringUtils.substring(textFileName, 0, textFileName.length() - 4).concat("_VosViewer_network.txt");
             fileNetworkFile = new BufferedWriter(new FileWriter(wkOutput + fileNetworkName));
-            System.out.println(wkOutput+fileNetworkName);
+            System.out.println(wkOutput + fileNetworkName);
             StringBuilder networkSb = new StringBuilder();
 
             for (int i = 0;
@@ -620,7 +693,7 @@ public class GUIMain implements Runnable {
 
 
 
-    //-------------------------------------------------------------------------------------------------------------     
+            //-------------------------------------------------------------------------------------------------------------     
             // #### 10. PRINTING GML output        
 
 
@@ -671,10 +744,10 @@ public class GUIMain implements Runnable {
             fileGMLFile.close();
             GMLSb = null;
 
-            
-    //-------------------------------------------------------------------------------------------------------------          
+
+            //-------------------------------------------------------------------------------------------------------------          
             // #### 11. PRINTING REPORT ON PARAMETERS EMPLOYED:
-            
+
             fileParametersName = StringUtils.substring(textFileName, 0, textFileName.length() - 4).concat("_parameters.txt");
             fileParametersFile = new BufferedWriter(new FileWriter(wkOutput + fileParametersName));
             StringBuilder parametersSb = new StringBuilder();
@@ -686,44 +759,51 @@ public class GUIMain implements Runnable {
             parametersSb.append(
                     "Inclusion of n-grams up to (and including) ").append(maxgram).append("-grams.\n");
             parametersSb.append(
+                    "Binary or full counting of co-occurrences per document? Binary = ").append(binary).append("\n");
+            parametersSb.append(
                     "Size of the list of most frequent stopwords removed: ").append(nbStopWords).append(".\n");
             parametersSb.append(
                     "Only for bigrams and above: size of the list of most frequent stopwords used to filter out: ").append(setStopWordsScientificOrShort.size()).append(".\n");
             parametersSb.append(
                     "max number of words allowed: ").append(freqThreshold).append(".\n");
             parametersSb.append(
-                    "min nb of occurrences for a word to be processed: ").append(occurrenceThreshold).append(".\n");
+                    "min nb of occurrences in the entire corpus for a word to be processed: ").append(occurrenceThreshold).append(".\n");
 
             parametersSb.append(
-                    "min nb of characters for a word to be processed: ").append(minWordLength).append(".\n");
+                    "min nb of chaacters for a word to be processed: ").append(minWordLength).append(".\n");
             parametersSb.append(
                     "number of words found including n-grams: ").append(setFreqWords.size()).append(".\n");
             parametersSb.append(
                     "number of nodes: ").append(counterIds).append(".\n");
             parametersSb.append(
-                    "number of edges: ").append(freqList.size()).append(".\n");
+                    "number of edges: ").append(freqList.size()).append(".\n\n\n");
+            parametersSb.append(
+                    mostFrequentTerms.toString());
 
             fileParametersFile.write(parametersSb.toString());
             fileParametersFile.flush();
 
             fileParametersFile.close();
-            parametersSb = null;        
-            
-    //-------------------------------------------------------------------------------------------------------------     
+
+
+            //-------------------------------------------------------------------------------------------------------------     
             printingOutputTime.closeAndPrintClock();
-            
-            Clock GephiVizTime = new Clock ("Creating pdf of Gephi viz");
-            GUI_Screen_1.logArea.setText(GUI_Screen_1.logArea.getText().concat("This step takes longer - count 15 seconds on a powerful desktop\n"));
-            GUI_Screen_1.logArea.setCaretPosition(GUI_Screen_1.logArea.getText().length());
-            GephiTooKit.main(wkOutput,fileGMLName);
+
+
+            //-------Printing GEPHI Output--------------------------------------------------------------------------------     
+
+            Clock GephiVizTime = new Clock("Creating pdf of Gephi viz");
+            Screen1.logArea.setText(Screen1.logArea.getText().concat("This step takes longer - count 15 seconds on a powerful desktop\n"));
+            Screen1.logArea.setCaretPosition(Screen1.logArea.getText().length());
+            GephiTooKit.main(wkOutput, fileGMLName);
             GephiVizTime.closeAndPrintClock();
-            GUI_Screen_1.logArea.setText(GUI_Screen_1.logArea.getText().concat("The resulting network is a file called \"GEPHI_output.png\" located in the same directory as your text file.\n"
+            Screen1.logArea.setText(Screen1.logArea.getText().concat("The resulting network is a file called \"GEPHI_output.png\" located in the same directory as your text file.\n"
                     + "Results are ugly but it's going to improve! Check again regularly.\n"
                     + "The source for this program is freely available at:\n"
                     + "https://github.com/seinecle/MapText/blob/master/src/seinecle/utils/text/GUIMain.java\n"
                     + "Thank you!\n"
                     + "www.clementlevallois.net // twitter: @seinecle"));
-            GUI_Screen_1.logArea.setCaretPosition(GUI_Screen_1.logArea.getText().length());
+            Screen1.logArea.setCaretPosition(Screen1.logArea.getText().length());
 
 
             //System.exit(0);
@@ -735,6 +815,4 @@ public class GUIMain implements Runnable {
             Exceptions.printStackTrace(ex);
         }
     }
-
-
 }

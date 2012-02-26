@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package seinecle.utils.text;
+package cowo;
 
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multiset.Entry;

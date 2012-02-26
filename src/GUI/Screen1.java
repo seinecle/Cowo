@@ -6,23 +6,29 @@ package GUI;
 
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
-import seinecle.utils.text.GUIMain;
+import cowo.GUIMain;
 
 /**
  *
  * @author C. Levallois
  */
-public class GUI_Screen_1 extends javax.swing.JFrame {
+public class Screen1 extends javax.swing.JFrame {
 
     private String workingDirectory;
     private boolean fileSelected;
     private String fileSelectedPathANdName;
     private String fileSelectedName;
+    public static Screen1 screen1;
+    public static Screen2 screen2;
+    public String binary;
+    public String minChars;
+    public String nGram;
+    public String nbWords;
 
     /**
-     * Creates new form GUI_Screen_1
+     * Creates new form Screen1
      */
-    public GUI_Screen_1() {
+    public Screen1() {
         initComponents();
     }
     
@@ -41,10 +47,9 @@ public class GUI_Screen_1 extends javax.swing.JFrame {
         createMapButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         logArea = new javax.swing.JTextArea();
-        logoEYD = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        underTheHood = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Map Text by Clement Levallois  - 2012");
@@ -76,14 +81,18 @@ public class GUI_Screen_1 extends javax.swing.JFrame {
         logArea.setHighlighter(null);
         jScrollPane2.setViewportView(logArea);
 
-        logoEYD.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/logo_139X67.jpg"))); // NOI18N
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/logo_Fallet_small.jpg"))); // NOI18N
-
         jLabel2.setFont(new java.awt.Font("Tahoma", 2, 13)); // NOI18N
-        jLabel2.setText("creates a map from a text");
+        jLabel2.setText("create a map from a text");
 
-        jButton1.setText("under the hood");
+        underTheHood.setText("under the hood");
+        underTheHood.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                underTheHoodActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Script MT Bold", 0, 48)); // NOI18N
+        jLabel3.setText("Cowo");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -92,44 +101,37 @@ public class GUI_Screen_1 extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(logoEYD)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1)))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(selectTextFileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(createMapButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(158, 158, 158)
-                        .addComponent(jButton1)))
+                        .addComponent(underTheHood))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(selectTextFileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(29, 29, 29)
+                                .addComponent(createMapButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(15, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(logoEYD, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(48, 48, 48)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addGap(42, 42, 42)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(selectTextFileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(createMapButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(63, 63, 63)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45)
-                .addComponent(jButton1)
+                .addComponent(underTheHood)
                 .addGap(33, 33, 33))
         );
 
@@ -179,15 +181,23 @@ public class GUI_Screen_1 extends javax.swing.JFrame {
 
                 //System.out.println(String.valueOf(countHTML));
                 String[] args;
-                args = new String[3];
+                args = new String[10];
                 args[0] = workingDirectory;
                 args[1] = fileSelectedPathANdName;
                 args[2] = fileSelectedName;
+                args[3] = new Boolean(Screen2.binaryBox.isSelected()).toString();
+                try {args[4] = Screen2.maxWordsField.getText();          
+                args[5] = Screen2.minCharsField.getText();
+                args[6] = Screen2.nGramsField.getText();
+                args[7] = Screen2.minOccurrences.getText();
+                args[8] = Screen2.fileSelectedPathANdName;
+                args[9] = new Boolean(Screen2.deleteChars.isSelected()).toString();
                 //logArea.append(workingDirectory);
                 //                    args[1] = String.valueOf(countPDF);
+            } catch (NullPointerException e){System.out.println("this value should not be null");}
+      
 
-
-                Runnable r = new GUIMain(args[0], args[1], args[2]);
+                Runnable r = new GUIMain(args[0], args[1], args[2],args[3],args[4],args[5],args[6],args[7],args[8],args[9]);
                 new Thread(r).start();
 
 
@@ -195,6 +205,11 @@ public class GUI_Screen_1 extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_createMapButtonActionPerformed
+
+    private void underTheHoodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_underTheHoodActionPerformed
+        screen2.setVisible(true);
+        screen1.setVisible(false);
+    }//GEN-LAST:event_underTheHoodActionPerformed
 
     //ImageIcon icon = CreateIcon.createImageIcon("img/logo Fallet.png","description");
     
@@ -221,13 +236,13 @@ public class GUI_Screen_1 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI_Screen_1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Screen1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI_Screen_1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Screen1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI_Screen_1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Screen1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUI_Screen_1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Screen1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -237,7 +252,10 @@ public class GUI_Screen_1 extends javax.swing.JFrame {
         SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
-                new GUI_Screen_1().setVisible(true);
+                screen1 = new Screen1();
+                screen2 = new Screen2();
+                screen1.setVisible(true);
+                screen2.setVisible(false);
                 
                
             }
@@ -245,13 +263,12 @@ public class GUI_Screen_1 extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createMapButton;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel2;
     public static javax.swing.JScrollPane jScrollPane2;
     public static javax.swing.JTextArea logArea;
-    public javax.swing.JLabel logoEYD;
     private javax.swing.JButton selectTextFileButton;
+    private javax.swing.JButton underTheHood;
     // End of variables declaration//GEN-END:variables
 }

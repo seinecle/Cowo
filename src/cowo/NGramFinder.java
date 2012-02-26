@@ -2,11 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package seinecle.utils.text;
+package cowo;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
-import java.util.List;
 
 /**
  *
@@ -16,14 +15,10 @@ import java.util.List;
 public class NGramFinder {
 
     private static HashMultiset<String> freqSetN = HashMultiset.create();
-    private static int minLength;
     private static String[] words;
-    private static List buffer;
-    private static int counter = 0;
 
     public static void ngrams(int n, String str) {
 
-        try {
             words = str.split(" ");
             
        
@@ -33,8 +28,7 @@ public class NGramFinder {
                     freqSetN.add(concat(words, i, i + n, n));
                 }
 
-        } catch (NullPointerException e) {
-        }
+        
     }
 
     public static String concat(String[] words, int start, int end, int ngram) {

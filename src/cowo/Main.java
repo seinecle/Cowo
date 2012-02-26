@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package seinecle.utils.text;
+package cowo;
 
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.HashMultiset;
@@ -65,9 +65,9 @@ public class Main {
     private static int freqThreshold = 400;
     //private final static String wk = "D:\\Docs Pro Clement\\E-humanities\\TextMining\\Exported Items\\";
     //private final static String wk = "D:\\Docs Pro Clement\\E-Projects\\Discours Sarko\\";
-    private final static String wk = "D:\\Docs Pro Clement\\NESSHI\\Project bibliometrics\\plain text files\\";
+    private final static String wk = "D:\\Docs Pro Clement\\Writing\\Article NRN\\semantic analysis\\";
     private final static String wkOutput = wk;
-    private final static String textFileName = "abs and ti of marketing papers (2005 to 2010) citing neuro journals.csv";
+    private final static String textFileName = "abs neuroeco.txt";
     private static String textFile = wk + textFileName;
     static String cleanWord;
     public static int counter = 0;
@@ -76,7 +76,6 @@ public class Main {
     private static BufferedReader fileKeepWords;
     private static BufferedReader fileStopWords2;
     private static String[] stopwordsSeinecle;
-    private static BufferedReader fileStopWords3;
     private static BufferedReader fileStopWords4;
     public static String[] stopwordsShort;
     private static String[] stopwordsScientific;
@@ -108,7 +107,7 @@ public class Main {
     private static String fileGMLName;
     private static BufferedWriter fileGMLFile;
 
-    public static void main(String[] args) throws FileNotFoundException, IOException, InterruptedException, ClassNotFoundException, InstantiationException, IllegalAccessException, ExecutionException {
+    public static void run(String[] args) throws FileNotFoundException, IOException, InterruptedException, ClassNotFoundException, InstantiationException, IllegalAccessException, ExecutionException {
 
 
         System.out.println("---------------------------------");
@@ -174,16 +173,27 @@ public class Main {
             currLine = currLine.replaceAll("[^A-Za-z'éèàç$êëï]", " ").trim();
             currLine = currLine.replaceAll(" +", " ");
             //currLine = currLine.replaceAll("[^A-Za-z]pfc", "prefrontal cortex");
+            currLine = currLine.replaceAll("orbitofrontal cortex (ofc)", "orbitofrontal cortex");
             currLine = currLine.replaceAll("ofc", "orbitofrontal cortex");
-            currLine = currLine.replaceAll("mpfc", "medial prefrontal cortex");
+            currLine = currLine.replaceAll("medial prefrontal cortex (mpfc)", "medial prefrontal cortex");
+            currLine = currLine.replaceAll("medial prefrontal cortex (mpfc)", "medial prefrontal cortex");
+            currLine = currLine.replaceAll("dorsolateral prefrontal cortex (dpfc)", "dorsolateral prefrontal cortex");
             currLine = currLine.replaceAll("dpfc", "dorsolateral prefrontal cortex");
+            currLine = currLine.replaceAll("dorsolateral prefrontal cortex (dlpfc)", "dorsolateral prefrontal cortex");
+            currLine = currLine.replaceAll("dlpfc", "dorsolateral prefrontal cortex");
+            currLine = currLine.replaceAll(" anterior cingulate cortex (acc) ", " anterior cingulate cortex ");
             currLine = currLine.replaceAll(" acc ", " anterior cingulate cortex ");
             currLine = currLine.replaceAll(" behavioural ", "behavorial");
+            currLine = currLine.replaceAll(" skin conductance response (scr) ", " skin conductance response ");
             currLine = currLine.replaceAll(" scr ", " skin conductance response ");
+            currLine = currLine.replaceAll(" prefrontal cortex (pfc) ", " prefrontal cortex ");
             currLine = currLine.replaceAll(" pfc ", " prefrontal cortex ");
+            currLine = currLine.replaceAll(" ventromedial prefrontal cortex (vmpfc) ", " ventromedial prefrontal cortex ");
             currLine = currLine.replaceAll(" vmpfc ", " ventromedial prefrontal cortex ");
             currLine = currLine.replaceAll(" behavioral ", " behavior ");
+            currLine = currLine.replaceAll(" functional magnetic resonance imaging (fmri)", " fmri ");
             currLine = currLine.replaceAll(" functional magnetic resonance imaging ", " fmri ");
+
             counterLines++;
             ArrayList<String> wordsOfLine = new ArrayList();
             wordsOfLine.addAll(Arrays.asList(currLine.split(" ")));
