@@ -789,21 +789,27 @@ public class GUIMain implements Runnable {
             //-------------------------------------------------------------------------------------------------------------     
             printingOutputTime.closeAndPrintClock();
 
-
+            Screen1.logArea.setText(Screen1.logArea.getText().concat("ANALYSIS COMPLETED.\n"
+                    + "diverse network files have been created in the same directory as your input text file\n"
+                    ));
+            Screen1.logArea.setCaretPosition(Screen1.logArea.getText().length());
+            Screen1.youTube.setVisible(true);
+            Screen1.exitButton.setVisible(true);
+            
             //-------Printing GEPHI Output--------------------------------------------------------------------------------     
 
-            Clock GephiVizTime = new Clock("Creating pdf of Gephi viz");
-            Screen1.logArea.setText(Screen1.logArea.getText().concat("This step takes longer - count 15 seconds on a powerful desktop\n"));
-            Screen1.logArea.setCaretPosition(Screen1.logArea.getText().length());
-            GephiTooKit.main(wkOutput, fileGMLName);
-            GephiVizTime.closeAndPrintClock();
-            Screen1.logArea.setText(Screen1.logArea.getText().concat("The resulting network is a file called \"GEPHI_output.png\" located in the same directory as your text file.\n"
-                    + "Results are ugly but it's going to improve! Check again regularly.\n"
-                    + "The source for this program is freely available at:\n"
-                    + "https://github.com/seinecle/MapText/blob/master/src/seinecle/utils/text/GUIMain.java\n"
-                    + "Thank you!\n"
-                    + "www.clementlevallois.net // twitter: @seinecle"));
-            Screen1.logArea.setCaretPosition(Screen1.logArea.getText().length());
+//            Clock GephiVizTime = new Clock("Creating pdf of Gephi viz");
+//            Screen1.logArea.setText(Screen1.logArea.getText().concat("This step takes longer - count 15 seconds on a powerful desktop\n"));
+//            Screen1.logArea.setCaretPosition(Screen1.logArea.getText().length());
+//            GephiTooKit.main(wkOutput, fileGMLName);
+//            GephiVizTime.closeAndPrintClock();
+//            Screen1.logArea.setText(Screen1.logArea.getText().concat("The resulting network is a file called \"GEPHI_output.png\" located in the same directory as your text file.\n"
+//                    + "Results are ugly but it's going to improve! Check again regularly.\n"
+//                    + "The source for this program is freely available at:\n"
+//                    + "https://github.com/seinecle/MapText/blob/master/src/seinecle/utils/text/GUIMain.java\n"
+//                    + "Thank you!\n"
+//                    + "www.clementlevallois.net // twitter: @seinecle"));
+//            Screen1.logArea.setCaretPosition(Screen1.logArea.getText().length());
 
 
             //System.exit(0);

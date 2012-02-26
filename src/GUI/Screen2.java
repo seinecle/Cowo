@@ -4,6 +4,12 @@
  */
 package GUI;
 
+import java.awt.Cursor;
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 
 /**
@@ -11,6 +17,7 @@ import javax.swing.JFileChooser;
  * @author C. Levallois
  */
 public class Screen2 extends javax.swing.JFrame {
+
     public static String fileSelectedPathANdName = "nothing";
 
     /**
@@ -58,7 +65,18 @@ public class Screen2 extends javax.swing.JFrame {
         jLabel1.setText(org.openide.util.NbBundle.getMessage(Screen2.class, "Screen2.jLabel1.text")); // NOI18N
 
         jLabel2.setText(org.openide.util.NbBundle.getMessage(Screen2.class, "Screen2.jLabel2.text")); // NOI18N
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
+        jLabel2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                jLabel2MouseMoved(evt);
+            }
+        });
 
+        closeParameters.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         closeParameters.setText(org.openide.util.NbBundle.getMessage(Screen2.class, "Screen2.closeParameters.text")); // NOI18N
         closeParameters.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -157,12 +175,10 @@ public class Screen2 extends javax.swing.JFrame {
                                         .addComponent(minCharsField)
                                         .addComponent(binaryBox)
                                         .addComponent(maxWordsField)
-                                        .addComponent(minOccurrences))))))
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(139, 139, 139)
-                        .addComponent(closeParameters)))
+                                        .addComponent(minOccurrences))))
+                            .addComponent(closeParameters)))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -178,11 +194,11 @@ public class Screen2 extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(binaryBox)
                     .addComponent(binaryCounting))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nGrams)
                     .addComponent(nGramsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(numChars)
                     .addComponent(minCharsField))
@@ -202,10 +218,10 @@ public class Screen2 extends javax.swing.JFrame {
                 .addComponent(openStopWordsFile)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
-                .addGap(32, 32, 32)
+                .addGap(33, 33, 33)
                 .addComponent(closeParameters)
-                .addGap(27, 27, 27)
-                .addComponent(jLabel1)
+                .addGap(26, 26, 26)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addContainerGap())
@@ -260,6 +276,22 @@ public class Screen2 extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_openStopWordsFileActionPerformed
 
+    private void jLabel2MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseMoved
+        jLabel2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+    }//GEN-LAST:event_jLabel2MouseMoved
+
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        try {
+            try {
+                Desktop.getDesktop().browse(new java.net.URI("http://www.vosviewer.com"));
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(Screen2.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Screen2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jLabel2MouseClicked
     /**
      * @param args the command line arguments
      */
