@@ -216,6 +216,7 @@ public class Screen1 extends javax.swing.JFrame {
                 args[1] = fileSelectedPathANdName;
                 args[2] = fileSelectedName;
                 args[3] = new Boolean(Screen2.binaryBox.isSelected()).toString();
+                System.out.println(args[3]);
                 try {args[4] = Screen2.maxWordsField.getText();          
                 args[5] = Screen2.minCharsField.getText();
                 args[6] = Screen2.nGramsField.getText();

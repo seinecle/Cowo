@@ -106,21 +106,23 @@ public class GUIMain implements Runnable {
     public static String ownStopWords;
     public static String fileGMLName;
     private static BufferedWriter fileGMLFile;
-    private boolean binary = true;
-    static private boolean filterDifficultChars;
+    private static boolean binary = true;
+    static private boolean filterDifficultChars = true;
 
-    public GUIMain(String wkGUI, String textFileGUI, String textFileNameGUI, String binary, String freqThreshold, String minWordLength,String maxgram, String occurrenceThreshold,String ownStopWords,String filterDifficultChars) {
+    public GUIMain(String wkGUI, String textFileGUI, String textFileNameGUI, String binaryYes, String freqThreshold, String minWordLength,String maxgram, String occurrenceThreshold,String ownStopWords,String filterDifficultChars) {
 
         textFile = textFileGUI;
         wk = wkGUI;
         textFileName = textFileNameGUI;
-        this.binary = Boolean.getBoolean(binary);
+        if (!"true".equals(binaryYes)){
+            GUIMain.binary = !GUIMain.binary;}
         GUIMain.freqThreshold = Integer.valueOf(freqThreshold);
         GUIMain.minWordLength = Integer.valueOf(minWordLength);
         GUIMain.maxgram = Integer.valueOf(maxgram);
         GUIMain.occurrenceThreshold = Integer.valueOf(occurrenceThreshold);
         GUIMain.ownStopWords = ownStopWords;
-        GUIMain.filterDifficultChars = Boolean.getBoolean(filterDifficultChars);
+        if (!"true".equals(filterDifficultChars)){
+            GUIMain.filterDifficultChars = !GUIMain.filterDifficultChars;}
 
     }
 
