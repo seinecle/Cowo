@@ -4,7 +4,7 @@
  */
 package GUI;
 
-import cowo.GUIMain;
+import cowo.Main;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 
@@ -229,7 +229,7 @@ public class Screen1 extends javax.swing.JFrame {
             } catch (NullPointerException e){System.out.println("this value should not be null");}
       
 
-                Runnable r = new GUIMain(args[0], args[1], args[2],args[3],args[4],args[5],args[6],args[7],args[8],args[9]);
+                Runnable r = new Main(args[0], args[1], args[2],args[3],args[4],args[5],args[6],args[7],args[8],args[9]);
                 new Thread(r).start();
 
 

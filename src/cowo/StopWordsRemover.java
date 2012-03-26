@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
  *
  * @author C. Levallois
  */
-public final class GUIStopWordsRemoverWT {
+public final class StopWordsRemover {
 
     //private final Entry<String> entry;
     private String entryWord;
@@ -29,7 +29,7 @@ public final class GUIStopWordsRemoverWT {
 //        this.entryCount = entry.getCount();
 //        //run();
 //    }
-    GUIStopWordsRemoverWT(String element, int entryCount) throws InterruptedException, ExecutionException {
+    StopWordsRemover(String element, int entryCount) throws InterruptedException, ExecutionException {
         this.entryWord = element;
         this.entryCount = entryCount;
 
@@ -43,12 +43,12 @@ public final class GUIStopWordsRemoverWT {
 
         boolean write = true;
 
-        //System.out.println(GUIMain.counter);
+        //System.out.println(Main.counter);
 
-        if (!GUIMain.ownStopWords.equals("nothing")) {
+        if (!Main.ownStopWords.equals("nothing")) {
             String[] wordsNGrams = entryWord.split(" ");
             for (int i = 0; i < wordsNGrams.length; i++) {
-                if (GUIMain.setStopWords.contains(wordsNGrams[i])) {
+                if (Main.setStopWords.contains(wordsNGrams[i])) {
                     write = false;
                 }
             }
@@ -69,7 +69,7 @@ public final class GUIStopWordsRemoverWT {
                     for (int n = 0; n < wordsNGrams.length; n++) {
                         //System.out.println(wordsNGrams[n]);
 
-                        if (wordsNGrams[n].length() < GUIMain.minWordLength) {
+                        if (wordsNGrams[n].length() < Main.minWordLength) {
                             write = false;
                             break;
                         }
@@ -77,8 +77,8 @@ public final class GUIStopWordsRemoverWT {
                     }
 
                     if (wordsNGrams.length == 2
-                            && ((GUIMain.setStopWordsScientificOrShort.contains(wordsNGrams[0].toLowerCase().trim())
-                            || GUIMain.setStopWordsScientificOrShort.contains(wordsNGrams[1].toLowerCase().trim())))) {
+                            && ((Main.setStopWordsScientificOrShort.contains(wordsNGrams[0].toLowerCase().trim())
+                            || Main.setStopWordsScientificOrShort.contains(wordsNGrams[1].toLowerCase().trim())))) {
                         write = false;
 
                     }
@@ -88,18 +88,18 @@ public final class GUIStopWordsRemoverWT {
 
                         for (int i = 0; i < wordsNGrams.length; i++) {
 
-                            if ((i == 0 | i == (wordsNGrams.length - 1)) & GUIMain.setStopWordsScientificOrShort.contains(wordsNGrams[i].toLowerCase().trim())) {
-                                scoreGarbage = GUIMain.maxAcceptedGarbage + 1;
+                            if ((i == 0 | i == (wordsNGrams.length - 1)) & Main.setStopWordsScientificOrShort.contains(wordsNGrams[i].toLowerCase().trim())) {
+                                scoreGarbage = Main.maxAcceptedGarbage + 1;
                                 continue;
                             }
 
 
-                            if (GUIMain.setStopWordsShort.contains(wordsNGrams[i].toLowerCase().trim())) {
+                            if (Main.setStopWordsShort.contains(wordsNGrams[i].toLowerCase().trim())) {
                                 scoreGarbage = scoreGarbage + 3;
                                 continue;
                             }
 
-                            if (GUIMain.setStopWordsScientific.contains(wordsNGrams[i].toLowerCase().trim())) {
+                            if (Main.setStopWordsScientific.contains(wordsNGrams[i].toLowerCase().trim())) {
                                 scoreGarbage = scoreGarbage + 2;
                                 continue;
                             }
@@ -111,14 +111,14 @@ public final class GUIStopWordsRemoverWT {
                         }
 
                         if (Main.setStopWords.contains(entryWord)) {
-                            scoreGarbage = GUIMain.maxAcceptedGarbage + 1;
+                            scoreGarbage = Main.maxAcceptedGarbage + 1;
                         }
 
                         //                    if (Main.setStopWordsShort.contains(wordsNGrams[0].toLowerCase().trim())
 //                            || (Main.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) & Main.setStopWordsShort.contains(wordsNGrams[2].toLowerCase().trim()))
 //                            || (Main.setStopWords.contains(wordsNGrams[0].toLowerCase().trim())& Main.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) && Main.setStopWords.contains(wordsNGrams[2].toLowerCase().trim()))
 //                            || (Main.setStopWordsShort.contains(wordsNGrams[wordsNGrams.length - 1].toLowerCase().trim()))) {
-                        if (scoreGarbage > GUIMain.maxAcceptedGarbage) {
+                        if (scoreGarbage > Main.maxAcceptedGarbage) {
 
                             write = false;
                         }
@@ -135,7 +135,7 @@ public final class GUIStopWordsRemoverWT {
 //                    entryWord = result.get();
                     //entryWord = new StanfordLemmatization(entryWord).call();
 
-                    if (GUIMain.setStopWords.contains(entryWord) & !GUIMain.setKeepWords.contains(entryWord)) {
+                    if (Main.setStopWords.contains(entryWord) & !Main.setKeepWords.contains(entryWord)) {
 
                         write = false;
 
@@ -153,15 +153,15 @@ public final class GUIStopWordsRemoverWT {
 
 
 
-            if (GUIMain.setKeepWords.contains(entryWord)) {
+            if (Main.setKeepWords.contains(entryWord)) {
                 write = true;
             }
 
         } //end of else block       
 
         if (write) {
-            synchronized (GUIMain.filteredFreqSet) {
-                GUIMain.filteredFreqSet.add(entryWord, entryCount);
+            synchronized (Main.filteredFreqSet) {
+                Main.filteredFreqSet.add(entryWord, entryCount);
 //                if ("risk".equals(entryWord)){
 //                    System.out.println("risk added to filteredFreqSet "+entryCount);
 //                }
