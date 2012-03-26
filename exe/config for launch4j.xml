@@ -1,8 +1,8 @@
 <launch4jConfig>
-  <dontWrapJar>false</dontWrapJar>
+  <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\C. Levallois\Documents\NetBeansProjects\MapText\dist\MapText.jar</jar>
-  <outfile>C:\Users\C. Levallois\Documents\NetBeansProjects\MapText\exe\maptext.exe</outfile>
+  <jar>Cowo.jar</jar>
+  <outfile>C:\Users\C. Levallois\Documents\NetBeansProjects\Cowo\dist\cowo.exe</outfile>
   <errTitle>You need to update your version of Java for this program to run</errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>
@@ -12,7 +12,7 @@
   <customProcName>false</customProcName>
   <stayAlive>false</stayAlive>
   <manifest></manifest>
-  <icon>D:\Docs Pro Clement\E-projects\Firm\logo\eyd.ico</icon>
+  <icon></icon>
   <classPath>
     <mainClass>seinecle.utils.text.GUI_Screen_1</mainClass>
     <cp>lib/joda-time.jar</cp>
@@ -23,15 +23,9 @@
   </classPath>
   <jre>
     <path></path>
-    <minVersion>1.6.0</minVersion>
+    <minVersion>1.6.1</minVersion>
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
     <maxHeapSize>500</maxHeapSize>
   </jre>
-  <splash>
-    <file>C:\Users\C. Levallois\Documents\NetBeansProjects\MapText\exe\splashscreen.bmp</file>
-    <waitForWindow>true</waitForWindow>
-    <timeout>60</timeout>
-    <timeoutErr>true</timeoutErr>
-  </splash>
 </launch4jConfig>

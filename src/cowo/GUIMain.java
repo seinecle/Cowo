@@ -13,9 +13,10 @@ import com.google.common.collect.Multiset.Entry;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -236,7 +237,7 @@ public class GUIMain implements Runnable {
                 currLine = currLine.replaceAll(" odc ", " obsessive compulsive disorder ");
                 currLine = currLine.replaceAll(" risky ", " risk ");
                 counterLines++;
-                System.out.println(currLine);
+                //System.out.println(currLine);
                 ArrayList<String> wordsOfLine = new ArrayList();
                 wordsOfLine.addAll(Arrays.asList(currLine.split(" ")));
 
@@ -815,12 +816,13 @@ public class GUIMain implements Runnable {
 
 
             //System.exit(0);
-        } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
         } catch (ExecutionException ex) {
-            Exceptions.printStackTrace(ex);
+            Logger.getLogger(GUIMain.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(GUIMain.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            Logger.getLogger(GUIMain.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 }

@@ -4,9 +4,9 @@
  */
 package GUI;
 
+import cowo.GUIMain;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
-import cowo.GUIMain;
 
 /**
  *
@@ -33,6 +33,7 @@ public class Screen1 extends javax.swing.JFrame {
 
         Screen1.youTube.setVisible(false);
         Screen1.exitButton.setVisible(false);
+        createMapButton.setEnabled(false);
     }
 
     /**
@@ -192,7 +193,7 @@ public class Screen1 extends javax.swing.JFrame {
         chooser.setAcceptAllFileFilterUsed(false);
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             System.out.println("Current directory: " + chooser.getCurrentDirectory().getAbsolutePath());
-
+            createMapButton.setEnabled(true);
             workingDirectory = chooser.getCurrentDirectory().getAbsolutePath().toString();
             fileSelected = true;
             fileSelectedPathANdName = chooser.getSelectedFile().toString();
