@@ -4,8 +4,6 @@
  */
 package cowo;
 
-import java.util.concurrent.ExecutionException;
-
 /**
  *
  * @author C. Levallois
@@ -29,7 +27,7 @@ public final class StopWordsRemover {
 //        this.entryCount = entry.getCount();
 //        //run();
 //    }
-    StopWordsRemover(String element, int entryCount) throws InterruptedException, ExecutionException {
+    StopWordsRemover(String element, int entryCount)  {
         this.entryWord = element;
         this.entryCount = entryCount;
 
@@ -39,7 +37,7 @@ public final class StopWordsRemover {
     }
 
     //@Override
-    public void call() throws InterruptedException, ExecutionException {
+    public void call()  {
 
         boolean write = true;
 

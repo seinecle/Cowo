@@ -6,6 +6,8 @@ package cowo;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  *
@@ -16,6 +18,44 @@ public class NGramFinder {
 
     private static HashMultiset<String> freqSetN = HashMultiset.create();
     private static String[] words;
+    
+    public static HashMultiset<String> setNGrams = HashMultiset.create();
+    public static HashSet<String> setUniqueNGramsPerLine;
+    public static HashMultiset<String> setAllNGramsPerLine;
+    
+    
+    
+    
+    public static void runIt(HashMap<Integer,String> mapofLines){
+    Clock extractingNGramsPerLine = new Clock("extracting");
+
+
+//
+            for (Integer lineNumber : mapofLines.keySet()) {
+
+
+
+                Main.setAllNGramsPerLine = HashMultiset.create();
+
+                Main.setAllNGramsPerLine.addAll(run(mapofLines.get(lineNumber), Main.maxgram));
+
+                //takes care of the binary counting. For the Alchemy API case, this happens in the AlchemyAPI extractor class
+                if (Main.binary) {
+                    setUniqueNGramsPerLine = new HashSet();
+                    setUniqueNGramsPerLine.addAll(setAllNGramsPerLine);
+                    setNGrams.addAll(setUniqueNGramsPerLine);
+                } else {
+                    setNGrams.addAll(setAllNGramsPerLine);
+                }
+
+
+
+            }
+
+    extractingNGramsPerLine.closeAndPrintClock();
+    
+}
+    
 
     public static void ngrams(int n, String str) {
 

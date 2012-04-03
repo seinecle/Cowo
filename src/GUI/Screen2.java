@@ -4,12 +4,6 @@
  */
 package GUI;
 
-import java.awt.Cursor;
-import java.awt.Desktop;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 
 /**
@@ -37,8 +31,6 @@ public class Screen2 extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         closeParameters = new javax.swing.JButton();
         binaryBox = new javax.swing.JCheckBox();
         nGramsField = new javax.swing.JTextField();
@@ -57,24 +49,16 @@ public class Screen2 extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         deleteChars = new javax.swing.JCheckBox();
+        jLabel9 = new javax.swing.JLabel();
+        useScientificStopWords = new javax.swing.JCheckBox();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        useAlchemyAPIButton = new javax.swing.JCheckBox();
+        selectCategoriesButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(Screen2.class, "Screen2.jLabel1.text")); // NOI18N
-
-        jLabel2.setText(org.openide.util.NbBundle.getMessage(Screen2.class, "Screen2.jLabel2.text")); // NOI18N
-        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel2MouseClicked(evt);
-            }
-        });
-        jLabel2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                jLabel2MouseMoved(evt);
-            }
-        });
 
         closeParameters.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         closeParameters.setText(org.openide.util.NbBundle.getMessage(Screen2.class, "Screen2.closeParameters.text")); // NOI18N
@@ -142,51 +126,99 @@ public class Screen2 extends javax.swing.JFrame {
         deleteChars.setSelected(true);
         deleteChars.setText(org.openide.util.NbBundle.getMessage(Screen2.class, "Screen2.deleteChars.text")); // NOI18N
 
+        jLabel9.setText(org.openide.util.NbBundle.getMessage(Screen2.class, "Screen2.jLabel9.text")); // NOI18N
+
+        useScientificStopWords.setBackground(new java.awt.Color(255, 255, 255));
+        useScientificStopWords.setSelected(true);
+        useScientificStopWords.setText(org.openide.util.NbBundle.getMessage(Screen2.class, "Screen2.useScientificStopWords.text")); // NOI18N
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 2, 13)); // NOI18N
+        jLabel10.setText(org.openide.util.NbBundle.getMessage(Screen2.class, "Screen2.jLabel10.text")); // NOI18N
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 2, 13)); // NOI18N
+        jLabel11.setText(org.openide.util.NbBundle.getMessage(Screen2.class, "Screen2.jLabel11.text")); // NOI18N
+
+        useAlchemyAPIButton.setBackground(new java.awt.Color(255, 255, 255));
+        useAlchemyAPIButton.setText(org.openide.util.NbBundle.getMessage(Screen2.class, "Screen2.useAlchemyAPIButton.text")); // NOI18N
+        useAlchemyAPIButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                useAlchemyAPIButtonActionPerformed(evt);
+            }
+        });
+
+        selectCategoriesButton.setText(org.openide.util.NbBundle.getMessage(Screen2.class, "Screen2.selectCategoriesButton.text")); // NOI18N
+        selectCategoriesButton.setEnabled(false);
+        selectCategoriesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectCategoriesButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(nGrams)
-                            .addComponent(openStopWordsFile)
+                            .addComponent(jLabel11)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel7))
-                            .addComponent(jLabel5)
+                                .addComponent(useAlchemyAPIButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(selectCategoriesButton))
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(9, 9, 9)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(numChars)
-                                    .addComponent(maxWords)
-                                    .addComponent(binaryCounting)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel8))
-                                .addGap(33, 33, 33)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(deleteChars)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(nGramsField)
-                                        .addComponent(minCharsField)
-                                        .addComponent(binaryBox)
-                                        .addComponent(maxWordsField)
-                                        .addComponent(minOccurrences))))
-                            .addComponent(closeParameters)))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(nGrams)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(binaryCounting)
+                                            .addComponent(jLabel8))
+                                        .addGap(33, 33, 33)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(deleteChars)
+                                            .addComponent(nGramsField)
+                                            .addComponent(binaryBox)))
+                                    .addComponent(jLabel5)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(openStopWordsFile)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(closeParameters)
+                                            .addComponent(jLabel7)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(numChars)
+                                            .addComponent(maxWords)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel6)
+                                            .addComponent(jLabel9))
+                                        .addGap(81, 81, 81)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(minCharsField)
+                                            .addComponent(maxWordsField)
+                                            .addComponent(minOccurrences)
+                                            .addComponent(useScientificStopWords, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addComponent(jLabel3)
-                .addGap(56, 56, 56)
+                .addGap(54, 54, 54)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(useAlchemyAPIButton)
+                    .addComponent(selectCategoriesButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel11)
+                .addGap(59, 59, 59)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addComponent(deleteChars))
@@ -194,11 +226,11 @@ public class Screen2 extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(binaryBox)
                     .addComponent(binaryCounting))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nGrams)
                     .addComponent(nGramsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(numChars)
                     .addComponent(minCharsField))
@@ -214,31 +246,30 @@ public class Screen2 extends javax.swing.JFrame {
                     .addComponent(minOccurrences, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
-                .addGap(38, 38, 38)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(useScientificStopWords))
+                .addGap(24, 24, 24)
                 .addComponent(openStopWordsFile)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
-                .addGap(33, 33, 33)
+                .addGap(62, 62, 62)
                 .addComponent(closeParameters)
-                .addGap(26, 26, 26)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addContainerGap())
+                .addGap(24, 24, 24))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -276,22 +307,19 @@ public class Screen2 extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_openStopWordsFileActionPerformed
 
-    private void jLabel2MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseMoved
-        jLabel2.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-    }//GEN-LAST:event_jLabel2MouseMoved
-
-    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        try {
-            try {
-                Desktop.getDesktop().browse(new java.net.URI("http://www.vosviewer.com"));
-            } catch (URISyntaxException ex) {
-                Logger.getLogger(Screen2.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(Screen2.class.getName()).log(Level.SEVERE, null, ex);
+    private void useAlchemyAPIButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useAlchemyAPIButtonActionPerformed
+        if (evt.getSource() == useAlchemyAPIButton) {
+            selectCategoriesButton.setEnabled(useAlchemyAPIButton.isSelected());
         }
-    }//GEN-LAST:event_jLabel2MouseClicked
+    }//GEN-LAST:event_useAlchemyAPIButtonActionPerformed
+
+    private void selectCategoriesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectCategoriesButtonActionPerformed
+        if (evt.getSource() == selectCategoriesButton) {
+            Screen1.screen2.setVisible(false);
+            Screen1.screen3.setVisible(true);
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_selectCategoriesButtonActionPerformed
     /**
      * @param args the command line arguments
      */
@@ -300,14 +328,15 @@ public class Screen2 extends javax.swing.JFrame {
     private javax.swing.JLabel binaryCounting;
     private javax.swing.JButton closeParameters;
     public static javax.swing.JCheckBox deleteChars;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel maxWords;
     public static javax.swing.JTextField maxWordsField;
@@ -317,5 +346,8 @@ public class Screen2 extends javax.swing.JFrame {
     public static javax.swing.JTextField nGramsField;
     private javax.swing.JLabel numChars;
     private javax.swing.JButton openStopWordsFile;
+    private javax.swing.JButton selectCategoriesButton;
+    public javax.swing.JCheckBox useAlchemyAPIButton;
+    public static javax.swing.JCheckBox useScientificStopWords;
     // End of variables declaration//GEN-END:variables
 }
