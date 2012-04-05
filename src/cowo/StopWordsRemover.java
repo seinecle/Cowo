@@ -28,9 +28,8 @@ public final class StopWordsRemover {
 //        //run();
 //    }
     StopWordsRemover(String element, int entryCount)  {
-        this.entryWord = element;
+        this.entryWord = element.replaceAll(" +", " ");
         this.entryCount = entryCount;
-
 
         call();
 
@@ -41,7 +40,6 @@ public final class StopWordsRemover {
 
         boolean write = true;
 
-        //System.out.println(Main.counter);
 
         if (!Main.ownStopWords.equals("nothing")) {
             String[] wordsNGrams = entryWord.split(" ");
@@ -53,7 +51,6 @@ public final class StopWordsRemover {
 
         } else {
             try {
-
                 multipleWord = entryWord.contains(" ");
 
 
@@ -65,7 +62,6 @@ public final class StopWordsRemover {
 
 
                     for (int n = 0; n < wordsNGrams.length; n++) {
-                        //System.out.println(wordsNGrams[n]);
 
                         if (wordsNGrams[n].length() < Main.minWordLength) {
                             write = false;

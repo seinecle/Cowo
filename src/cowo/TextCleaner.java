@@ -18,10 +18,10 @@ public class TextCleaner {
             if (Main.filterDifficultChars) {
                 //System.out.println("line inside the Text Cleaner: \""+currLine+"\"");
                 currLine = currLine.replaceAll("\\p{C}", " ");
-                currLine = currLine.replaceAll(".*http.*", "");
                 currLine = currLine.replaceAll("’", "'");
                 currLine = currLine.replaceAll("[^A-Za-z'\\|]", " ");
                 currLine = currLine.toLowerCase();
+                currLine = currLine.replaceAll(" +", " ");
                 //System.out.println("line inside the Text Cleaner, after the cleaning: \""+currLine+"\"");
 
             }

@@ -213,7 +213,7 @@ public class Screen1 extends javax.swing.JFrame {
 
                 //System.out.println(String.valueOf(countHTML));
                 String[] args;
-                args = new String[12];
+                args = new String[14];
                 args[0] = workingDirectory;
                 args[1] = fileSelectedPathANdName;
                 args[2] = fileSelectedName;
@@ -227,12 +227,14 @@ public class Screen1 extends javax.swing.JFrame {
                 args[9] = new Boolean(Screen2.deleteChars.isSelected()).toString();
                 args[10] = new Boolean(Screen2.useScientificStopWords.isSelected()).toString();
                 args[11] = Screen1.screen3.AlchemyAPIKey.getText();
+                args[12] = Screen2.wordSeparator.getText();
+                args[13] = new Boolean(Screen2.useTDIDF.isSelected()).toString();
                 //logArea.append(workingDirectory);
                 //                    args[1] = String.valueOf(countPDF);
             } catch (NullPointerException e){System.out.println("this value should not be null");}
       
 
-                Runnable r = new Main(args[0], args[1], args[2],args[3],args[4],args[5],args[6],args[7],args[8],args[9],args[10],args[11]);
+                Runnable r = new Main(args[0], args[1], args[2],args[3],args[4],args[5],args[6],args[7],args[8],args[9],args[10],args[11],args[12],args[13]);
                 new Thread(r).start();
 
 

@@ -65,7 +65,7 @@ public class NGramDuplicatesCleaner {
             toRemain = wordsToBeRemoved.add(currWord3);
 
             //This line includes the condition for an important word to remain in the list of words, even if listed with stopwords.
-            if ((toRemain & !Main.setStopWords.contains(currWord3)) | Main.setKeepWords.contains(currWord3)) {
+            if (((toRemain & !Main.setStopWords.contains(currWord3)) | Main.setKeepWords.contains(currWord3)) & currWord3.length()>=Main.minWordLength) {
                 Main.freqListFiltered.add(entry);
                 Main.setFreqWords.add(entry.getElement());
 //                if ("consumers".equals(entry.getElement())){

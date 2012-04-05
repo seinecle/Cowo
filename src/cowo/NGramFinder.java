@@ -19,7 +19,7 @@ public class NGramFinder {
     private static HashMultiset<String> freqSetN = HashMultiset.create();
     private static String[] words;
     
-    public static HashMultiset<String> setNGrams = HashMultiset.create();
+//    public static HashMultiset<String> setNGrams = HashMultiset.create();
     public static HashSet<String> setUniqueNGramsPerLine;
     public static HashMultiset<String> setAllNGramsPerLine;
     
@@ -27,7 +27,7 @@ public class NGramFinder {
     
     
     public static void runIt(HashMap<Integer,String> mapofLines){
-    Clock extractingNGramsPerLine = new Clock("extracting");
+    Clock extractingNGramsPerLine = new Clock("extracting ngrams");
 
 
 //
@@ -35,20 +35,18 @@ public class NGramFinder {
 
 
 
-                Main.setAllNGramsPerLine = HashMultiset.create();
+                setAllNGramsPerLine = HashMultiset.create();
 
-                Main.setAllNGramsPerLine.addAll(run(mapofLines.get(lineNumber), Main.maxgram));
+                setAllNGramsPerLine.addAll(run(mapofLines.get(lineNumber), Main.maxgram));
 
                 //takes care of the binary counting. For the Alchemy API case, this happens in the AlchemyAPI extractor class
                 if (Main.binary) {
                     setUniqueNGramsPerLine = new HashSet();
                     setUniqueNGramsPerLine.addAll(setAllNGramsPerLine);
-                    setNGrams.addAll(setUniqueNGramsPerLine);
+                    Main.setNGrams.addAll(setUniqueNGramsPerLine);
                 } else {
-                    setNGrams.addAll(setAllNGramsPerLine);
+                    Main.setNGrams.addAll(setAllNGramsPerLine);
                 }
-
-
 
             }
 
@@ -59,8 +57,9 @@ public class NGramFinder {
 
     public static void ngrams(int n, String str) {
 
-            words = str.split(" ");
-            
+            words = str.split(Main.wordSeparator);
+//            System.out.println(str);
+//            System.out.println(words[0]);
        
             
 
