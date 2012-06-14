@@ -1,0 +1,64 @@
+label,id
+risk, 1
+reward value, 2
+aversive, 3
+appetitive, 4
+human brain, 5
+neural, 6
+reward related learning, 7
+value signal, 8
+prefrontal cortex, 9
+incentive, 10
+human prefrontal cortex, 11
+neural substrate, 12
+dorsolateral, 13
+striatum, 14
+motor, 15
+dorsal striatum, 16
+human dorsal, 17
+lateral, 18
+choice behavior, 19
+neuroimaging, 20
+conditioning, 21
+awareness, 22
+aversion, 23
+computational, 24
+reward learning, 25
+reinforcement learning, 26
+human decision, 27
+fmri, 28
+monetary, 29
+avoidance learning, 30
+amygdala, 31
+directed action, 32
+ventromedial prefrontal cortex, 33
+medial orbitofrontal cortex, 34
+directed learning, 35
+anticipation, 36
+behavior, 37
+reward learning and decision, 38
+pavlovian, 39
+magnetic resonance imaging, 40
+reward related decision, 41
+striatal, 42
+orbitofrontal cortex, 43
+rewarding, 44
+expected value, 45
+valuation, 46
+midbrain, 47
+juice and money, 48
+ventral striatum, 49
+encoding, 50
+dopamine, 51
+behavioral, 52
+putamen, 53
+higher order, 54
+dopaminergic, 55
+neuron, 56
+magnetic resonance imaging fmri, 57
+dorsomedial, 58
+cognitive, 59
+cingulate, 60
+scanning, 61
+sulcus, 62
+ventromedial prefrontal cortex vmpfc, 63

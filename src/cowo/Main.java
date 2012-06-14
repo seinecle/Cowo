@@ -75,9 +75,11 @@ public class Main implements Runnable {
     private static BufferedReader fileStopWords;
     private static BufferedReader fileKeepWords;
     private static BufferedReader fileStopWords2;
+    private static BufferedReader fileStopWordsFrench;
     private static String[] stopwordsOwn;
     private static BufferedReader fileStopWords4;
     public static String[] stopwordsShort;
+    public static String[] stopwordsFrench;
     private static String[] stopwordsScientific;
     public static Set<String> setStopWords = new HashSet();
     public static Set<String> setStopWordsScientific = new HashSet();
@@ -94,11 +96,13 @@ public class Main implements Runnable {
     private static BufferedWriter fileParametersFile;
     public static Set<String> setStopWordsShort = new HashSet();
     public static Set<String> setStopWordsOwn = new HashSet();
+    public static Set<String> setStopWordsFrench = new HashSet();
     public static Set<String> setKeepWords = new HashSet();
     private static BufferedReader fileNoLemma;
     private static String[] noLemmaArray;
     public static String[] keepWordsArray;
     static InputStream in10000 = Main.class.getResourceAsStream("stopwords_10000_most_frequent_filtered.txt");
+    static InputStream inFrench = Main.class.getResourceAsStream("stopwords_french.txt");
     static InputStream inscientific = Main.class.getResourceAsStream("scientificstopwords.txt");
     static InputStream inOwn;
     static InputStream inkeep = Main.class.getResourceAsStream("stopwords_tokeep.txt");
@@ -183,6 +187,11 @@ public class Main implements Runnable {
             setStopWordsOwn.addAll(Arrays.asList(stopwordsOwn));
             fileStopWords2.close();
 
+            fileStopWordsFrench = new BufferedReader(new InputStreamReader(inFrench));
+            stopwordsFrench = fileStopWordsFrench.readLine().split(",");
+            setStopWordsFrench.addAll(Arrays.asList(stopwordsFrench));
+            fileStopWordsFrench.close();
+
             if (Main.useScientificStopWords) {
 
                 fileStopWords4 = new BufferedReader(new InputStreamReader(inscientific));
@@ -194,7 +203,7 @@ public class Main implements Runnable {
             fileKeepWords = new BufferedReader(new InputStreamReader(inkeep));
             keepWordsArray = fileKeepWords.readLine().split(",");
             setKeepWords.addAll(Arrays.asList(keepWordsArray));
-            fileKeepWords.close();
+            //fileKeepWords.close();
 
             fileNoLemma = new BufferedReader(new InputStreamReader(innolemma));
             noLemmaArray = fileNoLemma.readLine().split(",");
@@ -206,9 +215,10 @@ public class Main implements Runnable {
             stopwords = Arrays.copyOf(stopwords, nbStopWords);
             fileStopWords.close();
 
-            if (!ownStopWords.equals("nothing")) {
-                stopwords = ArrayUtils.addAll(stopwords, stopwordsOwn);
-            }
+//            if (!ownStopWords.equals("nothing")) {
+            stopwords = ArrayUtils.addAll(stopwords, stopwordsOwn);
+            stopwords = ArrayUtils.addAll(stopwords, stopwordsFrench);
+//            }
 
             if (Main.useScientificStopWords) {
                 stopwords = ArrayUtils.addAll(stopwords, stopwordsScientific);
@@ -265,7 +275,7 @@ public class Main implements Runnable {
                 executor = Executors.newFixedThreadPool(60);
                 listFutures = new HashMap();
                 // this line takes the fields selected by the user in the GUI and puts then in a set.
-                setFilteredFields.addAll(Screen1.screen3.listFields.getSelectedValuesList());
+                setFilteredFields.addAll(Arrays.asList((String[])Screen1.screen3.listFields.getSelectedValues()));
                 System.out.println("List of fields selected:\n" + setFilteredFields.toString());
             }
 
@@ -481,7 +491,7 @@ public class Main implements Runnable {
 
                 HashMap<String, Float> tdIDFScores = new HashMap();
                 String currWords = mapofLines.get(lineNumber);
-                System.out.println("in the loop: " + currWords);
+                //System.out.println("in the loop: " + currWords);
                 int countTermsInThisDoc;
                 if (useAAPI_Entity) {
                     countTermsInThisDoc = currWords.split("\\|").length;
@@ -491,22 +501,24 @@ public class Main implements Runnable {
 
 
                 if (countTermsInThisDoc < 2) {
-                    System.out.println("term 1 in the currLine: " + currWords.split(wordSeparator)[0]);
-                    System.out.println("breaking because just one word");
+                    if (countTermsInThisDoc > 0) {
+//                        System.out.println("term 1 in the currLine: " + currWords.split(wordSeparator)[0]);
+                    }
+//                    System.out.println("breaking because just one word");
 
                     continue;
                 }
 
 
                 if (currWords == null) {
-                    System.out.println("breaking because of null string!");
+//                    System.out.println("breaking because of null string!");
                     continue;
                 }
 
 //                System.out.println("this is the line \"" + currWords + "\"");
                 currWords = TextCleaner.doBasicCleaning(currWords);
                 if (currWords.equals("")) {
-                    System.out.println("breaking because of empty string!");
+//                    System.out.println("breaking because of empty string!");
                     continue;
                 }
 
@@ -520,7 +532,7 @@ public class Main implements Runnable {
 
                     if (currWords.contains(currFreqTerm)) {
                         ngramsInLine.add(currFreqTerm);
-                        System.out.println("currFreqTerm matched is:" + currFreqTerm);
+                        //System.out.println("currFreqTerm matched is:" + currFreqTerm);
 
                         //snippet to find the count of a word in the current line
                         int lastIndex = 0;
@@ -537,18 +549,18 @@ public class Main implements Runnable {
                         }
 //                        System.out.println("countTermInThisDoc: " + countTermInThisDoc);
                         //end snippet
-
+                        if (useTDIDF) {
 //                        System.out.println("countTermsInThisDoc: " + countTermsInThisDoc);
-                        int countDocsInCorpus = numberOfDocs;
+                            int countDocsInCorpus = numberOfDocs;
 //                        System.out.println("countDocsInCorpus: " + countDocsInCorpus);
-                        int countDocsContainingThisTerm = countTermsInDocs.count(currFreqTerm);
+                            int countDocsContainingThisTerm = countTermsInDocs.count(currFreqTerm);
 //                        System.out.println("countDocsContainingThisTerm: " + countDocsContainingThisTerm);
-                        float tdIDFscore = (float) (((float) countTermInThisDoc / (float) countTermsInThisDoc) * (float) Math.log((double) countDocsInCorpus / (double) countDocsContainingThisTerm));
+                            float tdIDFscore = (float) (((float) countTermInThisDoc / (float) countTermsInThisDoc) * (float) Math.log((double) countDocsInCorpus / (double) countDocsContainingThisTerm));
 //                        System.out.println("tdIDFscore: " + tdIDFscore);
 
-                        tdIDFScores.put(currFreqTerm, tdIDFscore);
+                            tdIDFScores.put(currFreqTerm, tdIDFscore);
 
-
+                        }
 //                        System.out.println(currFreqTerm);
 
                     }
@@ -716,7 +728,6 @@ public class Main implements Runnable {
             fileGMLFile.flush();
 
             fileGMLFile.close();
-            GMLSb = null;
             //-------------------------------------------------------------------------------------------------------------          
             // #### 11. PRINTING REPORT ON PARAMETERS EMPLOYED:
             fileParametersName = StringUtils.substring(textFileName, 0, textFileName.length() - 4).concat("_parameters.txt");
@@ -727,7 +738,8 @@ public class Main implements Runnable {
                     "Report of the parameters used to extract co-occurrences in file \"").append(textFileName).append("\".\n\n");
             if (useAAPI_Entity) {
                 parametersSb.append(
-                        "AlchemyAPI is used to detected entities in the corpus.\nType and numbers of entities extracted:\n").append(AlchemyAPIfieldsAndNumbers.toString() + "\n");
+                        "AlchemyAPI is used to detected entities in the corpus.\nType and numbers of entities extracted:\n").append(
+                        AlchemyAPIfieldsAndNumbers.toString()).append("\n");
             }
             parametersSb.append(
                     "TD-IDF measure used to correct the frequency of terms per docs: ").append(useTDIDF).append(".\n");
