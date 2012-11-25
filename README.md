@@ -1,14 +1,14 @@
 #Cowo
 First released 25 November 2012 by Clement Levallois  
 www.clementlevallois.net  
-twitter: @seinecle  
+twitter: [@seinecle] (https://twitter.com/seinecle)  
 
 ##What does Cowo do?
 Cowo takes a file containing several lines of text and creates a map of the terms contained in these lines (with VosViewer, www.vosviewer.com)
 
 ##What kind of "map of terms"?
 => [click here to visualize an example](http://www.clementlevallois.net/download/example%20of%20terms%20maps.jpg)  
-(this is a map of the terms used in publications in neuroeconomics, taken from [here](http://www.nature.com/nrn/journal/v13/n11/abs/nrn3354.html).
+(this is a map of the terms used in publications in neuroeconomics, taken from [here](http://www.nature.com/nrn/journal/v13/n11/abs/nrn3354.html)).
 
 ##More precisely, please!
 Let's imagine you have a text file where each line contains a description of a car. You have 1000 lines, because there are 1000 different cars to describe. What Cowo does is read this file, detect frequent words contained in it, and find the connections between these frequent words. For instance, if the words "nice v12 engine" frequently appears in the same descriptions as "ideal for car racing", Coword will catch it. At the end, Cowo spits out several files, two of which are really important (a "map" file and a "network" file). You take these two files, read them with VosViewer (click and point operation, takes 1 minute), and you obtain a map of your most frequent words, arranged according to how frequently they are connected in the same car descriptions.
