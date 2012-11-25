@@ -35,8 +35,11 @@ then:
 
 ##The technics behind it:
 - cowo takes a n-gram detection approach, not a Part of Speech tagging approach. This makes it very fast and agnostic to the syntax.
-- cowo makes use of very broad stopwords lists. For this reason, co-wo is particularly suited for texts from specialized domains.
+- cowo makes use of very broad stopwords lists. For this reason, cowo is particularly suited for texts from specialized domains.
 
 
-##questions, suggestions, bugs?
+###Questions, suggestions, bugs?
 => clementlevallois@gmail.com
+
+###Do you like this software?
+=> you might be interested in 2 others: [Eonydis](https://github.com/seinecle/Eonydis/wiki/wiki) and [Gaze](https://github.com/seinecle/Gaze/wiki/Gaze:-find-structure-in-your-networks)
