@@ -22,6 +22,8 @@ public class TextCleaner {
                 currLine = currLine.replaceAll("[^A-Za-z'\\|]", " ");
                 currLine = currLine.toLowerCase();
                 currLine = currLine.replaceAll(" +", " ");
+                currLine = currLine.replaceAll("dmn","default mode network");
+                currLine = currLine.replaceAll("behaviour","behavior");
                 //System.out.println("line inside the Text Cleaner, after the cleaning: \""+currLine+"\"");
 
             }

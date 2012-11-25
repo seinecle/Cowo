@@ -393,13 +393,9 @@ public class Main implements Runnable {
             if (!useAAPI_Entity & (useScientificStopWords | !ownStopWords.equals("nothing"))) {
                 Clock stopwordsRemovalTime = new Clock("Removing stopwords");
                 Iterator<Entry<String>> it = freqSet.entrySet().iterator();
-
-
                 while (it.hasNext()) {
                     counter++;
                     Entry<String> entry = it.next();
-
-
                     new StopWordsRemover(entry.getElement().trim(), entry.getCount());
                 }
                 counter = 0;
@@ -410,7 +406,8 @@ public class Main implements Runnable {
                 filteredFreqSet.addAll(freqSet);
             }
 
-
+            System.out.println("size of filteredFreqSet: " + filteredFreqSet.size());
+            
             // #### SORTS TERMS BY FREQUENCY, LEAVING OUT THE LESS FREQUENT ONE
             freqList = MultiSetSorter.sortMultisetPerEntryCount(filteredFreqSet);
             System.out.println("size of freqList: " + freqList.size());

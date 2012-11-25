@@ -292,6 +292,7 @@ public class Screen1 extends javax.swing.JFrame {
          */
         SwingUtilities.invokeLater(new Runnable() {
 
+            @Override
             public void run() {
                 screen1 = new Screen1();
                 screen2 = new Screen2();

@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -19,7 +21,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathExpressionException;
-import org.openide.util.Exceptions;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -37,13 +38,14 @@ public class AlchemyExtractor implements Callable {
     }
 
     @Override
-    public String call() {
-        StringBuilder currAlchemyText = new StringBuilder();
-        HashMultimap<String, String> currMapTypeToText = HashMultimap.create();
-        HashMap<String, String> currMapTextToType = new HashMap();
-
-        AlchemyAPI alchemyObj = AlchemyAPI.GetInstanceFromString(Main.AlchemyAPIKey);
+    public String call() throws IOException {
         try {
+            StringBuilder currAlchemyText = new StringBuilder();
+            HashMultimap<String, String> currMapTypeToText = HashMultimap.create();
+            HashMap<String, String> currMapTextToType = new HashMap();
+
+            AlchemyAPI alchemyObj = AlchemyAPI.GetInstanceFromString(Main.AlchemyAPIKey);
+
             Document doc = alchemyObj.TextGetRankedNamedEntities(currLine);
 
 
@@ -93,33 +95,31 @@ public class AlchemyExtractor implements Callable {
                 currAlchemyText.append(ITCurrMap.next()).append("|");
 
             }
-            
-            
+
+
             //these if and else conditions take care of the binary counting option.
             //when relying on n-grams, the binary counting case is dealt in the n-gram finder class
-            if (Main.binary){
+            if (Main.binary) {
                 HashSet setUniqueValues = new HashSet();
                 setUniqueValues.addAll(currMapTypeToText.values());
                 Main.freqSet.addAll(setUniqueValues);
-                
+
+            } else {
+                Main.freqSet.addAll(currMapTypeToText.values());
             }
-            else{Main.freqSet.addAll(currMapTypeToText.values());}
 
             currLine = currAlchemyText.toString();
             //System.out.println("currLine via Alchemy: " + currLine);
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-            System.out.println("error with API call");
+
         } catch (SAXException ex) {
-            Exceptions.printStackTrace(ex);
+            Logger.getLogger(AlchemyExtractor.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParserConfigurationException ex) {
-            Exceptions.printStackTrace(ex);
+            Logger.getLogger(AlchemyExtractor.class.getName()).log(Level.SEVERE, null, ex);
         } catch (XPathExpressionException ex) {
-            Exceptions.printStackTrace(ex);
+            Logger.getLogger(AlchemyExtractor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return currLine;
-
 
 
 

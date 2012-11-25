@@ -27,7 +27,7 @@ public final class StopWordsRemover {
 //        this.entryCount = entry.getCount();
 //        //run();
 //    }
-    StopWordsRemover(String element, int entryCount)  {
+    StopWordsRemover(String element, int entryCount) {
         this.entryWord = element.replaceAll(" +", " ");
         this.entryCount = entryCount;
 
@@ -36,7 +36,7 @@ public final class StopWordsRemover {
     }
 
     //@Override
-    public void call()  {
+    public void call() {
 
         boolean write = true;
 
@@ -50,101 +50,85 @@ public final class StopWordsRemover {
             }
 
         } else {
-            try {
-                multipleWord = entryWord.contains(" ");
+            multipleWord = entryWord.contains(" ");
+
+
+            if (multipleWord) {
+                String[] wordsNGrams = entryWord.split(" ");
 
 
 
-                if (multipleWord) {
+                for (int n = 0; n < wordsNGrams.length; n++) {
 
-                    String[] wordsNGrams = entryWord.split(" ");
-
-
-
-                    for (int n = 0; n < wordsNGrams.length; n++) {
-
-                        if (wordsNGrams[n].length() < Main.minWordLength) {
-                            write = false;
-                            break;
-                        }
-
-                    }
-
-                    if (wordsNGrams.length == 2
-                            && ((Main.setStopWordsScientificOrShort.contains(wordsNGrams[0].toLowerCase().trim())
-                            || Main.setStopWordsScientificOrShort.contains(wordsNGrams[1].toLowerCase().trim())))) {
+                    if (wordsNGrams[n].length() < Main.minWordLength) {
                         write = false;
+                        break;
+                    }
+
+                }
+
+                if (wordsNGrams.length == 2
+                        && ((Main.setStopWordsScientificOrShort.contains(wordsNGrams[0].toLowerCase().trim())
+                        || Main.setStopWordsScientificOrShort.contains(wordsNGrams[1].toLowerCase().trim())))) {
+                    write = false;
+
+                }
+
+                if (wordsNGrams.length > 2) {
+                    int scoreGarbage = 0;
+
+                    for (int i = 0; i < wordsNGrams.length; i++) {
+
+                        if ((i == 0 | i == (wordsNGrams.length - 1)) & Main.setStopWordsScientificOrShort.contains(wordsNGrams[i].toLowerCase().trim())) {
+                            scoreGarbage = Main.maxAcceptedGarbage + 1;
+                            continue;
+                        }
+
+
+                        if (Main.setStopWordsShort.contains(wordsNGrams[i].toLowerCase().trim())) {
+                            scoreGarbage = scoreGarbage + 3;
+                            continue;
+                        }
+
+                        if (Main.setStopWordsScientific.contains(wordsNGrams[i].toLowerCase().trim())) {
+                            scoreGarbage = scoreGarbage + 2;
+                            continue;
+                        }
 
                     }
 
-                    if (wordsNGrams.length > 2) {
-                        int scoreGarbage = 0;
+                    if (Main.setStopWords.contains(entryWord)) {
+                        scoreGarbage = Main.maxAcceptedGarbage + 1;
+                    }
 
-                        for (int i = 0; i < wordsNGrams.length; i++) {
-
-                            if ((i == 0 | i == (wordsNGrams.length - 1)) & Main.setStopWordsScientificOrShort.contains(wordsNGrams[i].toLowerCase().trim())) {
-                                scoreGarbage = Main.maxAcceptedGarbage + 1;
-                                continue;
-                            }
-
-
-                            if (Main.setStopWordsShort.contains(wordsNGrams[i].toLowerCase().trim())) {
-                                scoreGarbage = scoreGarbage + 3;
-                                continue;
-                            }
-
-                            if (Main.setStopWordsScientific.contains(wordsNGrams[i].toLowerCase().trim())) {
-                                scoreGarbage = scoreGarbage + 2;
-                                continue;
-                            }
-
-
-
-
-
-                        }
-
-                        if (Main.setStopWords.contains(entryWord)) {
-                            scoreGarbage = Main.maxAcceptedGarbage + 1;
-                        }
-
-                        //                    if (Main.setStopWordsShort.contains(wordsNGrams[0].toLowerCase().trim())
+                    //                    if (Main.setStopWordsShort.contains(wordsNGrams[0].toLowerCase().trim())
 //                            || (Main.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) & Main.setStopWordsShort.contains(wordsNGrams[2].toLowerCase().trim()))
 //                            || (Main.setStopWords.contains(wordsNGrams[0].toLowerCase().trim())& Main.setStopWordsShort.contains(wordsNGrams[1].toLowerCase().trim()) && Main.setStopWords.contains(wordsNGrams[2].toLowerCase().trim()))
 //                            || (Main.setStopWordsShort.contains(wordsNGrams[wordsNGrams.length - 1].toLowerCase().trim()))) {
-                        if (scoreGarbage > Main.maxAcceptedGarbage) {
-
-                            write = false;
-                        }
-                    }
-
-
-
-
-
-
-                } else {
-
-//                    Future<String> result = pool.submit(new StanfordLemmatization(entryWord));
-//                    entryWord = result.get();
-                    //entryWord = new StanfordLemmatization(entryWord).call();
-
-                    if (Main.setStopWords.contains(entryWord) & !Main.setKeepWords.contains(entryWord)) {
+                    if (scoreGarbage > Main.maxAcceptedGarbage) {
 
                         write = false;
-
-
                     }
                 }
 
 
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("problem: " + entryWord);
-                write = false;
 
+
+
+
+            } else {
+//                System.out.println("single word!");
+//                    Future<String> result = pool.submit(new StanfordLemmatization(entryWord));
+//                    entryWord = result.get();
+                //entryWord = new StanfordLemmatization(entryWord).call();
+
+                if (Main.setStopWords.contains(entryWord) & !Main.setKeepWords.contains(entryWord)) {
+
+                    write = false;
+
+
+                }
             }
-
-
 
 
             if (Main.setKeepWords.contains(entryWord)) {
@@ -154,13 +138,12 @@ public final class StopWordsRemover {
         } //end of else block       
 
         if (write) {
-            synchronized (Main.filteredFreqSet) {
-                Main.filteredFreqSet.add(entryWord, entryCount);
+            Main.filteredFreqSet.add(entryWord, entryCount);
+//            System.out.println("term added!");
 //                if ("risk".equals(entryWord)){
 //                    System.out.println("risk added to filteredFreqSet "+entryCount);
 //                }
 
-            }
 
 //                return toReturn;
         }
