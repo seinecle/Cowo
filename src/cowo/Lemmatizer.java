@@ -17,8 +17,8 @@ public class Lemmatizer {
     }
 
     public static String doLemmatizationReturnString(HashMultiset wordsOfLine) {
-        
-        
+
+
         Iterator<String> itwl = wordsOfLine.elementSet().iterator();
         StringBuilder sbWords = new StringBuilder();
 
@@ -32,7 +32,7 @@ public class Lemmatizer {
 
 
             if (currEntry.endsWith("ies")) {
-                if (!Main.setNoLemma.contains(currEntry)) {
+                if (!Controller.setNoLemma.contains(currEntry)) {
                     currEntry = currEntry.substring(0, currEntry.length() - 3) + "y";
 
                 }
@@ -44,7 +44,7 @@ public class Lemmatizer {
                     && !currEntry.endsWith("us")
                     && !currEntry.endsWith("as")
                     && !currEntry.endsWith("ss")
-                    && !Main.setNoLemma.contains(currEntry)
+                    && !Controller.setNoLemma.contains(currEntry)
                     && !currEntry.endsWith("is")) {
                 if (currEntry.endsWith("s")) {
                     currEntry = currEntry.substring(0, currEntry.length() - 1);
@@ -58,8 +58,9 @@ public class Lemmatizer {
             }
 
             for (int i = 0; i < wordsOfLine.count(currEntryOriginal); i++) {
-                if (currEntry.trim().length()>=Main.minWordLength)
+                if (currEntry.trim().length() >= Controller.minWordLength) {
                     sbWords.append(currEntry.trim()).append(" ");
+                }
             }
 
         } // end looping through all words of the line which is currently read
@@ -67,27 +68,29 @@ public class Lemmatizer {
         return sbWords.toString();
 
     }
-    
+
     public static HashMultiset doLemmatizationReturnMultiSet(HashMultiset wordsOfLine) {
-        
+
         HashMultiset result = HashMultiset.create();
-        
+
         Iterator<String> itwl = wordsOfLine.elementSet().iterator();
+        String terms[];
+        String lastTerm;
 
         while (itwl.hasNext()) {
             String currEntryOriginal = itwl.next().trim().toLowerCase();
             String currEntry = currEntryOriginal;
-
-
+            terms = currEntry.split(" ");
+            lastTerm = terms[terms.length - 1];
+            if (Controller.setNoLemma.contains(lastTerm)) {
+                result.add(currEntry.trim(), wordsOfLine.count(currEntryOriginal));
+                continue;
+            }
 //                    if ("consumers".equals(currEntry))
 //                        System.out.println("consumers");
-
-
+            
             if (currEntry.endsWith("ies")) {
-                if (!Main.setNoLemma.contains(currEntry)) {
-                    currEntry = currEntry.substring(0, currEntry.length() - 3) + "y";
-
-                }
+                currEntry = currEntry.substring(0, currEntry.length() - 3) + "y";
             } else if (currEntry.endsWith("'s")) {
                 currEntry = currEntry.substring(0, currEntry.length() - 2);
 
@@ -96,7 +99,7 @@ public class Lemmatizer {
                     && !currEntry.endsWith("us")
                     && !currEntry.endsWith("as")
                     && !currEntry.endsWith("ss")
-                    && !Main.setNoLemma.contains(currEntry)
+                    && !Controller.setNoLemma.contains(currEntry)
                     && !currEntry.endsWith("is")) {
                 if (currEntry.endsWith("s")) {
                     currEntry = currEntry.substring(0, currEntry.length() - 1);
@@ -109,9 +112,9 @@ public class Lemmatizer {
                 currEntry = currEntry.substring(0, currEntry.length() - 1);
             }
 
-                if (currEntry.trim().length()>=Main.minWordLength)
-                    result.add(currEntry.trim(),wordsOfLine.count(currEntryOriginal));
-            
+            result.add(currEntry.trim(), wordsOfLine.count(currEntryOriginal));
+
+
         } // end looping through all words of the line which is currently read
 
         return result;

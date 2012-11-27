@@ -1,1 +1,0 @@
-rest,self,day,mind,spontaneous,intrinsic,mode,network,baseline

@@ -4,6 +4,7 @@
  */
 package cowo;
 
+import com.google.common.collect.HashMultiset;
 import java.util.Iterator;
 
 /**
@@ -12,29 +13,28 @@ import java.util.Iterator;
  */
 public class NGramCleaner {
 
-    static void cleanIt() {
+    static HashMultiset<String> cleanIt(HashMultiset<String> multisetNGramsOriginal) {
 
-        Clock nGramHousekeeping = new Clock("cleaning");
+        Clock nGramHousekeeping = new Clock("cleaning ngrams: deleting n-grams less frequent than " + Controller.occurrenceThreshold + " and shorter than " + Controller.minWordLength + " characters.");
 
-
-        Iterator<String> ITsetNGrams = Main.setNGrams.elementSet().iterator();
+        HashMultiset<String> multisetToReturn = HashMultiset.create();
+        Iterator<String> ITsetNGrams = multisetNGramsOriginal.elementSet().iterator();
+        String currNGram;
         while (ITsetNGrams.hasNext()) {
-            String currNGram = ITsetNGrams.next();
-
-            if (currNGram.length() >= Main.minWordLength
-                    & currNGram.length() < 50
-                    & Main.setNGrams.count(currNGram) > Main.occurrenceThreshold
-                    ) {
-                {
-                    Main.freqSet.add(currNGram, Main.setNGrams.count(currNGram));
-
-                }
+            currNGram = ITsetNGrams.next();
+//            if (currNGram.equals("working memory")) {
+//                System.out.println("working memory in the cleaning!");
+//            }
+            if (currNGram.length() >= Controller.minWordLength
+                    & multisetNGramsOriginal.count(currNGram) >= Controller.occurrenceThreshold) {
+                multisetToReturn.add(currNGram, multisetNGramsOriginal.count(currNGram));
+//                System.out.println(currNGram + ", " + Main.multisetNGrams.count(currNGram));
             }
         }
 
 
-
+        nGramHousekeeping.addText("number of words after cleaning: " + multisetToReturn.elementSet().size());
         nGramHousekeeping.closeAndPrintClock();
-
+        return multisetToReturn;
     }
 }

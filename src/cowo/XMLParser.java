@@ -102,7 +102,7 @@ public class XMLParser extends DefaultHandler {
         if (qName.equalsIgnoreCase("text")) {
             newText = true;
             System.out.println("in a text: ");
-            Main.currMapTypeToText.put(type, text);
+            Controller.currMapTypeToText.put(type, text);
             
         }
 

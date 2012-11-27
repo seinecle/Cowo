@@ -44,7 +44,7 @@ public class AlchemyExtractor implements Callable {
             HashMultimap<String, String> currMapTypeToText = HashMultimap.create();
             HashMap<String, String> currMapTextToType = new HashMap();
 
-            AlchemyAPI alchemyObj = AlchemyAPI.GetInstanceFromString(Main.AlchemyAPIKey);
+            AlchemyAPI alchemyObj = AlchemyAPI.GetInstanceFromString(Controller.AlchemyAPIKey);
 
             Document doc = alchemyObj.TextGetRankedNamedEntities(currLine);
 
@@ -67,7 +67,7 @@ public class AlchemyExtractor implements Callable {
                     countPair = 2;
                 }
                 if (countPair == 2) {
-                    if (Main.setFilteredFields.contains(type) & text.length() >= Main.minWordLength) {
+                    if (Controller.setFilteredFields.contains(type) & text.length() >= Controller.minWordLength) {
                         //System.out.println("detected type " + type + ": " + text);
                         if (type.equals("Person")) {
                             if (text.contains(" ")) {
@@ -88,8 +88,8 @@ public class AlchemyExtractor implements Callable {
             }
 
 
-            Main.overallMapTypeToText.putAll(currMapTypeToText);
-            Main.overallMapTextToType.putAll(currMapTextToType);
+            Controller.overallMapTypeToText.putAll(currMapTypeToText);
+            Controller.overallMapTextToType.putAll(currMapTextToType);
             Iterator<String> ITCurrMap = currMapTypeToText.values().iterator();
             while (ITCurrMap.hasNext()) {
                 currAlchemyText.append(ITCurrMap.next()).append("|");
@@ -99,13 +99,13 @@ public class AlchemyExtractor implements Callable {
 
             //these if and else conditions take care of the binary counting option.
             //when relying on n-grams, the binary counting case is dealt in the n-gram finder class
-            if (Main.binary) {
+            if (Controller.binary) {
                 HashSet setUniqueValues = new HashSet();
                 setUniqueValues.addAll(currMapTypeToText.values());
-                Main.freqSet.addAll(setUniqueValues);
+                Controller.freqSet.addAll(setUniqueValues);
 
             } else {
-                Main.freqSet.addAll(currMapTypeToText.values());
+                Controller.freqSet.addAll(currMapTypeToText.values());
             }
 
             currLine = currAlchemyText.toString();

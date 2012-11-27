@@ -4,31 +4,32 @@
  */
 package cowo;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  *
  * @author C. Levallois
  */
 public class TextCleaner {
 
-
     public static String doBasicCleaning(String currLine) {
 
 //        try {
 
-            if (Main.filterDifficultChars) {
-                //System.out.println("line inside the Text Cleaner: \""+currLine+"\"");
-                currLine = currLine.replaceAll("\\p{C}", " ");
-                currLine = currLine.replaceAll("’", "'");
-                currLine = currLine.replaceAll("[^A-Za-z'\\|]", " ");
-                currLine = currLine.toLowerCase();
-                currLine = currLine.replaceAll(" +", " ");
-                currLine = currLine.replaceAll("dmn","default mode network");
-                currLine = currLine.replaceAll("behaviour","behavior");
-                //System.out.println("line inside the Text Cleaner, after the cleaning: \""+currLine+"\"");
+        if (Controller.filterDifficultChars) {
+            //System.out.println("line inside the Text Cleaner: \""+currLine+"\"");
+//            currLine = StringUtils.substring(currLine, StringUtils.ordinalIndexOf(currLine, ";", 3));
+//            System.out.println("currLine after trimming: " + currLine);
+            currLine = currLine.replaceAll("\\p{C}", " ");
+            currLine = currLine.replaceAll("’", "'");
+            currLine = currLine.replaceAll("[^A-Za-z'\\|]", " ");
+            currLine = currLine.toLowerCase();
+            currLine = currLine.replaceAll(" +", " ");
+            //System.out.println("line inside the Text Cleaner, after the cleaning: \""+currLine+"\"");
 
-            }
+        }
 
-            //        } catch (NullPointerException e) {
+        //        } catch (NullPointerException e) {
 //            currLine = "";
 //            System.out.println("error in the Text cleaner!");
 //            System.out.println(e);

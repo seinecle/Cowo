@@ -34,7 +34,7 @@ import org.apache.commons.lang3.StringUtils;
  * each line of the text 9. prints vosViewer output 10. prints GML file 11.
  * print a short report of all these operations
  */
-public class Main implements Runnable {
+public class Controller implements Runnable {
 
     public static String currLine = "";
     public static HashMultiset<String> freqSet = HashMultiset.create();
@@ -42,7 +42,7 @@ public class Main implements Runnable {
     public static LinkedHashMultimap<Integer, String> wordsPerLine = LinkedHashMultimap.create();
     public static LinkedHashMultimap<Integer, String> wordsPerLineFiltered = LinkedHashMultimap.create();
     public static HashSet<String> setOfWords = new HashSet();
-    public static HashMultiset<String> setNGrams = HashMultiset.create();
+    public static HashMultiset<String> multisetNGrams = HashMultiset.create();
     public static Multiset<String> multisetOfWords = ConcurrentHashMultiset.create();
     public static Multiset<String> multisetOcc = ConcurrentHashMultiset.create();
     public static Multiset<String> filteredFreqSet = ConcurrentHashMultiset.create();
@@ -101,18 +101,18 @@ public class Main implements Runnable {
     private static BufferedReader fileNoLemma;
     private static String[] noLemmaArray;
     public static String[] keepWordsArray;
-    static InputStream in10000 = Main.class.getResourceAsStream("stopwords_10000_most_frequent_filtered.txt");
-    static InputStream inFrench = Main.class.getResourceAsStream("stopwords_french.txt");
-    static InputStream inscientific = Main.class.getResourceAsStream("scientificstopwords.txt");
+    static InputStream in10000 = Controller.class.getResourceAsStream("stopwords_10000_most_frequent_filtered.txt");
+    static InputStream inFrench = Controller.class.getResourceAsStream("stopwords_french.txt");
+    static InputStream inscientific = Controller.class.getResourceAsStream("scientificstopwords.txt");
     static InputStream inOwn;
-    static InputStream inkeep = Main.class.getResourceAsStream("stopwords_tokeep.txt");
-    static InputStream innolemma = Main.class.getResourceAsStream("nolemmatization.txt");
+    static InputStream inkeep = Controller.class.getResourceAsStream("stopwords_tokeep.txt");
+    static InputStream innolemma = Controller.class.getResourceAsStream("nolemmatization.txt");
     public static String ownStopWords;
     public static String fileGMLName;
     private static BufferedWriter fileGMLFile;
     public static boolean binary = true;
     public static boolean filterDifficultChars = true;
-    static private boolean useScientificStopWords = false;
+    static public boolean useScientificStopWords = false;
     private static boolean useTDIDF = false;
     //
     //
@@ -132,31 +132,31 @@ public class Main implements Runnable {
     public static String msgAlchemy;
     StringBuilder AlchemyAPIfieldsAndNumbers;
 
-    public Main(String wkGUI, String textFileGUI, String textFileNameGUI, String binaryYes, String freqThresholdGUI, String minWordLengthGUI, String maxgramGUI, String occurrenceThresholdGUI, String ownStopWordsGUI, String filterDifficultCharsGUI, String useScientificStopWordsGUI, String AlchemyAPIKey, String wordSeparatorGUI, String useTDIDFGUI) {
+    public Controller(String wkGUI, String textFileGUI, String textFileNameGUI, String binaryYes, String freqThresholdGUI, String minWordLengthGUI, String maxgramGUI, String occurrenceThresholdGUI, String ownStopWordsGUI, String filterDifficultCharsGUI, String useScientificStopWordsGUI, String AlchemyAPIKey, String wordSeparatorGUI, String useTDIDFGUI) {
 
         textFile = textFileGUI;
         wk = wkGUI;
         textFileName = textFileNameGUI;
         if (!"true".equals(binaryYes)) {
-            Main.binary = !Main.binary;
+            Controller.binary = !Controller.binary;
         }
-        Main.freqThreshold = Integer.valueOf(freqThresholdGUI);
-        Main.minWordLength = Integer.valueOf(minWordLengthGUI);
-        Main.maxgram = Integer.valueOf(maxgramGUI);
-        Main.occurrenceThreshold = Integer.valueOf(occurrenceThresholdGUI);
-        Main.ownStopWords = ownStopWordsGUI;
+        Controller.freqThreshold = Integer.valueOf(freqThresholdGUI);
+        Controller.minWordLength = Integer.valueOf(minWordLengthGUI);
+        Controller.maxgram = Integer.valueOf(maxgramGUI);
+        Controller.occurrenceThreshold = Integer.valueOf(occurrenceThresholdGUI);
+        Controller.ownStopWords = ownStopWordsGUI;
         System.out.println("path of the personal stopword list: " + ownStopWordsGUI);
         if (!"true".equals(filterDifficultCharsGUI)) {
-            Main.filterDifficultChars = !Main.filterDifficultChars;
+            Controller.filterDifficultChars = !Controller.filterDifficultChars;
         }
         if ("true".equals(useScientificStopWordsGUI)) {
-            Main.useScientificStopWords = !Main.useScientificStopWords;
+            Controller.useScientificStopWords = !Controller.useScientificStopWords;
         }
-        System.out.println("use scientific stopwords? " + Main.useScientificStopWords);
-        Main.wordSeparator = wordSeparatorGUI;
+        System.out.println("use scientific stopwords? " + Controller.useScientificStopWords);
+        Controller.wordSeparator = wordSeparatorGUI;
         System.out.println("word separator is: \"" + wordSeparator + "\"");
         if ("true".equals(useTDIDFGUI)) {
-            Main.useTDIDF = !Main.useTDIDF;
+            Controller.useTDIDF = !Controller.useTDIDF;
         }
         System.out.println("word separator is: \"" + wordSeparator + "\"");
 
@@ -177,12 +177,12 @@ public class Main implements Runnable {
 
             Clock loadingStopWordsTime = new Clock("Loading the list of stopwords");
             if (!ownStopWords.equals("nothing")) {
-                inOwn = Main.class.getResourceAsStream(ownStopWords);
+                fileStopWords2 = new BufferedReader(new FileReader(ownStopWords));
             } //this else condition should be deleted at release and the following lines included in the preceding if condition
             else {
-                inOwn = Main.class.getResourceAsStream("stopwords_seinecle.txt");
+                inOwn = Controller.class.getResourceAsStream("stopwords_seinecle.txt");
+                fileStopWords2 = new BufferedReader(new InputStreamReader(inOwn));
             }
-            fileStopWords2 = new BufferedReader(new InputStreamReader(inOwn));
             stopwordsOwn = fileStopWords2.readLine().split(",");
             setStopWordsOwn.addAll(Arrays.asList(stopwordsOwn));
             fileStopWords2.close();
@@ -192,7 +192,7 @@ public class Main implements Runnable {
             setStopWordsFrench.addAll(Arrays.asList(stopwordsFrench));
             fileStopWordsFrench.close();
 
-            if (Main.useScientificStopWords) {
+            if (Controller.useScientificStopWords) {
 
                 fileStopWords4 = new BufferedReader(new InputStreamReader(inscientific));
                 stopwordsScientific = fileStopWords4.readLine().split(",");
@@ -220,7 +220,7 @@ public class Main implements Runnable {
             stopwords = ArrayUtils.addAll(stopwords, stopwordsFrench);
 //            }
 
-            if (Main.useScientificStopWords) {
+            if (Controller.useScientificStopWords) {
                 stopwords = ArrayUtils.addAll(stopwords, stopwordsScientific);
             }
 
@@ -230,7 +230,7 @@ public class Main implements Runnable {
             stopwordsShort = Arrays.copyOf(stopwords, nbStopWordsShort);
 
             setStopWordsShort.addAll(Arrays.asList(stopwordsShort));
-            if (Main.useScientificStopWords) {
+            if (Controller.useScientificStopWords) {
                 setStopWordsScientificOrShort.addAll(setStopWordsScientific);
             }
 
@@ -240,13 +240,6 @@ public class Main implements Runnable {
                 setStopWordsScientificOrShort.addAll(setStopWordsOwn);
             }
 
-            if (!ownStopWords.equals("nothing")) {
-
-                fileStopWords = new BufferedReader(new FileReader(ownStopWords));
-                stopwords = fileStopWords.readLine().split(",");
-                setStopWords.addAll(Arrays.asList(stopwords));
-
-            }
 
             loadingStopWordsTime.closeAndPrintClock();
             //-------------------------------------------------------------------------------------------------------------
@@ -275,7 +268,7 @@ public class Main implements Runnable {
                 executor = Executors.newFixedThreadPool(60);
                 listFutures = new HashMap();
                 // this line takes the fields selected by the user in the GUI and puts then in a set.
-                setFilteredFields.addAll(Arrays.asList((String[])Screen1.screen3.listFields.getSelectedValues()));
+                setFilteredFields.addAll(Arrays.asList((String[]) Screen1.screen3.listFields.getSelectedValues()));
                 System.out.println("List of fields selected:\n" + setFilteredFields.toString());
             }
 
@@ -299,8 +292,9 @@ public class Main implements Runnable {
                 } else {
                     currLine = TextCleaner.doBasicCleaning(currLine);
                     mapofLines.put(counterLines, currLine);
-                    //System.out.println(currLine);
-
+//                    if (currLine.contains("working memory")) {
+//                        System.out.println("first alert!");
+//                    }
 
                 } //end else condition
 
@@ -313,10 +307,6 @@ public class Main implements Runnable {
             br.close();
             loadingTime.closeAndPrintClock();
             //### END of file reading---------------------------------------------------------
-
-
-
-
             if (useAAPI_Entity) {
                 Iterator<Map.Entry<Integer, Future<String>>> itMap = listFutures.entrySet().iterator();
                 while (itMap.hasNext()) {
@@ -337,9 +327,6 @@ public class Main implements Runnable {
 
 
                 // ### END of creation of a map (nbLine, Line)-------------------------------------------------------------   
-
-
-
                 // ### these lines print a list of the categories selected by the user and show how many of them have been found in the text.
                 Iterator<String> ITFields = overallMapTypeToText.keySet().iterator();
                 AlchemyAPIfieldsAndNumbers = new StringBuilder();
@@ -350,10 +337,7 @@ public class Main implements Runnable {
                     System.out.println("nb of " + currField + " = " + overallMapTypeToText.get(currField).size());
 
                 }
-
                 System.out.println("total of entities: " + overallMapTypeToText.size());
-
-
             }
 
 
@@ -365,24 +349,33 @@ public class Main implements Runnable {
 
 
 
-            // ### EXTRACTING set of NGrams and LEMMATIZING
             if (!useAAPI_Entity) {
 
+                // ### EXTRACTING set of NGrams
+                multisetNGrams = NGramFinder.runIt(mapofLines);
+//                if (multisetNGrams.contains("working memory")) {
+//                    System.out.println("working memory present!");
+//                    System.out.println("number is: " + multisetNGrams.count("working memory"));
+//                }
+                multisetNGrams = NGramCleaner.cleanIt(multisetNGrams);
 
-                NGramFinder.runIt(mapofLines);
-                NGramCleaner.cleanIt();
-
+                // ### LEMMATIZING
                 Clock LemmatizerClock = new Clock("Lemmatizing");
-
-                freqSet = Lemmatizer.doLemmatizationReturnMultiSet(freqSet);
-
+                multisetNGrams = Lemmatizer.doLemmatizationReturnMultiSet(multisetNGrams);
+                LemmatizerClock.addText("number of words after lemmatization: " + multisetNGrams.elementSet().size());
                 LemmatizerClock.closeAndPrintClock();
 
-                System.out.println(
-                        "size of freqSet (unique Words):" + freqSet.elementSet().size());
+                Clock removalSmallWords = new Clock("removing words shorter than " + minWordLength + " characters");
+                Iterator<String> freqSetITERATOR = multisetNGrams.iterator();
+                while (freqSetITERATOR.hasNext()) {
+                    if (freqSetITERATOR.next().length() < minWordLength) {
+                        freqSetITERATOR.remove();
+                    }
+                }
+                removalSmallWords.addText("number of words after the removal of short words: " + multisetNGrams.elementSet().size());
+                removalSmallWords.closeAndPrintClock();
 
             }
-
 
 
 
@@ -392,60 +385,68 @@ public class Main implements Runnable {
 
             if (!useAAPI_Entity & (useScientificStopWords | !ownStopWords.equals("nothing"))) {
                 Clock stopwordsRemovalTime = new Clock("Removing stopwords");
-                Iterator<Entry<String>> it = freqSet.entrySet().iterator();
+                Iterator<Entry<String>> it = multisetNGrams.entrySet().iterator();
+                HashMultiset<String> tempMultiset = HashMultiset.create();
+                StopWordsRemover swr;
                 while (it.hasNext()) {
                     counter++;
                     Entry<String> entry = it.next();
-                    new StopWordsRemover(entry.getElement().trim(), entry.getCount());
+                    swr = new StopWordsRemover(entry.getElement().trim(), entry.getCount());
+                    tempMultiset.addAll(swr.call());
                 }
+                multisetNGrams = HashMultiset.create();
+                multisetNGrams.addAll(tempMultiset);
+
                 counter = 0;
                 counterLines = 0;
+                stopwordsRemovalTime.addText("number of words after the removal of stopwords: " + multisetNGrams.elementSet().size());
                 stopwordsRemovalTime.closeAndPrintClock();
 
-            } else {
-                filteredFreqSet.addAll(freqSet);
             }
-
-            System.out.println("size of filteredFreqSet: " + filteredFreqSet.size());
-            
-            // #### SORTS TERMS BY FREQUENCY, LEAVING OUT THE LESS FREQUENT ONE
-            freqList = MultiSetSorter.sortMultisetPerEntryCount(filteredFreqSet);
-            System.out.println("size of freqList: " + freqList.size());
-            ListIterator<Entry<String>> li = freqList.listIterator(Math.min(freqThreshold, freqList.size()));
-
-            while (li.hasNext()) {
-                li.next();
-                li.remove();
-            }
-            System.out.println("size of the set of words after terms less frequent than " + freqThreshold + " are removed: " + freqList.size());
-
 
 
             //-------------------------------------------------------------------------------------------------------------   
             // #### DELETES bi-grams trigrams and above, IF they are already contained in n+1 grams
             if (!useAAPI_Entity) {
-                NGramDuplicatesCleaner.removeDuplicates();
+
+                multisetNGrams = NGramDuplicatesCleaner.removeDuplicates(multisetNGrams);
 
             } //---------------------------------------------------------------------------------------------------------------
             //Deletes terms below the frequency threshold and in the case of a person, deletes it if there is no space in it.
             else {
 
-                freqListFiltered.addAll(freqList);
-                Iterator<Multiset.Entry<String>> itFreqList3 = Main.freqList.iterator();
+                Iterator<Multiset.Entry<String>> itFreqList3 = Controller.multisetNGrams.entrySet().iterator();
 
 
                 while (itFreqList3.hasNext()) {
                     Entry<String> currEntry = itFreqList3.next();
                     String currElement = currEntry.getElement();
                     int currElementCount = currEntry.getCount();
-                    if (currElementCount >= occurrenceThreshold & (!"Person".equals(Main.overallMapTextToType.get(currElement))
-                            | (Main.overallMapTextToType.get(currElement)).equals("Person") & currElement.trim().contains(" "))) {
+                    if (currElementCount >= occurrenceThreshold & (!"Person".equals(Controller.overallMapTextToType.get(currElement))
+                            | (Controller.overallMapTextToType.get(currElement)).equals("Person") & currElement.trim().contains(" "))) {
                         setFreqWords.add(currElement, currElementCount);
                     }
 
                 }
+                System.out.println("size of setFreqWords:" + setFreqWords.elementSet().size());
+
             }
-            System.out.println("size of setFreqWords:" + setFreqWords.elementSet().size());
+
+
+
+            // #### SORTS TERMS BY FREQUENCY, LEAVING OUT THE LESS FREQUENT ONE
+            Clock filteringOutLowFrequencies = new Clock("Keeping only the  " + freqThreshold + " most frequent words in the corpus");
+            freqList = MultiSetSorter.sortMultisetPerEntryCount(multisetNGrams);
+            ListIterator<Entry<String>> li = freqList.listIterator(Math.min(freqThreshold, freqList.size()));
+            Entry<String> liEntry;
+            while (li.hasNext()) {
+                liEntry = li.next();
+                li.remove();
+                setFreqWords.remove(liEntry.getElement());
+            }
+            filteringOutLowFrequencies.addText("number of words after frequency filtering: " + freqList.size());
+            filteringOutLowFrequencies.closeAndPrintClock();
+
 
 
             //-------------------------------------------------------------------------------------------------------------           
@@ -453,9 +454,9 @@ public class Main implements Runnable {
             StringBuilder mostFrequentTerms = new StringBuilder();
             String currFrequentTerm;
             for (int i = 0;
-                    i < freqListFiltered.size()
+                    i < freqList.size()
                     && i < freqThreshold; i++) {
-                currFrequentTerm = freqListFiltered.get(i).toString();
+                currFrequentTerm = freqList.get(i).toString();
                 System.out.println("most frequent words: " + currFrequentTerm);
                 mostFrequentTerms.append("most frequent words: ").append(currFrequentTerm).append("\n");
 
@@ -488,12 +489,13 @@ public class Main implements Runnable {
 
                 HashMap<String, Float> tdIDFScores = new HashMap();
                 String currWords = mapofLines.get(lineNumber);
-                //System.out.println("in the loop: " + currWords);
+//                System.out.println("in the loop: " + currWords);
                 int countTermsInThisDoc;
                 if (useAAPI_Entity) {
                     countTermsInThisDoc = currWords.split("\\|").length;
                 } else {
                     countTermsInThisDoc = currWords.split(wordSeparator).length;
+//                    System.out.println("nb terms in this doc: " + countTermsInThisDoc);
                 }
 
 
@@ -501,35 +503,35 @@ public class Main implements Runnable {
                     if (countTermsInThisDoc > 0) {
 //                        System.out.println("term 1 in the currLine: " + currWords.split(wordSeparator)[0]);
                     }
-//                    System.out.println("breaking because just one word");
+                    System.out.println("breaking because just one word");
 
                     continue;
                 }
 
 
                 if (currWords == null) {
-//                    System.out.println("breaking because of null string!");
+                    System.out.println("breaking because of null string!");
                     continue;
                 }
 
 //                System.out.println("this is the line \"" + currWords + "\"");
-                currWords = TextCleaner.doBasicCleaning(currWords);
+//                currWords = TextCleaner.doBasicCleaning(currWords);
+//                System.out.println("currWords after basic cleaning: " + currWords);
+//                System.out.println("currWords:");
                 if (currWords.equals("")) {
-//                    System.out.println("breaking because of empty string!");
+                    System.out.println("breaking because of empty string!");
                     continue;
                 }
 
 
                 Iterator<String> it3 = setFreqWords.elementSet().iterator();
 
-
-
                 while (it3.hasNext()) {
                     String currFreqTerm = it3.next();
 
                     if (currWords.contains(currFreqTerm)) {
                         ngramsInLine.add(currFreqTerm);
-                        //System.out.println("currFreqTerm matched is:" + currFreqTerm);
+//                        System.out.println("currFreqTerm matched is:" + currFreqTerm);
 
                         //snippet to find the count of a word in the current line
                         int lastIndex = 0;
@@ -565,6 +567,11 @@ public class Main implements Runnable {
                 }
 
                 String arrayWords[] = new String[ngramsInLine.size()];
+
+//                for (String element : arrayWords) {
+//                    System.out.print(element+" ");
+//                }
+//                System.out.println("");
                 if (arrayWords.length >= 2) {
                     HashSet<String> setOcc = new HashSet();
                     setOcc.addAll(new PerformCombinations(ngramsInLine.toArray(arrayWords)).call());
@@ -651,7 +658,7 @@ public class Main implements Runnable {
             fileMapFile.flush();
 
             fileMapFile.close();
-            mapSb = null;
+
             // #### Creates the Vosviewer network (edges) of ids
             fileNetworkName = StringUtils.substring(textFileName, 0, textFileName.length() - 4).concat("_VosViewer_network.txt");
             fileNetworkFile = new BufferedWriter(new FileWriter(wkOutput + fileNetworkName));
@@ -753,7 +760,7 @@ public class Main implements Runnable {
             parametersSb.append(
                     "max number of words allowed: ").append(freqThreshold).append(".\n");
             parametersSb.append(
-                    "min nb of occurrences in the entire corpus for a word to be processed: ").append(Main.occurrenceThreshold).append(".\n");
+                    "min nb of occurrences in the entire corpus for a word to be processed: ").append(Controller.occurrenceThreshold).append(".\n");
 
             parametersSb.append(
                     "min nb of characters for a word to be processed: ").append(minWordLength).append(".\n");
@@ -800,9 +807,9 @@ public class Main implements Runnable {
 
             //System.exit(0);
         } catch (InterruptedException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

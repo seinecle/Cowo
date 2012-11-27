@@ -15,70 +15,81 @@ public class Clock {
 
     private long start;
     private String action;
-    private String logText;
+    private StringBuilder logText;
+    private StringBuilder intermediateText;
     private final String newLine = "\n";
     private final String interval = "-------------------------------\n\n";
-            
-    
-    public Clock (String action){
-    
-    this.action = action;    
-        
-    startClock();
+
+    public Clock(String action) {
+
+        this.action = action;
+        intermediateText = new StringBuilder();
+        logText = new StringBuilder();
+        startClock();
     }
-    
-    
-    void startClock(){
-        
+
+    void startClock() {
+
         start = System.currentTimeMillis();
-        logText = action + "..."+newLine;
-        Screen1.logArea.setText(Screen1.logArea.getText().concat(logText));
+        logText.append(action).append("...").append(newLine);
+        Screen1.logArea.setText(Screen1.logArea.getText().concat(logText.toString()));
         Screen1.logArea.setCaretPosition(Screen1.logArea.getText().length());
 
         //GUI_Screen_1.logArea.repaint();
-        
-        System.out.print(logText);
+
+        System.out.print(logText.toString());
     }
 
-    
-    
-    void printElapsedTime(){
+    void addText(String it) {
+        intermediateText.append(it).append(newLine);
+    }
+
+    void printText() {
+        System.out.println(logText.toString());
+        logText = new StringBuilder();
+        intermediateText = new StringBuilder();
+        Screen1.logArea.setText(Screen1.logArea.getText().concat(logText.toString()));
+        Screen1.logArea.setCaretPosition(Screen1.logArea.getText().length());
+    }
+
+    void printElapsedTime() {
 
         long currentTime = System.currentTimeMillis();
         long elapsedTime = currentTime - start;
-       
+
         if (elapsedTime
                 < 1000) {
             System.out.println("still " + StringUtils.lowerCase(action) + ", " + elapsedTime + " milliseconds]");
-            
+
         } else {
             System.out.println("still " + StringUtils.lowerCase(action) + ", " + elapsedTime / 1000 + " seconds]");
         }
-        
+
     }
-    
-    void closeAndPrintClock(){
-    
+
+    void closeAndPrintClock() {
+
         long currentTime = System.currentTimeMillis();
         long totalTime = currentTime - start;
-       
-        if (totalTime
-                < 1000) {
-            logText = "finished [took: " + totalTime + " milliseconds]"+newLine+interval;
-            System.out.print(logText);
+        logText = new StringBuilder();
+        logText.append(intermediateText.toString());
+        logText.append("finished [took: ");
+
+
+        if (totalTime < 10000) {
+            logText.append(Math.round(totalTime / 1000))
+                    .append(" seconds, ")
+                    .append(Math.round(totalTime % 1000))
+                    .append(" milliseconds]")
+                    .append(newLine + interval);
+        } else if (totalTime < 60000) {
+            logText.append(totalTime / 1000).append(" seconds]").append(newLine + interval);
         } else {
-            logText = "finished [took: " + totalTime / 1000 + " seconds]"+newLine+interval;
-            System.out.print(logText);
-        
-               
+            logText.append(totalTime / 60000).append(" minutes ").append(Math.round((totalTime % 60000) / 1000)).append(" seconds").append(newLine + interval);
         }
-        Screen1.logArea.setText(Screen1.logArea.getText().concat(logText));
+        System.out.println(logText.toString());
+        Screen1.logArea.setText(Screen1.logArea.getText().concat(logText.toString()));
         Screen1.logArea.setCaretPosition(Screen1.logArea.getText().length());
 
-
-    
     }
-    
-    
-    
 }
