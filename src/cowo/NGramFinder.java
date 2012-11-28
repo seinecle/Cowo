@@ -6,9 +6,9 @@ package cowo;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -53,17 +53,15 @@ public class NGramFinder {
 
     }
 
-    public static void ngrams(int n, String str) {
+    public static Set<String> ngrams(int n, String str) {
 
+        Set<String> setToReturn = new HashSet();
         words = str.split(Controller.wordSeparator);
-//            System.out.println(str);
-//            System.out.println(words[0]);
-
-
-
         for (int i = 0; i < words.length - n + 1; i++) {
-            freqSetN.add(concat(words, i, i + n, n));
+            setToReturn.add(concat(words, i, i + n, n));
         }
+
+        return setToReturn;
 
 
     }
@@ -77,12 +75,10 @@ public class NGramFinder {
     }
 
     public static Multiset<String> run(String toBeParsed, int nGram) {
-        freqSetN.clear();
+        freqSetN = HashMultiset.create();
 
         for (int n = 1; n <= nGram; n++) {
-
-
-            ngrams(n, toBeParsed);
+            freqSetN.addAll(ngrams(n, toBeParsed));
         }
         //System.out.println(freqList.get(i));
         return freqSetN;
