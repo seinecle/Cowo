@@ -100,7 +100,7 @@ public class Screen1 extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Script MT Bold", 0, 48)); // NOI18N
         jLabel3.setText("Cowo");
 
-        youTube.setText("<html><b>To visualize the network you created, read the instructions in the README.txt file including in cowo.exe.zip</b><br><html>");
+        youTube.setText("<html><b>To visualize the network you created, read the instructions in the README.txt file included in cowo.exe.zip</b><br><html>");
 
         exitButton.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         exitButton.setText("Exit");

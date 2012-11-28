@@ -5,6 +5,7 @@
 package cowo;
 
 import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import java.util.Iterator;
 
 /**
@@ -16,7 +17,7 @@ public class Lemmatizer {
     Lemmatizer() {
     }
 
-    public static String doLemmatizationReturnString(HashMultiset wordsOfLine) {
+    public static String doLemmatizationReturnString(Multiset wordsOfLine) {
 
 
         Iterator<String> itwl = wordsOfLine.elementSet().iterator();
@@ -69,7 +70,7 @@ public class Lemmatizer {
 
     }
 
-    public static HashMultiset doLemmatizationReturnMultiSet(HashMultiset wordsOfLine) {
+    public static HashMultiset doLemmatizationReturnMultiSet(Multiset wordsOfLine) {
 
         HashMultiset result = HashMultiset.create();
 

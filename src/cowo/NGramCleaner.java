@@ -5,6 +5,7 @@
 package cowo;
 
 import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import java.util.Iterator;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Iterator;
  */
 public class NGramCleaner {
 
-    static HashMultiset<String> cleanIt(HashMultiset<String> multisetNGramsOriginal) {
+    static HashMultiset<String> cleanIt(Multiset<String> multisetNGramsOriginal) {
 
         Clock nGramHousekeeping = new Clock("cleaning ngrams: deleting n-grams less frequent than " + Controller.occurrenceThreshold + " and shorter than " + Controller.minWordLength + " characters.");
 

@@ -8,6 +8,7 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  *
@@ -23,7 +24,7 @@ public class NGramFinder {
     private static HashMultiset<String> setAllNGramsPerLine;
     private static HashMultiset<String> multisetToReturn;
 
-    public static HashMultiset<String> runIt(HashMap<Integer, String> mapofLines) {
+    public static HashMultiset<String> runIt(Map<Integer, String> mapofLines) {
         Clock extractingNGramsPerLine = new Clock("extracting ngrams");
         multisetToReturn = HashMultiset.create();
 

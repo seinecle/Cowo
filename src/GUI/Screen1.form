@@ -192,7 +192,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="youTube">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;To visualize the network you created, read the instructions in the README.txt file including in cowo.exe.zip&lt;/b&gt;&lt;br&gt;&lt;html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;To visualize the network you created, read the instructions in the README.txt file included in cowo.exe.zip&lt;/b&gt;&lt;br&gt;&lt;html&gt;"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
