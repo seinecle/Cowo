@@ -5,6 +5,7 @@
 package cowo;
 
 import GUI.Screen1;
+import Utils.Clock;
 import com.google.common.collect.*;
 import com.google.common.collect.Multiset.Entry;
 import java.io.*;
@@ -220,10 +221,14 @@ public class Controller implements Runnable {
             stopwords = fileStopWords.readLine().split(",");
             stopwords = Arrays.copyOf(stopwords, nbStopWords);
             fileStopWords.close();
+            fileStopWords = new BufferedReader(new InputStreamReader(in10000));
+            stopwords = fileStopWords.readLine().split(",");
+            stopwords = Arrays.copyOf(stopwords, nbStopWords);
+            fileStopWords.close();
 
 //            if (!ownStopWords.equals("nothing")) {
             stopwords = ArrayUtils.addAll(stopwords, stopwordsOwn);
-            stopwords = ArrayUtils.addAll(stopwords, stopwordsFrench);
+//            stopwords = ArrayUtils.addAll(stopwords, stopwordsFrench);
 //            }
 
             if (Controller.useScientificStopWords) {
@@ -264,8 +269,8 @@ public class Controller implements Runnable {
             fr = new FileReader(textFile);
             BufferedReader br = new BufferedReader(fr);
 
-            LineNumberReader lnr = new LineNumberReader(new FileReader(new File(textFile)));
-            lnr.skip(Long.MAX_VALUE);
+//            LineNumberReader lnr = new LineNumberReader(new FileReader(new File(textFile)));
+//            lnr.skip(Long.MAX_VALUE);
 
 
             if (useAAPI_Entity) {//these 5 lines are specfic to the AlchemyAPI option
@@ -383,15 +388,11 @@ public class Controller implements Runnable {
                 removalSmallWords.addText("number of words after the removal of short words: " + multisetNGrams.elementSet().size());
                 removalSmallWords.closeAndPrintClock();
 
-            }
+
+                //-------------------------------------------------------------------------------------------------------------        
+                // #### 6. REMOVING STOPWORDS
 
 
-
-            //-------------------------------------------------------------------------------------------------------------        
-            // #### 6. REMOVING STOPWORDS
-
-
-            if (!useAAPI_Entity & (useScientificStopWords | !ownStopWords.equals("nothing"))) {
                 Clock stopwordsRemovalTime = new Clock("Removing stopwords");
                 Iterator<Entry<String>> it = multisetNGrams.entrySet().iterator();
                 Multiset<String> tempMultiset = HashMultiset.create();
@@ -409,16 +410,10 @@ public class Controller implements Runnable {
                 stopwordsRemovalTime.addText("number of words after the removal of stopwords: " + multisetNGrams.elementSet().size());
                 stopwordsRemovalTime.closeAndPrintClock();
 
-            }
-
-
-            //-------------------------------------------------------------------------------------------------------------   
-            // #### DELETES bi-grams trigrams and above, IF they are already contained in n+1 grams
-            if (!useAAPI_Entity) {
-
+                //-------------------------------------------------------------------------------------------------------------   
+                // #### DELETES bi-grams trigrams and above, IF they are already contained in n+1 grams
                 multisetNGrams = NGramDuplicatesCleaner.removeDuplicates(multisetNGrams);
-
-            } //---------------------------------------------------------------------------------------------------------------
+            } 
             //Deletes terms below the frequency threshold and in the case of a person, deletes it if there is no space in it.
             else {
 
@@ -466,7 +461,7 @@ public class Controller implements Runnable {
             // #### PRINTING MOST FREQUENT TERMS         
             StringBuilder mostFrequentTerms = new StringBuilder();
 
-            multisetNGramsIterator =Multisets.copyHighestCountFirst(multisetNGrams).elementSet().iterator();
+            multisetNGramsIterator = Multisets.copyHighestCountFirst(multisetNGrams).elementSet().iterator();
             while (multisetNGramsIterator.hasNext()) {
                 string = multisetNGramsIterator.next();
                 System.out.println("most frequent words: " + string + " x " + multisetNGrams.count((string)));
@@ -678,8 +673,8 @@ public class Controller implements Runnable {
             //System.exit(0);
         } catch (InterruptedException ex) {
             Exceptions.printStackTrace(ex);
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
-        }    }
+        }
+    }
 }

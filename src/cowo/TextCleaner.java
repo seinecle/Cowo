@@ -16,16 +16,17 @@ public class TextCleaner {
 
 //        try {
 
+//        currLine = StringUtils.substring(currLine, StringUtils.ordinalIndexOf(currLine, ";", 3));
+//        currLine = StringUtils.substring(currLine, 0, StringUtils.ordinalIndexOf(currLine, "NUFORC Note:", 1));
+
         if (Controller.filterDifficultChars) {
             //System.out.println("line inside the Text Cleaner: \""+currLine+"\"");
-//            currLine = StringUtils.substring(currLine, StringUtils.ordinalIndexOf(currLine, ";", 3));
-//            currLine = StringUtils.substring(currLine, 0, StringUtils.ordinalIndexOf(currLine, "NUFORC Note:", 1));
 //            System.out.println("currLine after trimming: " + currLine);
-            currLine = currLine.replaceAll("\\p{C}", " ");
+//            currLine = currLine.replaceAll("\\p{C}", " ");
             currLine = currLine.replaceAll("’", "'");
             currLine = currLine.replaceAll("[^A-Za-z'\\|]", " ");
             currLine = currLine.toLowerCase();
-            currLine = currLine.replaceAll(" +", " ");
+//            currLine = currLine.replaceAll(" +", " ");
             //System.out.println("line inside the Text Cleaner, after the cleaning: \""+currLine+"\"");
 
         }

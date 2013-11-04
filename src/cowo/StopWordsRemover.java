@@ -44,14 +44,7 @@ public final class StopWordsRemover {
         boolean write = true;
 
 
-        if (!Controller.ownStopWords.equals("nothing") || !Controller.useScientificStopWords) {
-            String[] wordsNGrams = entryWord.split(" ");
-            for (int i = 0; i < wordsNGrams.length; i++) {
-                if (Controller.setStopWordsScientificOrShort.contains(wordsNGrams[i])) {
-                    write = false;
-                }
-            }
-        } else {
+        if (Controller.useScientificStopWords) {
             multipleWord = entryWord.contains(" ");
 
 
@@ -137,6 +130,13 @@ public final class StopWordsRemover {
                 write = true;
             }
 
+        } else {
+            String[] wordsNGrams = entryWord.split(" ");
+            for (int i = 0; i < wordsNGrams.length; i++) {
+                if (Controller.setStopWords.contains(wordsNGrams[i])) {
+                    write = false;
+                }
+            }
         } //end of else block       
 
         if (write) {

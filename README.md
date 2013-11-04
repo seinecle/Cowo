@@ -1,7 +1,7 @@
 #Cowo
 First released 25 November 2012 by Clement Levallois  
-www.clementlevallois.net  
-twitter: [@seinecle] (https://twitter.com/seinecle)  
+[www.clementlevallois.net](www.clementlevallois.net)    
+twitter: [@seinecle](https://twitter.com/seinecle)  
 
 ##What does Cowo do?
 Cowo takes a file containing several lines of text and creates a map of the terms contained in these lines (with VosViewer, www.vosviewer.com)

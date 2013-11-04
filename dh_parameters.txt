@@ -1,0 +1,88 @@
+Report of the parameters used to extract co-occurrences in file "dh.txt".
+
+TD-IDF measure used to correct the frequency of terms per docs: true.
+Number of documents in the corpus: 170.
+Inclusion of n-grams up to (and including) 4-grams.
+Binary or full counting of co-occurrences per document? Binary = true
+Size of the list of most frequent stopwords removed: 5000.
+Only for bigrams and above: size of the list of most frequent stopwords used to filter out: 1806.
+max number of words allowed: 250.
+min nb of occurrences in the entire corpus for a word to be processed: 3.
+min nb of characters for a word to be processed: 3.
+number of words found including n-grams: 1046.
+number of nodes: 72.
+number of edges: 769581.
+
+
+most frequent words: digital humanities x 430
+most frequent words: university x 48
+most frequent words: digitalen geisteswissenschaften x 21
+most frequent words: environment x 20
+most frequent words: archive x 17
+most frequent words: scholarly x 15
+most frequent words: ontology x 14
+most frequent words: die digitalen geisteswissenschaften x 10
+most frequent words: gis x 10
+most frequent words: identity x 10
+most frequent words: tei x 8
+most frequent words: cultural heritage x 8
+most frequent words: humanist x 8
+most frequent words: database x 8
+most frequent words: textual x 7
+most frequent words: computational x 6
+most frequent words: metadata x 6
+most frequent words: blog x 6
+most frequent words: encoding x 6
+most frequent words: digitale x 6
+most frequent words: digital library x 5
+most frequent words: linguistic x 5
+most frequent words: virtual x 5
+most frequent words: disciplinary x 5
+most frequent words: interactive x 5
+most frequent words: documentation x 5
+most frequent words: exploration x 4
+most frequent words: arts and humanities x 4
+most frequent words: der x 4
+most frequent words: mining x 4
+most frequent words: humanistic x 4
+most frequent words: large scale x 4
+most frequent words: funding x 4
+most frequent words: geographical x 4
+most frequent words: public x 4
+most frequent words: genre x 3
+most frequent words: markup x 3
+most frequent words: institutional x 3
+most frequent words: collaborative x 3
+most frequent words: within the digital humanities x 3
+most frequent words: digital preservation x 3
+most frequent words: annotation x 3
+most frequent words: visualization x 3
+most frequent words: thematic x 3
+most frequent words: sustainability x 3
+most frequent words: video x 3
+most frequent words: digitization x 3
+most frequent words: digital image x 3
+most frequent words: automatic x 3
+most frequent words: director x 3
+most frequent words: academy x 3
+most frequent words: humanities scholar x 3
+most frequent words: subjective x 3
+most frequent words: king's college london x 3
+most frequent words: generic x 3
+most frequent words: archiving x 3
+most frequent words: used within x 3
+most frequent words: king x 3
+most frequent words: digitized x 3
+most frequent words: repository x 3
+most frequent words: cooperation x 3
+most frequent words: pedagogy x 3
+most frequent words: editorial x 3
+most frequent words: dissemination x 3
+most frequent words: semantic x 3
+most frequent words: interoperability x 3
+most frequent words: humanitie x 3
+most frequent words: 'digital x 3
+most frequent words: wider x 3
+most frequent words: expertise x 3
+most frequent words: corpus x 3
+most frequent words: critique x 3

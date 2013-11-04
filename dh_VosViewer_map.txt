@@ -1,0 +1,73 @@
+label,id
+semantic, 1
+automatic, 2
+der, 3
+collaborative, 4
+die digitalen geisteswissenschaften, 5
+humanitie, 6
+identity, 7
+university, 8
+video, 9
+archive, 10
+expertise, 11
+digital humanities, 12
+humanities scholar, 13
+blog, 14
+database, 15
+digitized, 16
+corpus, 17
+visualization, 18
+public, 19
+editorial, 20
+textual, 21
+disciplinary, 22
+geographical, 23
+digitization, 24
+'digital, 25
+virtual, 26
+critique, 27
+pedagogy, 28
+within the digital humanities, 29
+scholarly, 30
+digitalen geisteswissenschaften, 31
+humanist, 32
+arts and humanities, 33
+director, 34
+cooperation, 35
+interoperability, 36
+markup, 37
+gis, 38
+king, 39
+digital library, 40
+cultural heritage, 41
+archiving, 42
+digitale, 43
+funding, 44
+documentation, 45
+genre, 46
+tei, 47
+metadata, 48
+academy, 49
+institutional, 50
+linguistic, 51
+sustainability, 52
+environment, 53
+computational, 54
+repository, 55
+dissemination, 56
+king's college london, 57
+digital preservation, 58
+generic, 59
+used within, 60
+exploration, 61
+ontology, 62
+mining, 63
+humanistic, 64
+encoding, 65
+digital image, 66
+subjective, 67
+wider, 68
+annotation, 69
+interactive, 70
+large scale, 71
+thematic, 72

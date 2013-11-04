@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package cowo;
+package Utils;
 
 import GUI.Screen1;
 import org.apache.commons.lang3.StringUtils;
@@ -28,31 +28,31 @@ public class Clock {
         startClock();
     }
 
-    void startClock() {
+    private void startClock() {
 
         start = System.currentTimeMillis();
         logText.append(action).append("...").append(newLine);
         Screen1.logArea.setText(Screen1.logArea.getText().concat(logText.toString()));
         Screen1.logArea.setCaretPosition(Screen1.logArea.getText().length());
 
-        //GUI_Screen_1.logArea.repaint();
 
         System.out.print(logText.toString());
     }
 
-    void addText(String it) {
+    public void addText(String it) {
         intermediateText.append(it).append(newLine);
     }
 
-    void printText() {
+    public void printText() {
         System.out.println(logText.toString());
         logText = new StringBuilder();
         intermediateText = new StringBuilder();
+
         Screen1.logArea.setText(Screen1.logArea.getText().concat(logText.toString()));
         Screen1.logArea.setCaretPosition(Screen1.logArea.getText().length());
     }
 
-    void printElapsedTime() {
+    public void printElapsedTime() {
 
         long currentTime = System.currentTimeMillis();
         long elapsedTime = currentTime - start;
@@ -67,7 +67,7 @@ public class Clock {
 
     }
 
-    void closeAndPrintClock() {
+    public void closeAndPrintClock() {
 
         long currentTime = System.currentTimeMillis();
         long totalTime = currentTime - start;
@@ -87,6 +87,7 @@ public class Clock {
         } else {
             logText.append(totalTime / 60000).append(" minutes ").append(Math.round((totalTime % 60000) / 1000)).append(" seconds").append(newLine + interval);
         }
+
         System.out.println(logText.toString());
         Screen1.logArea.setText(Screen1.logArea.getText().concat(logText.toString()));
         Screen1.logArea.setCaretPosition(Screen1.logArea.getText().length());

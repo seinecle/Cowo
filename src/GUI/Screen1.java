@@ -5,8 +5,11 @@
 package GUI;
 
 import cowo.Controller;
+import java.io.File;
+import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -182,26 +185,29 @@ public class Screen1 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void selectTextFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectTextFileButtonActionPerformed
-        if (evt.getSource() == selectTextFileButton) {
-            System.out.println("selectTextFile clicked");
-
-
-        }
-        JFileChooser chooser = new JFileChooser();
-        //chooser.setCurrentDirectory(new java.io.File("D:\\Docs Pro Clement\\E-humanities\\TextMining\\Exported Items\\"));
-        chooser.setDialogTitle("Select a text file");
-        //chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setAcceptAllFileFilterUsed(false);
-        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            System.out.println("Current directory: " + chooser.getCurrentDirectory().getAbsolutePath());
-            createMapButton.setEnabled(true);
-            workingDirectory = chooser.getCurrentDirectory().getAbsolutePath().toString();
-            fileSelected = true;
-            fileSelectedPathANdName = chooser.getSelectedFile().toString();
-            fileSelectedName = chooser.getSelectedFile().getName();
-            System.out.println("Selected File: " + fileSelectedPathANdName);
-        } else {
-            System.out.println("No Selection");
+        try {
+            if (evt.getSource() == selectTextFileButton) {
+                System.out.println("selectTextFile clicked");
+            }
+            JFileChooser chooser = new JFileChooser();
+            File f = new File(new File(".").getCanonicalPath());
+            chooser.setCurrentDirectory(f);
+            chooser.setDialogTitle("Select a text file");
+            //chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            chooser.setAcceptAllFileFilterUsed(false);
+            if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                System.out.println("Current directory: " + chooser.getCurrentDirectory().getAbsolutePath());
+                createMapButton.setEnabled(true);
+                workingDirectory = chooser.getCurrentDirectory().getAbsolutePath().toString();
+                fileSelected = true;
+                fileSelectedPathANdName = chooser.getSelectedFile().toString();
+                fileSelectedName = chooser.getSelectedFile().getName();
+                System.out.println("Selected File: " + fileSelectedPathANdName);
+            } else {
+                System.out.println("No Selection");
+            }
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
         }
     }//GEN-LAST:event_selectTextFileButtonActionPerformed
 
