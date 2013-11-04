@@ -14,7 +14,7 @@ Cowo takes a file containing several lines of text and creates a map of the term
 Let's imagine you have a text file where each line contains a description of a car. You have 1000 lines, because there are 1000 different cars to describe. What Cowo does is read this file, detect frequent words contained in it, and find the connections between these frequent words. For instance, if the words "nice v12 engine" frequently appear in the same descriptions as "ideal for car racing", Cowo will catch it. At the end, Cowo spits out several files, two of which are really important (a "map" file and a "network" file). You take these two files, read them with VosViewer (click and point operation, takes 1 minute), and you obtain a map of your most frequent words, arranged according to how frequently they are connected in the same car descriptions.
 
 ##Where can I download it?
-[on my website](http://www.clementlevallois.net/software.php)
+[on my website](http://www.clementlevallois.net/portfolio.html)
 
 ##Steps to get it to work:
 - unzip cowo.exe.zip
