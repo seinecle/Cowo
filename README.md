@@ -1,6 +1,6 @@
-<span style="color:red;">Since 2021, you can access Cowo directly from [a free web app here](https://nocodefunctions.com/cowo/semantic_networks_tool.html).
+:fire::fire::fire: Since 2021, you can access Cowo directly from [a free web app here](https://nocodefunctions.com/cowo/semantic_networks_tool.html).
 
-This repo is now archived. For any question, get in touch at analysis@exploreyourdata.com</span>
+:fire::fire::fire: This repo is now archived. For any question, get in touch at analysis@exploreyourdata.com</span>
 
 # Cowo
 First released 25 November 2012 by Clement Levallois  
