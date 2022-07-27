@@ -25,7 +25,7 @@ Let's imagine you have a text file where each line contains a description of a c
 (there are options you can modify in "under the hood" if you want).
 
 then:
-- download [Vosviewer] (http://www.vosviewer.com)
+- download [Vosviewer](http://www.vosviewer.com)
 - open VosViewer
 - click on "create" in the "action" tab
 - select "create a map based on a network"
